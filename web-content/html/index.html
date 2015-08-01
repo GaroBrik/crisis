@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Hi there</title>
+</head>
+<body>
+  <div>
+    <div id="protoDivisionMarker"></div>
+    <div id="protoDivisionDetails">
+      <ul>
+	<li id="protoUnitListItem"></li>
+      </ul>
+    </div>
+  </div>
+  <table>
+    <thead>
+      <tr>
+	<th>Faction</th>
+	<th>Division</th>
+	<th>Units</th>
+	<th>Coords</th>
+      </tr>
+    </thead>
+    <tbody>
+      {{range .}}
+      <tr>
+	<td>{{.FacName}}</td>
+	<td>{{.DivName}}</td>
+	<td>
+	  <ul>
+	    {{range $name, $amount := .Units}}
+	    <li>{{$name}}: {{$amount}}</li>
+	    {{end}}
+	  </ul>
+	</td>
+	<td>({{.CoordX}}, {{.CoordY}})</td>
+      </tr>
+      {{end}}
+    </tbody>
+  </table>
+</body>
+
+<script>
+  document.ready(function() {
+  crisis.init();
+  var map = new crisis.Map(data);
+  $.ajax({
+  
+  });
+  });
+</script>
+
+</html>
