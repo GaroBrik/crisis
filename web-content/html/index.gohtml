@@ -1,17 +1,4 @@
-<!DOCTYPE html>
-<html>
-<head>
-  <title>Hi there</title>
-</head>
-<body>
-  <div>
-    <div id="protoDivisionMarker"></div>
-    <div id="protoDivisionDetails">
-      <ul>
-	<li id="protoUnitListItem"></li>
-      </ul>
-    </div>
-  </div>
+{{include "head.html"}}
   <table>
     <thead>
       <tr>
@@ -41,7 +28,7 @@
 </body>
 
 <script>
-  document.ready(function() {
+  $(document).ready(function() {
   crisis.init();
   var map = new crisis.Map(data);
   $.ajax({

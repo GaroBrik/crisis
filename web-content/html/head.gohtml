@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Hi there</title>
+  <script src="http://code.jquery.com/jquery-2.1.4.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.8.3/underscore-min.js"></script>
+  <script src="{{.JSUri}}"></script>
+</head>
+<body>
+  <div style="diplay: hidden" id="htmlObjectPrototypes">
+    <div id="protoDivisionMarker"></div>
+    <div id="protoDivisionDetails">
+      <span class="paneInvalidAlert"></span>
+      <ul></ul>
+      <input type="button" class="editButton">
+    </div>
+    <li id="protoUnitListItem">
+      <div class=".type"></div>
+      <span class=".value"></span>
+      <input type="text" class=".editAmount">    
+      <span class=".invalidAlert"></span>
+    </li>
+    <div id="protoUnitTypes">
+      {{range .Types}}
+        <span data-type="{{.Name}}">
+	       <!-- <img src="/static/images/unitType?id={{.Id}}"> -->
+	      {{.Name}}
+      </span>
+      {{end}>
+  </div>
+  <div class="main">

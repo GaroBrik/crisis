@@ -9,3 +9,7 @@ type Division struct {
 	CoordY  int
 	Speed   int
 }
+
+type DivisionJson struct {
+	Id int
+}
