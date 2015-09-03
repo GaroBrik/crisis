@@ -1,8 +1,10 @@
 package crisis
 
 import (
+	"fmt"
 	"html/template"
 	"net/http"
+	"runtime"
 )
 
 type servlet func(http.ResponseWriter, *http.Request)
@@ -13,9 +15,12 @@ var staffPageTmpl *template.Template
 var err error
 
 func Serve() {
-	http.HandleFunc("/", test)
+	http.HandleFunc("/", hello)
 }
 
+func hello(res http.ResponseWriter, req *http.Request) {
+	fmt.Fprintf(res, "hello, world from %s", runtime.Version())
+}
 func test(res http.ResponseWriter, req *http.Request) {
 	testTmpl, err := template.ParseFiles("html/test.gohtml")
 	if err != nil {
