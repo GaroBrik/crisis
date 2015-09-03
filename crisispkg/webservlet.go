@@ -15,7 +15,7 @@ var staffPageTmpl *template.Template
 var err error
 
 func Serve() {
-	http.HandleFunc("/", hello)
+	http.HandleFunc("/", test)
 }
 
 func hello(res http.ResponseWriter, req *http.Request) {
