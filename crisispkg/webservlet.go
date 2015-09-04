@@ -1,42 +1,40 @@
 package crisis
 
 import (
-	"fmt"
 	"html/template"
 	"net/http"
-	"runtime"
 )
 
 type servlet func(http.ResponseWriter, *http.Request)
+
+const (
+	htmlPath = "webcontent/html/"
+	jsPath   = "webcontent/js/"
+)
+
+type unitType struct {
+	Id   int
+	Name string
+}
+
+type headInfo struct {
+	JSUri string
+	Types []unitType
+}
 
 var headerTmpl *template.Template
 var footerTmpl *template.Template
 var staffPageTmpl *template.Template
 var err error
 
-func Serve() {
-	http.HandleFunc("/", test)
-}
-
-func hello(res http.ResponseWriter, req *http.Request) {
-	fmt.Fprintf(res, "hello, world from %s", runtime.Version())
-}
-func test(res http.ResponseWriter, req *http.Request) {
-	testTmpl, err := template.ParseFiles("webcontent/html/test.gohtml")
-	if err != nil {
-		panic(err)
-	}
-	testTmpl.Execute(res, nil)
-}
-
 func StartListening() {
-	if headerTmpl, err = template.ParseFiles("html/head.gohtml"); err != nil {
+	if headerTmpl, err = template.ParseFiles(htmlPath + "head.gohtml"); err != nil {
 		panic(err)
 	}
-	if staffPageTmpl, err = template.ParseFiles("html/staff.gohtml"); err != nil {
+	if staffPageTmpl, err = template.ParseFiles(htmlPath + "staff.gohtml"); err != nil {
 		panic(err)
 	}
-	if footerTmpl, err = template.ParseFiles("html/foot.gohtml"); err != nil {
+	if footerTmpl, err = template.ParseFiles(htmlPath + "foot.gohtml"); err != nil {
 		panic(err)
 	}
 
@@ -46,9 +44,9 @@ func StartListening() {
 func wrapAndListen(path string, handler servlet) {
 	http.HandleFunc(path, func(res http.ResponseWriter, req *http.Request) {
 		//authInfo := GetAuthInfoOf(req)
-		headerTmpl.Execute(res, 1)
+		headerTmpl.Execute(res, headInfo{})
 		handler(res, req)
-		footerTmpl.Execute(res, 1)
+		footerTmpl.Execute(res, nil)
 	})
 }
 
