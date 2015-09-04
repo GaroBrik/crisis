@@ -22,7 +22,7 @@ func hello(res http.ResponseWriter, req *http.Request) {
 	fmt.Fprintf(res, "hello, world from %s", runtime.Version())
 }
 func test(res http.ResponseWriter, req *http.Request) {
-	testTmpl, err := template.ParseFiles("html/test.gohtml")
+	testTmpl, err := template.ParseFiles("webcontent/html/test.gohtml")
 	if err != nil {
 		panic(err)
 	}
