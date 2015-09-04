@@ -40,7 +40,7 @@ func (db *Database) Close() {
 func (db *Database) GetCrisisDivisions(crisis_id int) map[int][]*Division {
 	rows, err := db.db.Query("SELECT faction.id, faction.faction_name, division.id, "+
 		"division.coord_x, division.coord_y, division.division_name "+
-		"FROM division INNER JOIN faction ON (faction.id = division.faction) "+
+		"FROM division INNER JOIN faction ON (faction.id  = division.faction) "+
 		"WHERE faction.crisis=?", crisis_id)
 	if err != nil {
 		log.Fatal(err)
