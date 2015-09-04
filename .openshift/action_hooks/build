@@ -1,0 +1,4 @@
+#!/bin/bash
+
+repodir="${OPENSHIFT_REPO_DIR}"
+cp -r $repodir/webcontent/* $repodir/bin/
