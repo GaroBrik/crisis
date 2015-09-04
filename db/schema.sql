@@ -49,7 +49,7 @@ CREATE TABLE division_view (
        division_id integer REFERENCES division(id),
        faction_id integer REFERENCES faction(id),
        view_units boolean,
-       PRIMARY KEY (unit_id, faction_id)
+       PRIMARY KEY (division_id, faction_id)
 );
 
 COMMIT;
