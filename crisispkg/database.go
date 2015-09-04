@@ -11,7 +11,7 @@ import (
 const (
 	DB_USER_ENV     = "OPENSHIFT_POSTGRESQL_DB_USERNAME"
 	DB_PASSWORD_ENV = "OPENSHIFT_POSTGRESQL_DB_PASSWORD"
-	DB_NAME         = "crisismap"
+	DB_NAME         = "crisis"
 )
 
 type Database struct {
