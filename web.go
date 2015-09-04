@@ -8,7 +8,7 @@ import (
 )
 
 func main() {
-	crisis.Serve()
+	crisis.StartListening()
 	bind := fmt.Sprintf("%s:%s", os.Getenv("HOST"), os.Getenv("PORT"))
 	fmt.Printf("listening on %s...", bind)
 	err := http.ListenAndServe(bind, nil)
