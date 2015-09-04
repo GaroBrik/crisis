@@ -40,10 +40,10 @@ func (db *Database) Close() {
 func (db *Database) GetCrisisDivisions(crisis_id int) map[int][]*Division {
 	rows, err := db.db.Query("SELECT faction.id, faction.faction_name, division.id, "+
 		"division.coord_x, division.coord_y, division.division_name "+
-		"FROM division INNER JOIN faction ON (faction.id  = division.faction) "+
+		"FROM division INNER JOIN faction ON (faction.id = division.faction) "+
 		"WHERE faction.crisis=?", crisis_id)
 	if err != nil {
-		log.Fatal(err)
+		panic(err)
 	}
 	defer rows.Close()
 
@@ -57,7 +57,7 @@ func (db *Database) GetFactionDivisions(faction_id int) []*Division {
 		"INNER JOIN division_view ON (division_view.division_id = division.id) "+
 		"WHERE division_view.faction_id=?", faction_id)
 	if err != nil {
-		log.Fatal(err)
+		panic(err)
 	}
 	defer rows.Close()
 
@@ -71,7 +71,7 @@ func (db *Database) getCrisisDivisionsFromRows(rows *sql.Rows) map[int][]*Divisi
 		div := Division{}
 		err := rows.Scan(&facId, &div.FacName, &div.Id, &div.CoordX, &div.CoordY, &div.DivName)
 		if err != nil {
-			log.Fatal(err)
+			panic(err)
 		}
 		db.loadUnitsFor(&div)
 		m[facId] = append(m[facId], &div)
@@ -85,7 +85,7 @@ func (db *Database) getFactionDivisionsFromRows(rows *sql.Rows) []*Division {
 		div := Division{}
 		err := rows.Scan(&div.FacName, &div.Id, &div.CoordX, &div.CoordY, &div.DivName)
 		if err != nil {
-			log.Fatal(err)
+			panic(err)
 		}
 		db.loadUnitsFor(&div)
 		fs = append(fs, &div)
@@ -98,7 +98,7 @@ func (db *Database) loadUnitsFor(div *Division) {
 		"FROM unit INNER JOIN unit_type ON (unit.unit_type = unit_type.id)"+
 		"WHERE unit.division = ?", div.Id)
 	if err != nil {
-		log.Fatal(err)
+		panic(err)
 	}
 	defer rows.Close()
 
@@ -110,7 +110,7 @@ func (db *Database) loadUnitsFor(div *Division) {
 	min_speed := 1<<16 - 1
 	for rows.Next() {
 		if err = rows.Scan(&name, &amount, &speed); err != nil {
-			log.Fatal(err)
+			panic(err)
 		}
 		div.Units[name] = amount
 		if speed < min_speed {
