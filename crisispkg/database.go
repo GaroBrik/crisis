@@ -5,12 +5,13 @@ import (
 	"fmt"
 	_ "github.com/lib/pq"
 	"log"
+	"os"
 )
 
 const (
-	DB_USER     = "adminmx2q25f"
-	DB_PASSWORD = "xjt2j3wAKmrZ"
-	DB_NAME     = "crisismap"
+	DB_USER_ENV     = "OPENSHIFT_POSTGRESQL_DB_USERNAME"
+	DB_PASSWORD_ENV = "OPENSHIFT_POSTGRESQL_DB_PASSWORD"
+	DB_NAME         = "crisismap"
 )
 
 type Database struct {
@@ -22,7 +23,7 @@ var m_database *Database
 func GetDatabaseInstance() *Database {
 	if m_database == nil {
 		dbinfo := fmt.Sprintf("user=%s password=%s dbname=%s sslmode=disable",
-			DB_USER, DB_PASSWORD, DB_NAME)
+			os.Getenv(DB_USER_ENV), os.Getenv(DB_PASSWORD_ENV), DB_NAME)
 		db, err := sql.Open("postgres", dbinfo)
 		if err != nil {
 			log.Fatal(err)
