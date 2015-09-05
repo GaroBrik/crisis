@@ -49,8 +49,8 @@ func wrapAndListen(path string, handler servlet) {
 	http.HandleFunc(path, func(res http.ResponseWriter, req *http.Request) {
 		//authInfo := GetAuthInfoOf(req)
 		headerTmpl.Execute(res, headInfo{
-			JSUrl:  "statik/js/main.js",
-			CSSUrl: "statik/css/main.css",
+			JSUrl:  "static/compiled.js",
+			CSSUrl: "static/main.css",
 			Types:  make([]unitType, 0),
 		})
 		handler(res, req)
