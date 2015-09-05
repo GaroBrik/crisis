@@ -117,9 +117,8 @@ crisis.DivisionDetails.prototype.commitEdit = function() {
 
 /**
  * @typedef{{
- *   type: string,
+ *   utype: string,
  *   amount: number,
- *   $listItem: jQuery
  * }} 
  */
 crisis.UnitData;
@@ -129,8 +128,11 @@ crisis.UnitData;
  * @param {crisis.UnitData} unitData 
  */ 
 crisis.Unit = function(unitData) {
+    /** @type{number} */
     this.amount = unitData.amount;
-    this.type = unitData.type;
+    /** @type{string} */
+    this.type = unitData.utype;
+    /** @type{jQuery} */
     this.$listItem = crisis.$g_protoUnitListItem.clone();
     this.$listItem.find(".type").html(
 	      crisis.$g_protoUnitTypes.find("[type=" + this.type + "]").clone());

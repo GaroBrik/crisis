@@ -1,7 +1,6 @@
 /**
  * @typedef{{
- *   mapHeight: number,
- *   mapWidth: number,
+ *   bounds: crisis.Bounds, 
  *   divisions: Array<crisis.DivisionData>
  * }}
  */
