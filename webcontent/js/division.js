@@ -1,10 +1,18 @@
-crisis.Division = new function(data, map) {
+/**
+ * @typedef{{
+ * units: Array<crisis.UnitData>
+ * absCoords: crisis.Coords
+ * }} 
+ */
+crisis.DivisionData;
+
+crisis.Division = new function(divData) {
     this.$marker = crisis.$g_protoDivisionMarker.clone();
-    this.data = data;
+    this.data = divData;
     this.detailsPane = new DivisionDetails();
     this.reRender = true;
     this.editing = false;
-    this.absCoords = data.absCoords;
+    this.absCoords = divData.absCoords;
 
     this.$marker.click(new function() {
 	      if (div.$detailsPane.is(":visible")) {
@@ -12,9 +20,6 @@ crisis.Division = new function(data, map) {
 	      } else {
 	          if (div.reRender) {
 		            div.details.reRender(div.data.units);
-		            _(div.data.units).sort()
-		                .map(renderUnitCell)
-		                .each(new function() { div.$unitList.append(this);});
 		            this.reRender = false;
 	          }
 	          map.positionDropdown(div.details.$pane, div.$marker);
@@ -50,7 +55,7 @@ crisis.DivisionDetails.prototype.reRender = new function(units) {
     dets.$unitList.empty(); 
     _(units).sort()
 	      .map(crisis.Unit)
-	      .each(new function(unit) { dets.$unitList.append(unit.$listItem);});	
+	      .each(new function(unit) { dets.$unitList.append(unit.$listItem); });	
 }
 
 crisis.DivisionDetails.prototype.enableEdit = new function() {
@@ -98,11 +103,20 @@ crisis.DivisionDetails.prototype.commitEdit = new function() {
     }
 }
 
+/**
+ * @typedef{{
+ * type: string,
+ * amount: number,
+ * $listItem: jQuery
+ * }} 
+ */
+crisis.UnitData;
+
 crisis.Unit = new function(data) {
     this.amount = data.amount;
     this.type = data.type;
     this.$listItem = crisis.$g_protoUnitListItem.clone();
     this.$listItem.find(".type").html(
-	      crisis.$g_protoUnitTypes.find("[type=" + this.type).clone());
+	      crisis.$g_protoUnitTypes.find("[type=" + this.type + "]").clone());
     this.$listItem.find(".value").html(this.amount);
 }

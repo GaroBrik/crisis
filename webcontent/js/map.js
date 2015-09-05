@@ -1,19 +1,28 @@
-crisis.Map = new function(data) {
-    this.data = data;
-    this.divisions = _.map(data.divisions, new function(div) {
-	      return crisis.Division
+/**
+ * @typedef{{
+ * mapHeight: number,
+ * mapWidth: number,
+ * divisions: Array<crisis.DivisionData>
+ * }}
+ */
+crisis.MapData;
+
+crisis.Map = new function(mapData) {
+    this.data = mapData;
+    this.divisions = _.map(data.divisions, new function(divData) {
+	      return new crisis.Division(divData);
     });
     this.loc = {
 	      x: 0,
 	      y: 0
     }
     this.bounds = {
-	      height: data.mapHeight,
-	      width:  data.mapWidth
+	      height: mapData.mapHeight,
+	      width:  mapData.mapWidth
     };
     this.maxBounds = {
-	      height: data.mapHeight,
-	      width:  data.mapWidth
+	      height: mapData.mapHeight,
+	      width:  mapData.mapWidth
     };
 }
 

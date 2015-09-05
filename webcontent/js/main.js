@@ -12,3 +12,11 @@ crisis = {
 	      this.$g_protoUnitTypes = $prototypes.find("#protoUnitTypes");
     }
 }
+
+/**
+ * @typedef{{
+ * x: number,
+ * y: number
+ * }}
+ */
+crisis.Coords;
