@@ -1,4 +1,4 @@
-crisis.Division = new function(divData) {
+crisis.Division = function(divData) {
     console.log("test");
     this.$marker = crisis.$g_protoDivisionMarker.clone();
     this.data = divData;
