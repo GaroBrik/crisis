@@ -4,7 +4,8 @@
   <title>Hi there</title>
   <script src="http://code.jquery.com/jquery-2.1.4.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.8.3/underscore-min.js"></script>
-  <script src="{{.JSUri}}"></script> 
+  <script src="{{.JSUrl}}"></script>
+  <link rel="stylesheet" type="text/css" href="{{.CSSUrl}}">
 </head>
 <body>
   <div style="display: none" id="htmlObjectPrototypes">
@@ -31,4 +32,4 @@
       {{end}}
     </div>
   </div>
-  <div class="main">
+  <div id="main">

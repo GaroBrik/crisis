@@ -18,8 +18,9 @@ type unitType struct {
 }
 
 type headInfo struct {
-	JSUri string
-	Types []unitType
+	JSUrl  string
+	CSSUrl string
+	Types  []unitType
 }
 
 var headerTmpl *template.Template
@@ -44,7 +45,11 @@ func StartListening() {
 func wrapAndListen(path string, handler servlet) {
 	http.HandleFunc(path, func(res http.ResponseWriter, req *http.Request) {
 		//authInfo := GetAuthInfoOf(req)
-		headerTmpl.Execute(res, headInfo{})
+		headerTmpl.Execute(res, headInfo{
+			JSUrl:  "../js/main.js",
+			CSSUrl: "../css/main.css",
+			Types:  make([]unitType, 0),
+		})
 		handler(res, req)
 		footerTmpl.Execute(res, nil)
 	})
