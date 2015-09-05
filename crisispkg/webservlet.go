@@ -30,7 +30,7 @@ var staffPageTmpl *template.Template
 var err error
 
 func StartListening() {
-	http.Handle("/statik", http.StripPrefix("/statik", fs))
+	http.Handle("/statik", http.StripPrefix("/statik", webcontentDir))
 
 	if headerTmpl, err = template.ParseFiles(htmlPath + "head.gohtml"); err != nil {
 		panic(err)
