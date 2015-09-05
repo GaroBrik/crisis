@@ -8,9 +8,9 @@ import (
 type servlet func(http.ResponseWriter, *http.Request)
 
 const (
-	webcontentDir = http.Dir("webcontent")
-	htmlPath      = "webcontent/html/"
-	jsPath        = "webcontent/js"
+	webcontentServer = http.FileServer(http.Dir("webcontent"))
+	htmlPath         = "webcontent/html/"
+	jsPath           = "webcontent/js"
 )
 
 type unitType struct {
@@ -30,7 +30,7 @@ var staffPageTmpl *template.Template
 var err error
 
 func StartListening() {
-	http.Handle("/statik", http.StripPrefix("/statik", webcontentDir))
+	http.Handle("/statik", http.StripPrefix("/statik", webcontentServer))
 
 	if headerTmpl, err = template.ParseFiles(htmlPath + "head.gohtml"); err != nil {
 		panic(err)
