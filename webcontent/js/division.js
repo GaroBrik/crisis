@@ -7,7 +7,7 @@ crisis.Division = function(divData) {
     this.editing = false;
     this.absCoords = divData.absCoords;
 
-    this.$marker.click(new function() {
+    this.$marker.click(function() {
 	      if (div.$detailsPane.is(":visible")) {
 	          div.$detailsPane.hide();
 	      } else {
@@ -48,13 +48,13 @@ crisis.DivisionDetails.prototype.reRender = function(units) {
     dets.$unitList.empty(); 
     _(units).sort()
 	      .map(crisis.Unit)
-	      .each(new function(unit) { dets.$unitList.append(unit.$listItem); });	
+	      .each(function(unit) { dets.$unitList.append(unit.$listItem); });	
 }
 
 crisis.DivisionDetails.prototype.enableEdit = function() {
     var dets = this;
     
-    _.each(units, new function() {
+    _.each(units, function() {
 	      var unit = this;
 	      
 	      unit.$listItem.find(".editField").val(unit.amount).show();
@@ -66,7 +66,7 @@ crisis.DivisionDetails.prototype.disableEdit = function() {
     var dets = this;
 
     dets.find(".paneInvalidAlert").hide();
-    _.each(units, new function(unit) {
+    _.each(units, function(unit) {
 	      unit.$listItem.find(".editField").hide();
 	      unit.$listItem.find(".value").show();
 	      unit.$listItem.find(".invalidAlert").hide();
@@ -78,7 +78,7 @@ crisis.DivisionDetails.prototype.commitEdit = function() {
 
     var changedUnits = [];
     var validSubmit = true;
-    _.each(dets.units, new function(unit) {
+    _.each(dets.units, function(unit) {
 	      var newVal = unit.$listItem.find(".editField").val();
 	      newVal = parseInt(newVal);
 	      if (newVal === null) {

@@ -7,9 +7,9 @@
  */
 crisis.MapData;
 
-crisis.Map = new function(mapData) {
+crisis.Map = function(mapData) {
     this.data = mapData;
-    this.divisions = _.map(data.divisions, new function(divData) {
+    this.divisions = _.map(data.divisions, function(divData) {
 	      return new crisis.Division(divData);
     });
     this.loc = {
@@ -26,7 +26,7 @@ crisis.Map = new function(mapData) {
     };
 }
 
-crisis.Map.prototype.positionDropdown = new function($dropdown, $source) {
+crisis.Map.prototype.positionDropdown = function($dropdown, $source) {
     var canvasTop = 0;
     var canvasLeft = 0;
     var canvasBottom = window.height();
@@ -55,21 +55,21 @@ crisis.Map.prototype.positionDropdown = new function($dropdown, $source) {
     });
 }
 
-crisis.Map.prototype.relativeCoords = new function(absCoords) {
+crisis.Map.prototype.relativeCoords = function(absCoords) {
     return {
 	      x: (absCoords.x - map.loc.x) / map.bounds.width,
 	      y: (absCoords.y - map.loc.y) / map.bounds.height
     }
 }
 
-crisis.Map.prototype.absCoords = new function(relativeCoords) {
+crisis.Map.prototype.absCoords = function(relativeCoords) {
     return {
 	      x: map.bounds.width * relativeCoords.x + map.loc.x,
 	      y: map.bounds.height * relativeCoords.y + map.loc.y	
     }
 }
 
-crisis.Map.prototype.zoom = new function(factor, center) {
+crisis.Map.prototype.zoom = function(factor, center) {
     var map = this;
     
     var newBounds = {
@@ -87,7 +87,7 @@ crisis.Map.prototype.zoom = new function(factor, center) {
     map.positionDivisions();
 }
 
-crisis.Map.prototype.move = new function(xPercent, yPercent) {
+crisis.Map.prototype.move = function(xPercent, yPercent) {
     var map = this;
     map.loc = {
 	      x: Math.max(0, Math.min(map.maxBounds.width - newBounds.width,
@@ -98,7 +98,7 @@ crisis.Map.prototype.move = new function(xPercent, yPercent) {
     map.positionDivisions();
 }
 
-crisis.Map.prototype.positionDivisions = new function() {
+crisis.Map.prototype.positionDivisions = function() {
     var map = this;
 
     _.each(map.divisions(), function(div) {
