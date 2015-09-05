@@ -1,10 +1,27 @@
-crisis.Division = function(divData) {
-    console.log("test");
+/**
+ * @typedef{{
+ *   absCoords: crisis.Coords,
+ *   units: Array<crisis.UnitData>
+ * }}
+ */
+crisis.DivisionData;
+
+/** 
+ * @constructor
+ * @param {crisis.DivisionData} divData
+ */
+crisis.Division = function(divData) { 
+    /** @type{jQuery} */
     this.$marker = crisis.$g_protoDivisionMarker.clone();
+    /** @type{crisis.DivisionData} */
     this.data = divData;
-    this.detailsPane = new DivisionDetails();
+    /** @type{crisis.DivisionDetails} */
+    this.detailsPane = new crisis.DivisionDetails();
+    /** @type{boolean} */
     this.reRender = true;
+    /** @type{boolean} */
     this.editing = false;
+    /** @type{crisis.Coords} */ 
     this.absCoords = divData.absCoords;
 
     this.$marker.click(function() {
@@ -19,24 +36,26 @@ crisis.Division = function(divData) {
 	          div.details.$pane.show();
 	      }
     });
-
-    this.$detailsPane.find(".editButton").click(function() {
-	      //if () {}
-    });
 }
 
+/** @param {crisis.DivisionData} divData */
 crisis.Division.prototype.updateData = function(divData) {
     this.data = divData;
     this.reRender = true;
 }
 
+/** @constructor */
 crisis.DivisionDetails = function() {
+    /** @type{jQuery} */
     this.$pane = null;
+    /** @type{jQuery} */
     this.$unitList = null;
+    /** @type{jQuery} */
     this.$editButton = null;
 }
 
-crisis.DivisionDetails.prototype.reRender = function(units) {
+/** @param {crisis.DivisionData} divData */
+crisis.DivisionDetails.prototype.reRender = function(divData) {
     var dets = this;
 
     if (dets.$pane === null) {
@@ -46,7 +65,7 @@ crisis.DivisionDetails.prototype.reRender = function(units) {
     }
 
     dets.$unitList.empty(); 
-    _(units).sort()
+    _(divData.units).sort()
 	      .map(crisis.Unit)
 	      .each(function(unit) { dets.$unitList.append(unit.$listItem); });	
 }
@@ -98,16 +117,20 @@ crisis.DivisionDetails.prototype.commitEdit = function() {
 
 /**
  * @typedef{{
- * type: string,
- * amount: number,
- * $listItem: jQuery
+ *   type: string,
+ *   amount: number,
+ *   $listItem: jQuery
  * }} 
  */
 crisis.UnitData;
 
-crisis.Unit = function(data) {
-    this.amount = data.amount;
-    this.type = data.type;
+/** 
+ * @constructor
+ * @param {crisis.UnitData} unitData 
+ */ 
+crisis.Unit = function(unitData) {
+    this.amount = unitData.amount;
+    this.type = unitData.type;
     this.$listItem = crisis.$g_protoUnitListItem.clone();
     this.$listItem.find(".type").html(
 	      crisis.$g_protoUnitTypes.find("[type=" + this.type + "]").clone());

@@ -1,31 +1,44 @@
 /**
  * @typedef{{
- * mapHeight: number,
- * mapWidth: number,
- * divisions: Array<crisis.DivisionData>
+ *   mapHeight: number,
+ *   mapWidth: number,
+ *   divisions: Array<crisis.DivisionData>
  * }}
  */
 crisis.MapData;
 
+/**
+ * @constructor
+ * @param {crisis.MapData} mapData
+ */
 crisis.Map = function(mapData) {
+    /** @type{crisis.MapData} */
     this.data = mapData;
+    /** @type{Array<crisis.Division>} */
     this.divisions = _.map(data.divisions, function(divData) {
 	      return new crisis.Division(divData);
     });
+    /** @type{crisis.Coords} */ 
     this.loc = {
 	      x: 0,
 	      y: 0
     }
+    /** @type{crisis.Bounds} */
     this.bounds = {
 	      height: mapData.mapHeight,
 	      width:  mapData.mapWidth
     };
+    /** @type{crisis.Bounds} */
     this.maxBounds = {
 	      height: mapData.mapHeight,
 	      width:  mapData.mapWidth
     };
 }
 
+/**
+ * @param {jQuery} $dropdown
+ * @param {jQuery} $source
+ */ 
 crisis.Map.prototype.positionDropdown = function($dropdown, $source) {
     var canvasTop = 0;
     var canvasLeft = 0;
@@ -55,6 +68,10 @@ crisis.Map.prototype.positionDropdown = function($dropdown, $source) {
     });
 }
 
+/** 
+ * @param {crisis.Coords} absCoords 
+ * @return {crisis.Coords}
+ */
 crisis.Map.prototype.relativeCoords = function(absCoords) {
     return {
 	      x: (absCoords.x - map.loc.x) / map.bounds.width,
@@ -62,6 +79,10 @@ crisis.Map.prototype.relativeCoords = function(absCoords) {
     }
 }
 
+/**
+ * @param {crisis.Coords}
+ * @return {crisis.Coords}
+ */
 crisis.Map.prototype.absCoords = function(relativeCoords) {
     return {
 	      x: map.bounds.width * relativeCoords.x + map.loc.x,
@@ -69,6 +90,10 @@ crisis.Map.prototype.absCoords = function(relativeCoords) {
     }
 }
 
+/**
+ * @param {number} factor
+ * @param {number} center
+ */ 
 crisis.Map.prototype.zoom = function(factor, center) {
     var map = this;
     
@@ -87,6 +112,10 @@ crisis.Map.prototype.zoom = function(factor, center) {
     map.positionDivisions();
 }
 
+/**
+ * @param {number} xPercent
+ * @param {number} yPercent
+ */
 crisis.Map.prototype.move = function(xPercent, yPercent) {
     var map = this;
     map.loc = {

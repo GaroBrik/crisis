@@ -19,8 +19,16 @@ crisis = {
 
 /**
  * @typedef{{
- * x: number,
- * y: number
+ *   x: number,
+ *   y: number
  * }}
  */
 crisis.Coords;
+
+/**
+ * @typedef{{
+ *   height: number,
+ *   width: number
+ * }}
+ */
+crisis.Bounds;
