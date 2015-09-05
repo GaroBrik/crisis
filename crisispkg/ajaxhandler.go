@@ -39,7 +39,7 @@ func (handler *AjaxHandler) HandleRequest(w http.ResponseWriter, r *http.Request
 			divisions = handler.db.GetFactionDivisions(factionId)
 		}
 
-		json, err := json.Marshal(Map{divisions, 10, 10})
+		json, err := json.Marshal(Map{Bounds{10, 10}, divisions})
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return
