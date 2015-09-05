@@ -30,7 +30,7 @@ var err error
 
 func StartListening() {
 	webcontentServer := http.FileServer(http.Dir(webcontentPath))
-	http.Handle("/statik", http.StripPrefix("/statik", webcontentServer))
+	http.Handle("/statik/", http.StripPrefix("/statik/", webcontentServer))
 
 	if headerTmpl, err = template.ParseFiles(htmlPath + "head.gohtml"); err != nil {
 		panic(err)
