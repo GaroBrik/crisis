@@ -1,6 +1,6 @@
 package crisis
 
 type Map struct {
-	bounds    Bounds
-	divisions []*Division
+	Bounds    Bounds      `json:"bounds"`
+	Divisions []*Division `json:"divisions"`
 }
