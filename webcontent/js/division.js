@@ -23,7 +23,7 @@ crisis.Division = new function(data, map) {
     });
 
     this.$detailsPane.find(".editButton").click(function() {
-	      if () {}
+	      //if () {}
     });
 }
 

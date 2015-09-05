@@ -2,7 +2,7 @@ crisis = {
     $g_protoDivisionMarker: null,
     $g_protoDivisionDetails: null,
     $g_protoUnitListItem: null,
-    $g_protoUnitTypes: null
+    $g_protoUnitTypes: null,
     
     init: function() {
 	      var $prototypes = $("#htmlObjectPrototypes");
