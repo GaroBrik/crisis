@@ -8,8 +8,8 @@ import (
 type servlet func(http.ResponseWriter, *http.Request)
 
 const (
-	webcontentPath = "webcontent/"
-	htmlPath       = webcontentPath + "html/"
+	staticPath = "static/"
+	htmlPath   = "webcontent/html/"
 )
 
 type unitType struct {
@@ -30,7 +30,7 @@ var err error
 
 func StartListening() {
 	webcontentServer := http.FileServer(http.Dir(webcontentPath))
-	http.Handle("/statik/", http.StripPrefix("/statik/", webcontentServer))
+	http.Handle("/static/", http.StripPrefix("/static/", webcontentServer))
 
 	if headerTmpl, err = template.ParseFiles(htmlPath + "head.gohtml"); err != nil {
 		panic(err)

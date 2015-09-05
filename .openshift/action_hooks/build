@@ -1,3 +1,8 @@
 #!/bin/bash
 
-cp -r "${OPENSHIFT_REPO_DIR}webcontent/html" "${OPENSHIFT_REPO_DIR}bin/" 
+cp -r "${OPENSHIFT_REPO_DIR}webcontent/html" "${OPENSHIFT_REPO_DIR}bin/"
+pushd "${OPENSHIFT_REPO_DIR}webcontent/js" > /dev/null
+{ 
+    output="${OPENSHIFT_REPO_DIR}static/compiled.js"
+    java -jar compiler.jar --js main.js division.js map.js --js_output_file output 
+} >> "${OPENSHIFT_GO_LOG_DIR}go.log"
