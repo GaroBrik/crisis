@@ -8,8 +8,9 @@ import (
 type servlet func(http.ResponseWriter, *http.Request)
 
 const (
-	htmlPath = "webcontent/html/"
-	jsPath   = "webcontent/js/"
+	webcontentDir = http.Dir("webcontent")
+	htmlPath      = "webcontent/html/"
+	jsPath        = "webcontent/js/"
 )
 
 type unitType struct {
@@ -29,6 +30,8 @@ var staffPageTmpl *template.Template
 var err error
 
 func StartListening() {
+	http.Handle("/statik", http.StripPrefix("/statik", fs))
+
 	if headerTmpl, err = template.ParseFiles(htmlPath + "head.gohtml"); err != nil {
 		panic(err)
 	}
@@ -46,8 +49,8 @@ func wrapAndListen(path string, handler servlet) {
 	http.HandleFunc(path, func(res http.ResponseWriter, req *http.Request) {
 		//authInfo := GetAuthInfoOf(req)
 		headerTmpl.Execute(res, headInfo{
-			JSUrl:  "../js/main.js",
-			CSSUrl: "webcontent/css/main.css",
+			JSUrl:  "statik/js/main.js",
+			CSSUrl: "statik/css/main.css",
 			Types:  make([]unitType, 0),
 		})
 		handler(res, req)
