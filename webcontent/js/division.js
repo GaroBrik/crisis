@@ -25,18 +25,18 @@ crisis.Division = function(divData) {
     });
 }
 
-crisis.Division.prototype.updateData = new function(divData) {
-    this.data = data;
+crisis.Division.prototype.updateData = function(divData) {
+    this.data = divData;
     this.reRender = true;
 }
 
-crisis.DivisionDetails = new function() {
+crisis.DivisionDetails = function() {
     this.$pane = null;
     this.$unitList = null;
     this.$editButton = null;
 }
 
-crisis.DivisionDetails.prototype.reRender = new function(units) {
+crisis.DivisionDetails.prototype.reRender = function(units) {
     var dets = this;
 
     if (dets.$pane === null) {
@@ -51,7 +51,7 @@ crisis.DivisionDetails.prototype.reRender = new function(units) {
 	      .each(new function(unit) { dets.$unitList.append(unit.$listItem); });	
 }
 
-crisis.DivisionDetails.prototype.enableEdit = new function() {
+crisis.DivisionDetails.prototype.enableEdit = function() {
     var dets = this;
     
     _.each(units, new function() {
@@ -62,7 +62,7 @@ crisis.DivisionDetails.prototype.enableEdit = new function() {
     });
 }
 
-crisis.DivisionDetails.prototype.disableEdit = new function() {
+crisis.DivisionDetails.prototype.disableEdit = function() {
     var dets = this;
 
     dets.find(".paneInvalidAlert").hide();
@@ -73,7 +73,7 @@ crisis.DivisionDetails.prototype.disableEdit = new function() {
     });
 }
 
-crisis.DivisionDetails.prototype.commitEdit = new function() {
+crisis.DivisionDetails.prototype.commitEdit = function() {
     var dets = this;
 
     var changedUnits = [];
@@ -105,7 +105,7 @@ crisis.DivisionDetails.prototype.commitEdit = new function() {
  */
 crisis.UnitData;
 
-crisis.Unit = new function(data) {
+crisis.Unit = function(data) {
     this.amount = data.amount;
     this.type = data.type;
     this.$listItem = crisis.$g_protoUnitListItem.clone();
