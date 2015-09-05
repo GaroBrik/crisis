@@ -10,7 +10,7 @@ type servlet func(http.ResponseWriter, *http.Request)
 const (
 	webcontentDir = http.Dir("webcontent")
 	htmlPath      = "webcontent/html/"
-	jsPath        = "webcontent/js/"
+	jsPath        = "webcontent/js"
 )
 
 type unitType struct {
