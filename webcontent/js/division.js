@@ -1,11 +1,3 @@
-/**
- * @typedef{{
- * units: Array<crisis.UnitData>
- * absCoords: crisis.Coords
- * }} 
- */
-crisis.DivisionData;
-
 crisis.Division = new function(divData) {
     console.log("test");
     this.$marker = crisis.$g_protoDivisionMarker.clone();
@@ -33,7 +25,7 @@ crisis.Division = new function(divData) {
     });
 }
 
-crisis.Division.prototype.updateData = new function(data) {
+crisis.Division.prototype.updateData = new function(divData) {
     this.data = data;
     this.reRender = true;
 }
