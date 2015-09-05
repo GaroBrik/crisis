@@ -32,6 +32,11 @@ func StartListening() {
 	staticServer := http.FileServer(http.Dir(staticPath))
 	http.Handle("/static/", http.StripPrefix("/static/", staticServer))
 
+	ajaxHandler := GetAjaxHandlerInstance()
+	http.HandleFunc("/ajax/", func(w http.ResponseWriter, r *http.Request) {
+		ajaxHandler.HandleRequest(w, r)
+	})
+
 	if headerTmpl, err = template.ParseFiles(htmlPath + "head.gohtml"); err != nil {
 		panic(err)
 	}

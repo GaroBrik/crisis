@@ -9,6 +9,12 @@ type AjaxHandler struct {
 	db *Database
 }
 
+type MapDataJson struct {
+	divisions DivisionJson
+	mapHeight int
+	mapWidth  int
+}
+
 var m_ajaxHandler *AjaxHandler
 
 func GetAjaxHandlerInstance() *AjaxHandler {
@@ -39,7 +45,7 @@ func (handler *AjaxHandler) HandleRequest(w http.ResponseWriter, r *http.Request
 			divisions = handler.db.GetFactionDivisions(factionId)
 		}
 
-		json, err := json.Marshal(divisions)
+		json, err := json.Marshal(MapDataJson{divisions, 10, 10})
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return
