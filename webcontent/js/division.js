@@ -7,6 +7,7 @@
 crisis.DivisionData;
 
 crisis.Division = new function(divData) {
+    console.log("test");
     this.$marker = crisis.$g_protoDivisionMarker.clone();
     this.data = divData;
     this.detailsPane = new DivisionDetails();
