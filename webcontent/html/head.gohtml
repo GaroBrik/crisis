@@ -12,14 +12,16 @@
     <div id="protoDivisionDetails">
       <span class="paneInvalidAlert"></span>
       <ul></ul>
-      <input type="button" class="editButton">
+      <input type="button" class="editButton" value="value">
     </div>
-    <li id="protoUnitListItem">
-      <div class=".type"></div>
-      <span class=".value"></span>
-      <input type="text" class=".editAmount">    
-      <span class=".invalidAlert"></span>
-    </li>
+    <ul>
+      <li id="protoUnitListItem">
+        <div class=".type"></div>
+        <span class=".value"></span>
+        <input type="text" class=".editAmount">    
+        <span class=".invalidAlert"></span>
+      </li>
+    </ul>
     <div id="protoUnitTypes">
       {{range .Types}}
         <span data-type="{{.Name}}">

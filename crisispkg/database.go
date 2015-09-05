@@ -55,7 +55,7 @@ func (db *Database) GetFactionDivisions(faction_id int) []*Division {
 		"division.coord_y, division.division_name "+
 		"FROM division INNER JOIN faction ON (faction.id = division.faction) "+
 		"INNER JOIN division_view ON (division_view.division_id = division.id) "+
-		"WHERE division_view.faction_id=?", faction_id)
+		"WHERE division_view.faction_id = $1 ", faction_id)
 	if err != nil {
 		panic(err)
 	}
@@ -96,7 +96,7 @@ func (db *Database) getFactionDivisionsFromRows(rows *sql.Rows) []*Division {
 func (db *Database) loadUnitsFor(div *Division) {
 	rows, err := db.db.Query("SELECT unit_type.unit_name, unit.amount, unit_type.unit_speed "+
 		"FROM unit INNER JOIN unit_type ON (unit.unit_type = unit_type.id)"+
-		"WHERE unit.division = ?", div.Id)
+		"WHERE unit.division = $1", div.Id)
 	if err != nil {
 		panic(err)
 	}
