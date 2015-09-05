@@ -29,8 +29,8 @@ var staffPageTmpl *template.Template
 var err error
 
 func StartListening() {
-	webcontentServer := http.FileServer(http.Dir(webcontentPath))
-	http.Handle("/static/", http.StripPrefix("/static/", webcontentServer))
+	staticServer := http.FileServer(http.Dir(staticPath))
+	http.Handle("/static/", http.StripPrefix("/static/", staticServer))
 
 	if headerTmpl, err = template.ParseFiles(htmlPath + "head.gohtml"); err != nil {
 		panic(err)
