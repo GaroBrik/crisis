@@ -47,7 +47,7 @@ func wrapAndListen(path string, handler servlet) {
 		//authInfo := GetAuthInfoOf(req)
 		headerTmpl.Execute(res, headInfo{
 			JSUrl:  "../js/main.js",
-			CSSUrl: "../css/main.css",
+			CSSUrl: "webcontent/css/main.css",
 			Types:  make([]unitType, 0),
 		})
 		handler(res, req)
