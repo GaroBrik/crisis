@@ -10,7 +10,9 @@ crisis = {
     $g_protoUnitTypes: null
 }
 
-/** @export */
+/** 
+ * @export 
+ */
 crisis.Init = function() {
 	  var $prototypes = $("#htmlObjectPrototypes");
 	  crisis.$g_protoDivisionMarker = $prototypes.find("#protoDivisionMarker");
