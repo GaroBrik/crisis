@@ -1,3 +1,4 @@
+/** @export */
 crisis = {
     /** @type{jQuery} */
     $g_protoDivisionMarker: null,
