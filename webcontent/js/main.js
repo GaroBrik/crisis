@@ -27,7 +27,7 @@ crisis.init = function() {
 /** @param {jQuery} $proto */
 crisis.cloneProto = function($proto) {
     var ret = $proto.clone();
-    ret.id("");
+    ret.attr("id", "");
     return ret;
 }
 
