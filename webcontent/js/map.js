@@ -12,8 +12,6 @@ crisis.MapData;
  * @param {crisis.MapData} mapData
  */
 crisis.Map = function(mapData) {
-    console.log(mapData);
-    _.each(mapData.Divisions, function(divData) { console.log(divData); });
     /** @type{Array<crisis.Division>} */
     this.Divisions = _.map(mapData.Divisions, function(divData) {
         console.log(divData);
