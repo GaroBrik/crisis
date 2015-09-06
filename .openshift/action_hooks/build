@@ -3,8 +3,7 @@
 cp -r "${OPENSHIFT_REPO_DIR}webcontent/css" "${OPENSHIFT_REPO_DIR}static/"
 pushd "${OPENSHIFT_REPO_DIR}webcontent/js" > /dev/null
 { 
-    output="${OPENSHIFT_REPO_DIR}static/compiled.js"
-    input="main.js division.js map.js jquery-1.9.js"
+    output="${OPENSHIFT_REPO_DIR}static/compiled.js" 
     java -jar compiler.jar --compilation_level ADVANCED_OPTIMIZATIONS \
-        --js $input --js_output_file $output
+        --js_output_file $output `find ./src/ -name '*.js'`
 } >> "${OPENSHIFT_GO_LOG_DIR}go.log"
