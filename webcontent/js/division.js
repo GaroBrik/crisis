@@ -13,7 +13,7 @@ crisis.Division = function(divJson) {
     /** @type{boolean} */
     this.editing = false;
     /** @type{crisis.Coords} */ 
-    this.absCoords = divJson.AbsCoords;
+    this.absCoords = { x: divJson.AbsCoords.X, y: divJson.AbsCoords.Y };
     /** @type{Array<crisis.Unit> */
     this.units = _.map(divJson.Units, crisis.Unit.fromData);
     

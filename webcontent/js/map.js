@@ -1,5 +1,4 @@
 /**
-/**
  * @constructor
  * @export
  * @param {crisis.MapJson} mapData
@@ -109,7 +108,7 @@ crisis.Map.prototype.move = function(xPercent, yPercent) {
     var map = this;
     map.loc = {
 	      x: Math.max(0, Math.min(map.maxBounds.width - newBounds.width,
-				                        map.loc.x - xPercent * map.bounds.width)),
+				                        map.loc.x - xPercent * map.bounds.Width)),
 	      y: Math.max(0, Math.min(map.maxBounds.height - newBounds.height,
 				                        map.loc.y - yPercent * map.bounds.height))
     }
@@ -120,7 +119,7 @@ crisis.Map.prototype.positionDivisions = function() {
     var map = this;
 
     _.each(map.divisions, function(div) {
-	      var rel = map.relativeCoords(div.AbsCoords);
+	      var rel = map.relativeCoords(div.absCoords);
 	      if (0 <= rel.x && rel.x <= 100 && 0 <= rel.y && rel.y <= 100) {
 	          div.$marker.css({
 		            "left": rel.x + "%",
