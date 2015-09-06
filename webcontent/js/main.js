@@ -7,7 +7,9 @@ crisis = {
     /** @type{jQuery} */
     $g_protoUnitListItem: null,
     /** @type{jQuery} */
-    $g_protoUnitTypes: null
+    $g_protoUnitTypes: null 
+    /** @type{jQuery} */
+    $g_mapHolder: null
 }
 
 /** 
@@ -19,6 +21,7 @@ crisis.Init = function() {
 	  crisis.$g_protoDivisionDetails = $prototypes.find("#protoDivisionDetails");
 	  crisis.$g_protoUnitListItem = $prototypes.find("#protoUnitListItem");
 	  crisis.$g_protoUnitTypes = $prototypes.find("#protoUnitTypes");
+    crisis.$g_mapHolder = $("#mapHolder");
 }
 
 /**

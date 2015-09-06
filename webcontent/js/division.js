@@ -13,6 +13,7 @@ crisis.DivisionData;
 crisis.Division = function(divData) { 
     /** @type{jQuery} */
     this.$marker = crisis.$g_protoDivisionMarker.clone();
+    crisis.$g_mapHolder.append(this.$marker);
     /** @type{crisis.DivisionDetails} */
     this.Details = new crisis.DivisionDetails(this);
     /** @type{boolean} */
