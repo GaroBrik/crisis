@@ -21,3 +21,9 @@
     width: 100%;
     height: 100%;
 }
+
+.divisionMarker {
+    width: 10px;
+    height: 10px;
+    background-color: red;
+}

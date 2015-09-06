@@ -1,6 +1,6 @@
 package crisis
 
 type Coords struct {
-	x int
-	y int
+	X int
+	Y int
 }

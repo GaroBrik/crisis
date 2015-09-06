@@ -1,6 +1,6 @@
 package crisis
 
 type Bounds struct {
-	height int
-	width  int
+	Height int
+	Width  int
 }

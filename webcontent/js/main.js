@@ -8,7 +8,7 @@ crisis = {
     /** @type{jQuery} */
     $g_protoUnitTypes: null,
     
-    init: function() {
+    Init: function() {
 	      var $prototypes = $("#htmlObjectPrototypes");
 	      this.$g_protoDivisionMarker = $prototypes.find("#protoDivisionMarker");
 	      this.$g_protoDivisionDetails = $prototypes.find("#protoDivisionDetails");
@@ -19,16 +19,16 @@ crisis = {
 
 /**
  * @typedef{{
- *   x: number,
- *   y: number
+ *   X: number,
+ *   Y: number
  * }}
  */
 crisis.Coords;
 
 /**
  * @typedef{{
- *   height: number,
- *   width: number
+ *   Height: number,
+ *   Width: number
  * }}
  */
 crisis.Bounds;

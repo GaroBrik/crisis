@@ -1,3 +1,14 @@
 <div id="mapHolder">
   <img src="http://i.imgur.com/utWV7Ut.jpg" id="mapImage"> 
 </div>
+<script type="text/javascript">
+$(document).ready(function() {
+  crisis.Init();
+  $.ajax("ajax", {
+    success: function(data) {
+      console.log(data);
+      var t = new crisis.Map(data); 
+    }
+  });
+});
+</script>

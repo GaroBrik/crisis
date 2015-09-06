@@ -1,7 +1,7 @@
 /**
  * @typedef{{
- *   absCoords: crisis.Coords,
- *   units: Array<crisis.UnitData>
+ *   AbsCoords: crisis.Coords,
+ *   Units: Array<crisis.UnitData>
  * }}
  */
 crisis.DivisionData;
@@ -14,23 +14,24 @@ crisis.Division = function(divData) {
     /** @type{jQuery} */
     this.$marker = crisis.$g_protoDivisionMarker.clone();
     /** @type{crisis.DivisionData} */
-    this.data = divData;
+    this.Data = divData;
     /** @type{crisis.DivisionDetails} */
-    this.detailsPane = new crisis.DivisionDetails();
+    this.Details = new crisis.DivisionDetails(this);
     /** @type{boolean} */
-    this.reRender = true;
+    this.ReRender = true;
     /** @type{boolean} */
     this.editing = false;
     /** @type{crisis.Coords} */ 
-    this.absCoords = divData.absCoords;
-
+    this.AbsCoords = divData.AbsCoords;
+    
+    var div = this;
     this.$marker.click(function() {
-	      if (div.$detailsPane.is(":visible")) {
-	          div.$detailsPane.hide();
+	      if (div.Details.is(":visible")) {
+	          div.Details.hide();
 	      } else {
-	          if (div.reRender) {
-		            div.details.reRender(div.data.units);
-		            this.reRender = false;
+	          if (div.ReRender) {
+		            div.details.reRender();
+		            this.ReRender = false;
 	          }
 	          map.positionDropdown(div.details.$pane, div.$marker);
 	          div.details.$pane.show();
@@ -40,22 +41,26 @@ crisis.Division = function(divData) {
 
 /** @param {crisis.DivisionData} divData */
 crisis.Division.prototype.updateData = function(divData) {
-    this.data = divData;
-    this.reRender = true;
+    this.Data = divData;
+    this.ReRender = true;
 }
 
-/** @constructor */
-crisis.DivisionDetails = function() {
+/** 
+ * @constructor
+ * @param {crisis.Division} div
+ */
+crisis.DivisionDetails = function(div) {
     /** @type{jQuery} */
     this.$pane = null;
     /** @type{jQuery} */
     this.$unitList = null;
     /** @type{jQuery} */
     this.$editButton = null;
+    /** @type{crisis.Division} */
+    this.Division = div;
 }
 
-/** @param {crisis.DivisionData} divData */
-crisis.DivisionDetails.prototype.reRender = function(divData) {
+crisis.DivisionDetails.prototype.reRender = function() {
     var dets = this;
 
     if (dets.$pane === null) {
@@ -65,7 +70,7 @@ crisis.DivisionDetails.prototype.reRender = function(divData) {
     }
 
     dets.$unitList.empty(); 
-    _(divData.units).sort()
+    _(dets.Division.Units).sort()
 	      .map(crisis.Unit)
 	      .each(function(unit) { dets.$unitList.append(unit.$listItem); });	
 }
@@ -117,8 +122,8 @@ crisis.DivisionDetails.prototype.commitEdit = function() {
 
 /**
  * @typedef{{
- *   utype: string,
- *   amount: number,
+ *   Utype: string,
+ *   Amount: number,
  * }} 
  */
 crisis.UnitData;
@@ -129,12 +134,12 @@ crisis.UnitData;
  */ 
 crisis.Unit = function(unitData) {
     /** @type{number} */
-    this.amount = unitData.amount;
+    this.Amount = unitData.Amount;
     /** @type{string} */
-    this.type = unitData.utype;
+    this.Type = unitData.Utype;
     /** @type{jQuery} */
     this.$listItem = crisis.$g_protoUnitListItem.clone();
     this.$listItem.find(".type").html(
-	      crisis.$g_protoUnitTypes.find("[type=" + this.type + "]").clone());
-    this.$listItem.find(".value").html(this.amount);
+	      crisis.$g_protoUnitTypes.find("[type=" + this.Type + "]").clone());
+    this.$listItem.find(".value").html(this.Amount);
 }

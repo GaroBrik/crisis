@@ -1,7 +1,7 @@
 /**
  * @typedef{{
- *   bounds: crisis.Bounds, 
- *   divisions: Array<crisis.DivisionData>
+ *   Bounds: crisis.Bounds, 
+ *   Divisions: Array<crisis.DivisionData>
  * }}
  */
 crisis.MapData;
@@ -12,26 +12,22 @@ crisis.MapData;
  */
 crisis.Map = function(mapData) {
     /** @type{crisis.MapData} */
-    this.data = mapData;
+    this.Data = mapData;
     /** @type{Array<crisis.Division>} */
-    this.divisions = _.map(data.divisions, function(divData) {
+    this.Divisions = _.map(data.Divisions, function(divData) {
 	      return new crisis.Division(divData);
     });
     /** @type{crisis.Coords} */ 
-    this.loc = {
-	      x: 0,
-	      y: 0
+    this.Loc = {
+	      X: 0,
+	      Y: 0
     }
     /** @type{crisis.Bounds} */
-    this.bounds = {
-	      height: mapData.mapHeight,
-	      width:  mapData.mapWidth
-    };
+    this.Bounds = mapData.Bounds;
     /** @type{crisis.Bounds} */
-    this.maxBounds = {
-	      height: mapData.mapHeight,
-	      width:  mapData.mapWidth
-    };
+    this.MaxBounds = mapData.Bounds; 
+
+    this.positionDivisions();
 }
 
 /**
@@ -72,9 +68,10 @@ crisis.Map.prototype.positionDropdown = function($dropdown, $source) {
  * @return {crisis.Coords}
  */
 crisis.Map.prototype.relativeCoords = function(absCoords) {
+    var map = this;
     return {
-	      x: (absCoords.x - map.loc.x) / map.bounds.width,
-	      y: (absCoords.y - map.loc.y) / map.bounds.height
+	      X: (absCoords.X - map.Loc.X) / map.Bounds.Width,
+	      Y: (absCoords.Y - map.Loc.Y) / map.Bounds.Height
     }
 }
 
@@ -84,8 +81,8 @@ crisis.Map.prototype.relativeCoords = function(absCoords) {
  */
 crisis.Map.prototype.absCoords = function(relativeCoords) {
     return {
-	      x: map.bounds.width * relativeCoords.x + map.loc.x,
-	      y: map.bounds.height * relativeCoords.y + map.loc.y	
+	      X: map.Bounds.Width * relativeCoords.X + map.Loc.X,
+	      Y: map.Bounds.Height * relativeCoords.Y + map.Loc.Y	
     }
 }
 
@@ -97,17 +94,17 @@ crisis.Map.prototype.zoom = function(factor, center) {
     var map = this;
     
     var newBounds = {
-	      height: Math.min(map.bounds.height * factor, map.maxBounds.height),
-	      width: Math.min(map.bounds.width * factor, map.maxBounds.width)
+	      Height: Math.min(map.Bounds.Height * factor, map.MaxBounds.Height),
+	      Width: Math.min(map.Bounds.Width * factor, map.MaxBounds.Width)
     }
-    var newCenter = {
-	      x: Math.max(0, Math.min(map.maxBounds.width - newBounds.width,
-				                        center - newBounds.width)),
-	      y: Math.max(0, Math.min(map.maxBounds.height - newBounds.height,
-				                        center - newBounds.height))
+    var newLoc = {
+	      X: Math.max(0, Math.min(map.MaxBounds.Width - newBounds.Width,
+				                        center - newBounds.Width)),
+	      Y: Math.max(0, Math.min(map.MaxBounds.Height - newBounds.Height,
+				                        center - newBounds.Height))
     }
-    map.bounds = newBounds;
-    map.loc = loc;
+    map.Bounds = newBounds;
+    map.Loc = newLoc;
     map.positionDivisions();
 }
 
@@ -117,11 +114,11 @@ crisis.Map.prototype.zoom = function(factor, center) {
  */
 crisis.Map.prototype.move = function(xPercent, yPercent) {
     var map = this;
-    map.loc = {
-	      x: Math.max(0, Math.min(map.maxBounds.width - newBounds.width,
-				                        map.loc.x - xPercent * map.bounds.width)),
-	      y: Math.max(0, Math.min(map.maxBounds.height - newBounds.height,
-				                        map.loc.y - yPercent * map.bounds.height))
+    map.Loc = {
+	      X: Math.max(0, Math.min(map.MaxBounds.Width - newBounds.Width,
+				                        map.Loc.X - xPercent * map.Bounds.Width)),
+	      Y: Math.max(0, Math.min(map.MaxBounds.Height - newBounds.Height,
+				                        map.Loc.Y - yPercent * map.Bounds.Height))
     }
     map.positionDivisions();
 }
@@ -129,12 +126,12 @@ crisis.Map.prototype.move = function(xPercent, yPercent) {
 crisis.Map.prototype.positionDivisions = function() {
     var map = this;
 
-    _.each(map.divisions(), function(div) {
+    _.each(map.Divisions, function(div) {
 	      var rel = map.relativeCoords(div.absCoords);
-	      if (0 <= rel.x && rel.x <= 100 && 0 <= rel.y && rel.y <= 100) {
+	      if (0 <= rel.X && rel.X <= 100 && 0 <= rel.Y && rel.Y <= 100) {
 	          div.$marker.css({
-		            "left": rel.x + "%",
-		            "top": rel.y + "%"
+		            "left": rel.X + "%",
+		            "top": rel.Y + "%"
 	          });
 	          div.$marker.show();
 	          if (div.$detailsPane.is(":visible")) {
