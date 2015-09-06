@@ -13,16 +13,16 @@ crisis.DivisionData;
 crisis.Division = function(divData) { 
     /** @type{jQuery} */
     this.$marker = crisis.$g_protoDivisionMarker.clone();
-    /** @type{crisis.DivisionData} */
-    this.Data = divData;
     /** @type{crisis.DivisionDetails} */
     this.Details = new crisis.DivisionDetails(this);
     /** @type{boolean} */
     this.ReRender = true;
     /** @type{boolean} */
-    this.editing = false;
+    this.Editing = false;
     /** @type{crisis.Coords} */ 
     this.AbsCoords = divData.AbsCoords;
+    /** @type{Array<crisis.Unit> */
+    this.Units = _.map(divData.Units, crisis.Unit.fromData);
     
     var div = this;
     this.$marker.click(function() {
@@ -30,18 +30,19 @@ crisis.Division = function(divData) {
 	          div.Details.hide();
 	      } else {
 	          if (div.ReRender) {
-		            div.details.reRender();
+		            div.Details.reRender();
 		            this.ReRender = false;
 	          }
-	          map.positionDropdown(div.details.$pane, div.$marker);
-	          div.details.$pane.show();
+	          map.positionDropdown(div.Details.$pane, div.$marker);
+	          div.Details.$pane.show();
 	      }
     });
 }
 
 /** @param {crisis.DivisionData} divData */
 crisis.Division.prototype.updateData = function(divData) {
-    this.Data = divData;
+    this.AbsCoords = divData.AbsCoords;
+    this.Units = _.map(divData.Units, crisis.Unit.fromData);
     this.ReRender = true;
 }
 
@@ -70,9 +71,9 @@ crisis.DivisionDetails.prototype.reRender = function() {
     }
 
     dets.$unitList.empty(); 
-    _(dets.Division.Units).sort()
-	      .map(crisis.Unit)
-	      .each(function(unit) { dets.$unitList.append(unit.$listItem); });	
+    _.each(dets.Division.Units, function(unit) { 
+        dets.$unitList.append(unit.$listItem); 
+    });	
 }
 
 crisis.DivisionDetails.prototype.enableEdit = function() {
@@ -142,4 +143,8 @@ crisis.Unit = function(unitData) {
     this.$listItem.find(".type").html(
 	      crisis.$g_protoUnitTypes.find("[type=" + this.Type + "]").clone());
     this.$listItem.find(".value").html(this.Amount);
+}
+
+crisis.Unit.fromData = function(unitData) {
+    return new crisis.Unit(unitData);
 }
