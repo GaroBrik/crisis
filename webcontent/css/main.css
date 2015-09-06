@@ -26,5 +26,9 @@
     position: absolute;
     width: 10px;
     height: 10px;
-    background-color: red;
+    background-color: purple;
+}
+
+.divisionDetails {
+    background-color: white;
 }

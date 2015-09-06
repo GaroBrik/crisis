@@ -15,13 +15,20 @@ crisis = {
 /** 
  * @export 
  */
-crisis.Init = function() {
+crisis.init = function() {
 	  var $prototypes = $("#htmlObjectPrototypes");
 	  crisis.$g_protoDivisionMarker = $prototypes.find("#protoDivisionMarker");
 	  crisis.$g_protoDivisionDetails = $prototypes.find("#protoDivisionDetails");
 	  crisis.$g_protoUnitListItem = $prototypes.find("#protoUnitListItem");
 	  crisis.$g_protoUnitTypes = $prototypes.find("#protoUnitTypes");
     crisis.$g_mapHolder = $("#mapHolder");
+}
+
+/** @param {jQuery} $proto */
+crisis.cloneProto = function($proto) {
+    var ret = $proto.clone();
+    ret.id("");
+    return ret;
 }
 
 /**

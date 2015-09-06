@@ -30,8 +30,8 @@ crisis.Map = function(mapData) {
 crisis.Map.prototype.positionDropdown = function($dropdown, $source) {
     var canvasTop = 0;
     var canvasLeft = 0;
-    var canvasBottom = window.height();
-    var canvasRight = window.width();
+    var canvasBottom = $(window).height();
+    var canvasRight = $(window).width();
     var idealY = $source.top() + $source.height() / 2;
     if (idealY + $dropdown.size() > canvasBottom) {
 	      idealY += canvasBottom - (idealY + $dropdown.size());

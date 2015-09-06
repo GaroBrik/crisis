@@ -4,7 +4,7 @@
  */
 crisis.Division = function(divJson, map) { 
     /** @type{jQuery} */
-    this.$marker = crisis.$g_protoDivisionMarker.clone();
+    this.$marker = crisis.cloneProto(crisis.$g_protoDivisionMarker);
     crisis.$g_mapHolder.append(this.$marker);
     /** @type{crisis.DivisionDetails} */
     this.details = new crisis.DivisionDetails(this);
@@ -77,7 +77,7 @@ crisis.DivisionDetails.prototype.reRender = function() {
     var dets = this;
 
     if (dets.$pane === null) {
-	      dets.$pane = crisis.$g_protoDivisionDetails.clone();
+	      dets.$pane = crisis.cloneProto(crisis.$g_protoDivisionDetails);
 	      dets.$unitList = dets.$pane.find("ul");
 	      dets.$editButton = dets.$pane.find(".editButton");
         crisis.$g_mapHolder.append(dets.$pane);
@@ -144,9 +144,9 @@ crisis.Unit = function(unitJson) {
     /** @type{string} */
     this.type = unitJson.Utype;
     /** @type{jQuery} */
-    this.$listItem = crisis.$g_protoUnitListItem.clone();
-    this.$listItem.find(".type").html(
-	      crisis.$g_protoUnitTypes.find("[type=" + this.type + "]").clone());
+    this.$listItem = crisis.cloneProto(crisis.$g_protoUnitListItem);
+    this.$listItem.find(".type").html(crisis.cloneProto(
+	      crisis.$g_protoUnitTypes.find("[type=" + this.type + "]")));
     this.$listItem.find(".value").html(this.amount);
 }
 
