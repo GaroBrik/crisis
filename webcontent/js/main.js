@@ -7,16 +7,16 @@ crisis = {
     /** @type{jQuery} */
     $g_protoUnitListItem: null,
     /** @type{jQuery} */
-    $g_protoUnitTypes: null,
-    
-    /** @export */
-    Init: function() {
-	      var $prototypes = $("#htmlObjectPrototypes");
-	      crisis.$g_protoDivisionMarker = $prototypes.find("#protoDivisionMarker");
-	      crisis.$g_protoDivisionDetails = $prototypes.find("#protoDivisionDetails");
-	      crisis.$g_protoUnitListItem = $prototypes.find("#protoUnitListItem");
-	      crisis.$g_protoUnitTypes = $prototypes.find("#protoUnitTypes");
-    }
+    $g_protoUnitTypes: null,    
+}
+
+/** @export */
+crisis.Init = function() {
+	  var $prototypes = $("#htmlObjectPrototypes");
+	  crisis.$g_protoDivisionMarker = $prototypes.find("#protoDivisionMarker");
+	  crisis.$g_protoDivisionDetails = $prototypes.find("#protoDivisionDetails");
+	  crisis.$g_protoUnitListItem = $prototypes.find("#protoUnitListItem");
+	  crisis.$g_protoUnitTypes = $prototypes.find("#protoUnitTypes");
 }
 
 /**
