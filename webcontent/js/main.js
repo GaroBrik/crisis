@@ -7,7 +7,7 @@ crisis = {
     /** @type{jQuery} */
     $g_protoUnitListItem: null,
     /** @type{jQuery} */
-    $g_protoUnitTypes: null 
+    $g_protoUnitTypes: null,
     /** @type{jQuery} */
     $g_mapHolder: null
 }
