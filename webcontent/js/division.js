@@ -20,7 +20,7 @@ crisis.Division = function(divJson, map) {
     this.map = map;
     
     var div = this;
-    this.$marker.click(function() { this.details.toggle(); });
+    this.$marker.click(function() { div.details.toggle(); });
 }
 
 /** @param {crisis.DivisionJson} divJson */
@@ -56,13 +56,15 @@ crisis.DivisionDetails.prototype.toggle = function() {
 };
 
 crisis.DivisionDetails.prototype.open = function() {
-    if (this.division.reRender) {
-        this.reRender();
-        this.division.reRender = false;
+    var dets = this;
+
+    if (dets.division.reRender) {
+        dets.reRender();
+        dets.division.reRender = false;
     }
-    this.division.map.positionDropdown(this.$pane, this.division.$marker);
-    this.$pane.show();
-    this.isOpen = true;
+    dets.division.map.positionDropdown(dets.$pane, dets.division.$marker);
+    dets.$pane.show();
+    dets.isOpen = true;
 }
 
 crisis.DivisionDetails.prototype.close = function () {
