@@ -4,10 +4,11 @@
  * @param {crisis.MapJson} mapData
  */
 crisis.Map = function(mapData) {
+    var map = this;
+
     /** @type{Array<crisis.Division>} */
     this.divisions = _.map(mapData.Divisions, function(divData) {
-        console.log(divData);
-	      return new crisis.Division(divData);
+	      return new crisis.Division(divData, map);
     });
     /** @type{crisis.Coords} */ 
     this.loc = {
@@ -126,13 +127,13 @@ crisis.Map.prototype.positionDivisions = function() {
 		            "top": rel.y + "%"
 	          });
 	          div.$marker.show();
-	          if (div.$detailsPane.is(":visible")) {
-		            map.positionDropdown(div.$detailsPane, div.$marker);
-		            div.$detailsPane.show();
+	          if (div.details.isOpen) {
+		            map.positionDropdown(div.details.$pane, div.$marker);
+		            div.details.$pane.show();
 	          }
-	      } else {
-	          div.$marker.hide();
-	          div.$detailsPane.hide();
-	      }
+        } else {
+            div.$marker.hide();
+            div.details.$pane.hide();
+        }
     });
 }

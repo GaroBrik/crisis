@@ -2,7 +2,7 @@
  * @constructor
  * @param {crisis.DivisionJson} divJson
  */
-crisis.Division = function(divJson) { 
+crisis.Division = function(divJson, map) { 
     /** @type{jQuery} */
     this.$marker = crisis.$g_protoDivisionMarker.clone();
     crisis.$g_mapHolder.append(this.$marker);
@@ -16,20 +16,11 @@ crisis.Division = function(divJson) {
     this.absCoords = { x: divJson.AbsCoords.X, y: divJson.AbsCoords.Y };
     /** @type{Array<crisis.Unit> */
     this.units = _.map(divJson.Units, crisis.Unit.fromData);
+    /** @type{crisis.Map} */
+    this.map = map;
     
     var div = this;
-    this.$marker.click(function() {
-	      if (div.details.is(":visible")) {
-	          div.details.hide();
-	      } else {
-	          if (div.reRender) {
-		            div.details.reRender();
-		            this.reRender = false;
-	          }
-	          map.positionDropdown(div.details.$pane, div.$marker);
-	          div.details.$pane.show();
-	      }
-    });
+    this.$marker.click(function() { this.details.toggle(); });
 }
 
 /** @param {crisis.DivisionJson} divJson */
@@ -52,6 +43,31 @@ crisis.DivisionDetails = function(div) {
     this.$editButton = null;
     /** @type{crisis.Division} */
     this.division = div;
+    /** @type{boolean} */
+    this.isOpen = false;
+}
+
+crisis.DivisionDetails.prototype.toggle = function() {
+	  if (this.isOpen) {
+        this.close();
+    } else {
+        this.open();
+    }
+};
+
+crisis.DivisionDetails.prototype.open = function() {
+    if (this.division.reRender) {
+        this.reRender();
+        this.division.reRender = false;
+    }
+    this.division.map.positionDropdown(this.$pane, this.division.$marker);
+    this.$pane.show();
+    this.isOpen = true;
+}
+
+crisis.DivisionDetails.prototype.close = function () {
+    this.$pane.show();
+    this.isOpen = false;
 }
 
 crisis.DivisionDetails.prototype.reRender = function() {
