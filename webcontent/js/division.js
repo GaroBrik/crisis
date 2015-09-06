@@ -115,9 +115,9 @@ crisis.DivisionDetails.prototype.commitEdit = function() {
     });
 
     if (!validSubmit) return;
-    if (changedUnits.length > 0) {
+    // if (changedUnits.length > 0) {
 	      
-    }
+    // }
 }
 
 /**

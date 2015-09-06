@@ -10,10 +10,10 @@ crisis = {
     
     Init: function() {
 	      var $prototypes = $("#htmlObjectPrototypes");
-	      this.$g_protoDivisionMarker = $prototypes.find("#protoDivisionMarker");
-	      this.$g_protoDivisionDetails = $prototypes.find("#protoDivisionDetails");
-	      this.$g_protoUnitListItem = $prototypes.find("#protoUnitListItem");
-	      this.$g_protoUnitTypes = $prototypes.find("#protoUnitTypes");
+	      crisis.$g_protoDivisionMarker = $prototypes.find("#protoDivisionMarker");
+	      crisis.$g_protoDivisionDetails = $prototypes.find("#protoDivisionDetails");
+	      crisis.$g_protoUnitListItem = $prototypes.find("#protoUnitListItem");
+	      crisis.$g_protoUnitTypes = $prototypes.find("#protoUnitTypes");
     }
 }
 
