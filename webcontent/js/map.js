@@ -12,8 +12,10 @@ crisis.MapData;
  * @param {crisis.MapData} mapData
  */
 crisis.Map = function(mapData) {
+    console.log(mapData);
     /** @type{Array<crisis.Division>} */
     this.Divisions = _.map(mapData.Divisions, function(divData) {
+        console.log(divData);
 	      return new crisis.Division(divData);
     });
     /** @type{crisis.Coords} */ 
