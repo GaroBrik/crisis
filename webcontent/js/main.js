@@ -1,4 +1,3 @@
-/** @export */
 crisis = {
     /** @type{jQuery} */
     $g_protoDivisionMarker: null,
@@ -9,7 +8,6 @@ crisis = {
     /** @type{jQuery} */
     $g_protoUnitTypes: null,
     
-    /** @export */
     Init: function() {
 	      var $prototypes = $("#htmlObjectPrototypes");
 	      crisis.$g_protoDivisionMarker = $prototypes.find("#protoDivisionMarker");

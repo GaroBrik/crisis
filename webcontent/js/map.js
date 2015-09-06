@@ -8,7 +8,6 @@ crisis.MapData;
 
 /**
  * @constructor
- * @export
  * @param {crisis.MapData} mapData
  */
 crisis.Map = function(mapData) {
