@@ -5,5 +5,5 @@ pushd "${OPENSHIFT_REPO_DIR}webcontent/js" > /dev/null
 { 
     output="${OPENSHIFT_REPO_DIR}static/compiled.js" 
     java -jar compiler.jar --compilation_level ADVANCED_OPTIMIZATIONS \
-        --js_output_file $output `find ./src/ -name '*.js'`
+        --js_output_file $output `find . -name '*.js'`
 } >> "${OPENSHIFT_GO_LOG_DIR}go.log"
