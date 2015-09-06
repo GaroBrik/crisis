@@ -2,6 +2,12 @@
    with the closure compiler. */
 
 goog = {};
+
+/**
+ * Reference to the global context.  In most cases this will be 'window'.
+ */
+goog.global = this;
+
 /**
  * Exports a property unobfuscated into the object's namespace.
  * ex. goog.exportProperty(Foo, 'staticFunction', Foo.staticFunction);
@@ -37,4 +43,44 @@ goog.exportProperty = function(object, publicName, symbol) {
  */
 goog.exportSymbol = function(publicPath, object, opt_objectToExportTo) {
   goog.exportPath_(publicPath, object, opt_objectToExportTo);
+};
+
+/**
+ * Builds an object structure for the provided namespace path, ensuring that
+ * names that already exist are not overwritten. For example:
+ * "a.b.c" -> a = {};a.b={};a.b.c={};
+ * Used by goog.provide and goog.exportSymbol.
+ * @param {string} name name of the object that this file defines.
+ * @param {*=} opt_object the object to expose at the end of the path.
+ * @param {Object=} opt_objectToExportTo The object to add the path to; default
+ *     is |goog.global|.
+ * @private
+ */
+goog.exportPath_ = function(name, opt_object, opt_objectToExportTo) {
+  var parts = name.split('.');
+  var cur = opt_objectToExportTo || goog.global;
+
+  // Internet Explorer exhibits strange behavior when throwing errors from
+  // methods externed in this manner.  See the testExportSymbolExceptions in
+  // base_test.html for an example.
+  if (!(parts[0] in cur) && cur.execScript) {
+    cur.execScript('var ' + parts[0]);
+  }
+
+  // Certain browsers cannot parse code in the form for((a in b); c;);
+  // This pattern is produced by the JSCompiler when it collapses the
+  // statement above into the conditional loop below. To prevent this from
+  // happening, use a for-loop and reserve the init logic as below.
+
+  // Parentheses added to eliminate strict JS warning in Firefox.
+  for (var part; parts.length && (part = parts.shift());) {
+    if (!parts.length && opt_object !== undefined) {
+      // last part and we have an object; use it
+      cur[part] = opt_object;
+    } else if (cur[part]) {
+      cur = cur[part];
+    } else {
+      cur = cur[part] = {};
+    }
+  }
 };
