@@ -6,7 +6,6 @@ $(document).ready(function() {
   crisis.Init();
   $.ajax("ajax", {
     success: function(data) {
-      console.log(data);
       var t = new crisis.Map(data); 
     }
   });
