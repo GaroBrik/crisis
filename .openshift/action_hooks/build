@@ -5,5 +5,6 @@ pushd "${OPENSHIFT_REPO_DIR}webcontent/js" > /dev/null
 { 
     output="${OPENSHIFT_REPO_DIR}static/compiled.js"
     input="main.js division.js map.js jquery-1.9.js"
-    java -jar compiler.jar --js $input --js_output_file $output
+    java -jar compiler.jar --compilation_level ADVANCED_OPTIMIZATIONS \
+        --js $input --js_output_file $output
 } >> "${OPENSHIFT_GO_LOG_DIR}go.log"

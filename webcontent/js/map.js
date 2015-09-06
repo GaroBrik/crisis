@@ -125,7 +125,7 @@ crisis.Map.prototype.positionDivisions = function() {
     var map = this;
 
     _.each(map.Divisions, function(div) {
-	      var rel = map.relativeCoords(div.absCoords);
+	      var rel = map.relativeCoords(div.AbsCoords);
 	      if (0 <= rel.X && rel.X <= 100 && 0 <= rel.Y && rel.Y <= 100) {
 	          div.$marker.css({
 		            "left": rel.X + "%",
