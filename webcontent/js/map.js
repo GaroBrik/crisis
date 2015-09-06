@@ -63,8 +63,8 @@ crisis.Map.prototype.positionDropdown = function($dropdown, $source) {
 crisis.Map.prototype.relativeCoords = function(absCoords) {
     var map = this;
     return {
-	      x: (absCoords.x - map.loc.x) / map.bounds.width,
-	      y: (absCoords.y - map.loc.y) / map.bounds.height
+	      x: (absCoords.x - map.loc.x) * 100 / map.bounds.width,
+	      y: (absCoords.y - map.loc.y) * 100 / map.bounds.height
     }
 }
 
@@ -74,8 +74,8 @@ crisis.Map.prototype.relativeCoords = function(absCoords) {
  */
 crisis.Map.prototype.absCoords = function(relativeCoords) {
     return {
-	      x: map.bounds.width * relativeCoords.x + map.loc.x,
-	      y: map.bounds.height * relativeCoords.y + map.loc.y	
+	      x: map.bounds.width * relativeCoords.x / 100 + map.loc.x,
+	      y: map.bounds.height * relativeCoords.y / 100 + map.loc.y	
     }
 }
 
