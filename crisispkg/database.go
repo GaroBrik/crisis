@@ -108,6 +108,7 @@ func (db *Database) loadUnitsFor(div *Division) {
 		speed  int
 	)
 	min_speed := 1<<16 - 1
+	div.Units = make(map[string]int)
 	for rows.Next() {
 		if err = rows.Scan(&name, &amount, &speed); err != nil {
 			panic(err)
