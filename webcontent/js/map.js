@@ -13,8 +13,8 @@ crisis.MapData;
  */
 crisis.Map = function(mapData) {
     console.log(mapData);
+    _.each(mapData.Divisions, function(divData) { console.log(divData); });
     /** @type{Array<crisis.Division>} */
-    _.map([1,2,3], function(num) { console.log(num); return num * 3; });
     this.Divisions = _.map(mapData.Divisions, function(divData) {
         console.log(divData);
 	      return new crisis.Division(divData);
