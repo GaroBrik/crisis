@@ -12,7 +12,7 @@ crisis.MapData;
  */
 crisis.Map = function(mapData) {
     /** @type{Array<crisis.Division>} */
-    this.Divisions = _.map(mapData, function(divData) {
+    this.Divisions = _.map(mapData.Divisions, function(divData) {
 	      return new crisis.Division(divData);
     });
     /** @type{crisis.Coords} */ 
