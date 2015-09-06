@@ -26,16 +26,16 @@ crisis.Init = function() {
 
 /**
  * @typedef{{
- *   X: number,
- *   Y: number
+ *   x: number,
+ *   y: number
  * }}
  */
 crisis.Coords;
 
 /**
  * @typedef{{
- *   Height: number,
- *   Width: number
+ *   height: number,
+ *   width: number
  * }}
  */
 crisis.Bounds;

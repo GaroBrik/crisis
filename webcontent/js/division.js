@@ -1,51 +1,42 @@
-/**
- * @typedef{{
- *   AbsCoords: crisis.Coords,
- *   Units: Array<crisis.UnitData>
- * }}
- */
-crisis.DivisionData;
-
 /** 
  * @constructor
- * @param {crisis.DivisionData} divData
+ * @param {crisis.DivisionJson} divJson
  */
-crisis.Division = function(divData) { 
+crisis.Division = function(divJson) { 
     /** @type{jQuery} */
     this.$marker = crisis.$g_protoDivisionMarker.clone();
-    console.log(this.$marker);
     crisis.$g_mapHolder.append(this.$marker);
     /** @type{crisis.DivisionDetails} */
-    this.Details = new crisis.DivisionDetails(this);
+    this.details = new crisis.DivisionDetails(this);
     /** @type{boolean} */
-    this.ReRender = true;
+    this.reRender = true;
     /** @type{boolean} */
-    this.Editing = false;
+    this.editing = false;
     /** @type{crisis.Coords} */ 
-    this.AbsCoords = divData.AbsCoords;
+    this.absCoords = divJson.AbsCoords;
     /** @type{Array<crisis.Unit> */
-    this.Units = _.map(divData.Units, crisis.Unit.fromData);
+    this.units = _.map(divJson.Units, crisis.Unit.fromData);
     
     var div = this;
     this.$marker.click(function() {
-	      if (div.Details.is(":visible")) {
-	          div.Details.hide();
+	      if (div.details.is(":visible")) {
+	          div.details.hide();
 	      } else {
-	          if (div.ReRender) {
-		            div.Details.reRender();
-		            this.ReRender = false;
+	          if (div.reRender) {
+		            div.details.reRender();
+		            this.reRender = false;
 	          }
-	          map.positionDropdown(div.Details.$pane, div.$marker);
-	          div.Details.$pane.show();
+	          map.positionDropdown(div.details.$pane, div.$marker);
+	          div.details.$pane.show();
 	      }
     });
 }
 
-/** @param {crisis.DivisionData} divData */
-crisis.Division.prototype.updateData = function(divData) {
-    this.AbsCoords = divData.AbsCoords;
-    this.Units = _.map(divData.Units, crisis.Unit.fromData);
-    this.ReRender = true;
+/** @param {crisis.DivisionJson} divJson */
+crisis.Division.prototype.updateData = function(divJson) {
+    this.absCoords = divJson.AbsCoords;
+    this.units = _.map(divJson.Units, crisis.Unit.fromData);
+    this.reRender = true;
 }
 
 /** 
@@ -60,7 +51,7 @@ crisis.DivisionDetails = function(div) {
     /** @type{jQuery} */
     this.$editButton = null;
     /** @type{crisis.Division} */
-    this.Division = div;
+    this.division = div;
 }
 
 crisis.DivisionDetails.prototype.reRender = function() {
@@ -73,7 +64,7 @@ crisis.DivisionDetails.prototype.reRender = function() {
     }
 
     dets.$unitList.empty(); 
-    _.each(dets.Division.Units, function(unit) { 
+    _.each(dets.division.units, function(unit) { 
         dets.$unitList.append(unit.$listItem); 
     });	
 }
@@ -123,30 +114,23 @@ crisis.DivisionDetails.prototype.commitEdit = function() {
     // }
 }
 
-/**
- * @typedef{{
- *   Utype: string,
- *   Amount: number,
- * }} 
- */
-crisis.UnitData;
-
 /** 
  * @constructor
- * @param {crisis.UnitData} unitData 
+ * @param {crisis.UnitJson} unitJson 
  */ 
-crisis.Unit = function(unitData) {
+crisis.Unit = function(unitJson) {
     /** @type{number} */
-    this.Amount = unitData.Amount;
+    this.amount = unitJson.Amount;
     /** @type{string} */
-    this.Type = unitData.Utype;
+    this.type = unitJson.Utype;
     /** @type{jQuery} */
     this.$listItem = crisis.$g_protoUnitListItem.clone();
     this.$listItem.find(".type").html(
-	      crisis.$g_protoUnitTypes.find("[type=" + this.Type + "]").clone());
-    this.$listItem.find(".value").html(this.Amount);
+	      crisis.$g_protoUnitTypes.find("[type=" + this.type + "]").clone());
+    this.$listItem.find(".value").html(this.amount);
 }
 
-crisis.Unit.fromData = function(unitData) {
-    return new crisis.Unit(unitData);
+/** @param {crisis.UnitJson} unitJson */
+crisis.Unit.fromData = function(unitJson) {
+    return new crisis.Unit(unitJson);
 }
