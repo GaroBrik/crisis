@@ -1,6 +1,7 @@
 /* This code is copied from the google closure library for use in conjunction
    with the closure compiler. */
 
+goog = {};
 /**
  * Exports a property unobfuscated into the object's namespace.
  * ex. goog.exportProperty(Foo, 'staticFunction', Foo.staticFunction);
