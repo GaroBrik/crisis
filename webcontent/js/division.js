@@ -62,6 +62,7 @@ crisis.DivisionDetails.prototype.open = function() {
         dets.reRender();
         dets.division.reRender = false;
     }
+    console.log(dets.$pane);
     dets.division.map.positionDropdown(dets.$pane, dets.division.$marker);
     dets.$pane.show();
     dets.isOpen = true;
@@ -79,6 +80,7 @@ crisis.DivisionDetails.prototype.reRender = function() {
 	      dets.$pane = crisis.$g_protoDivisionDetails.clone();
 	      dets.$unitList = dets.$pane.find("ul");
 	      dets.$editButton = dets.$pane.find(".editButton");
+        crisis.$g_mapHolder.append(dets.$pane);
     }
 
     dets.$unitList.empty(); 
