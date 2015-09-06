@@ -15,7 +15,7 @@
 }
 
 #mapImage {
-    position absolute;
+    position: absolute;
     left: 0;
     top: 0;
     width: 100%;
@@ -23,6 +23,7 @@
 }
 
 .divisionMarker {
+    position: absolute;
     width: 10px;
     height: 10px;
     background-color: red;
