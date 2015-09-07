@@ -32,7 +32,7 @@ crisis.Map.prototype.positionDropdown = function($dropdown, $source) {
     var canvasLeft = 0;
     var canvasBottom = $(window).height();
     var canvasRight = $(window).width();
-    var idealY = $source.top() + $source.height() / 2;
+    var idealY = $source.position().top + $source.height() / 2;
     if (idealY + $dropdown.size() > canvasBottom) {
 	      idealY += canvasBottom - (idealY + $dropdown.size());
     }
@@ -41,7 +41,7 @@ crisis.Map.prototype.positionDropdown = function($dropdown, $source) {
 	      idealY += canvasTop - idealY;
     }
 
-    var idealX = $source.left() + $source.width() / 2;
+    var idealX = $source.position().left + $source.width() / 2;
     if (idealX + $dropdown.width() > canvasRight) {
 	      idealX += canvasRight - (idealX + $dropdown.width());
     }
