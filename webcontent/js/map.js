@@ -1,13 +1,13 @@
 /**
  * @constructor
  * @export
- * @param {crisis.MapJson} mapData
+ * @param {crisisJson.Crisis} crisisData
  */
-crisis.Map = function(mapData) {
+crisis.Map = function(crisisData) {
     var map = this;
 
     /** @type{Array<crisis.Division>} */
-    this.divisions = _.map(mapData.Divisions, function(divData) {
+    this.divisions = _.map(crisisData.Divisions, function(divData) {
 	      return new crisis.Division(divData, map);
     });
     /** @type{crisis.Coords} */ 
@@ -16,9 +16,9 @@ crisis.Map = function(mapData) {
 	      y: 0
     }
     /** @type{crisis.Bounds} */
-    this.bounds = { height: mapData.Bounds.Height, width: mapData.Bounds.Width };
+    this.bounds = { height: crisisData.MapBounds.Height, width: crisisData.MapBounds.Width };
     /** @type{crisis.Bounds} */
-    this.maxBounds = { height: mapData.Bounds.Height, width: mapData.Bounds.Width }; 
+    this.maxBounds = { height: crisisData.MapBounds.Height, width: crisisData.MapBounds.Width }; 
 
     this.positionDivisions();
 }

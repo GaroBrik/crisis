@@ -10,22 +10,22 @@
 <body>
   <div style="display: none" id="htmlObjectPrototypes">
     <div id="protoDivisionMarker" class="divisionMarker"></div>
-    <div id="protoDivisionDetails" class="divisionDetails">
-      <span class="paneInvalidAlert"></span>
+    <div id="protoDivisionDetails" class="divisionDetails" style="display: none">
+      <span class="paneInvalidAlert" style="display: none"></span>
       <ul></ul>
-      <input type="button" class="editButton" value="value">
+      <input type="button" class="editButton" value="Edit">
     </div>
     <ul>
       <li id="protoUnitListItem" class="unitListItem">
         <div class="type"></div>
         <span class="value"></span>
-        <input type="text" class=".editAmount">    
-        <span class="invalidAlert"></span>
+        <input type="text" class=".editField" style="display: none">    
+        <span class="invalidAlert" style="display: none"></span>
       </li>
     </ul>
     <div id="protoUnitTypes">
       {{range .Types}}
-        <span data-type="{{.Name}}">
+        <span data-type="{{.Id}}">
 	        <img src="/static/images/unitType?id={{.Id}}">
 	        {{.Name}}
         </span>

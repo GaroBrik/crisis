@@ -120,3 +120,19 @@ func (db *Database) loadUnitsFor(div *Division) {
 	}
 	div.Speed = min_speed
 }
+
+func (db *Database) getAllCrises() {
+	rows, err := db.db.Query("SELECT * FROM crisis")
+	if err != nil {
+		panic(err)
+	}
+	var costs
+	for rows.Next() {
+
+	}
+}
+
+func (db *Database) doUnitMovement() {
+	for crisis := range db.getAllCrises() {
+	}
+}

@@ -1,4 +1,4 @@
-BEGIN;
+BEGIN; 
 
 INSERT INTO crisis (crisis_name, password) VALUES ('test', 'password');
 
@@ -9,15 +9,15 @@ INSERT INTO unit_type (crisis, unit_name, unit_speed) VALUES(1, 'test1', 15);
 INSERT INTO unit_type (crisis, unit_name, unit_speed) VALUES(1, 'test2', 20);
 
 INSERT INTO division (faction, division_name, coord_x, coord_y)
-               VALUES(1, 'testd11', 10, 11);
+               VALUES(1, 'testd11', '{"(10, 11)"}'::coords[]);
 INSERT INTO division (faction, division_name, coord_x, coord_y)
-               VALUES(1, 'testd12', 22, 11);
+               VALUES(1, 'testd12', '{"(22, 11)"}'::coords[]);
 INSERT INTO division (faction, division_name, coord_x, coord_y)
-               VALUES(2, 'testd21', 5, 5);
+               VALUES(2, 'testd21', '{"(5, 5)"}'::coords[]);
 INSERT INTO division (faction, division_name, coord_x, coord_y)
-               VALUES(2, 'testd22', 7, 20);
+               VALUES(2, 'testd22', '{"(7, 20)"}'::coords[]);
 INSERT INTO division (faction, division_name, coord_x, coord_y)
-               VALUES(2, 'testd23', 15, 2);
+               VALUES(2, 'testd23', '{"(15, 2)"}'::coords[]);
 
 INSERT INTO unit VALUES (1, 1, 30);
 INSERT INTO unit VALUES (1, 2, 15);

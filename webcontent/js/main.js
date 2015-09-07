@@ -12,9 +12,7 @@ crisis = {
     $g_mapHolder: null
 }
 
-/** 
- * @export 
- */
+/** @export */
 crisis.init = function() {
 	  var $prototypes = $("#htmlObjectPrototypes");
 	  crisis.$g_protoDivisionMarker = $prototypes.find("#protoDivisionMarker");

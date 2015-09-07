@@ -1,6 +1,6 @@
 /** 
  * @constructor
- * @param {crisis.DivisionJson} divJson
+ * @param {crisisJson.Division} divJson
  */
 crisis.Division = function(divJson, map) { 
     /** @type{jQuery} */
@@ -23,7 +23,7 @@ crisis.Division = function(divJson, map) {
     this.$marker.click(function() { div.details.toggle(); });
 }
 
-/** @param {crisis.DivisionJson} divJson */
+/** @param {crisisJson.Division} divJson */
 crisis.Division.prototype.updateData = function(divJson) {
     this.absCoords = divJson.AbsCoords;
     this.units = _.map(divJson.Units, crisis.Unit.fromData);
@@ -136,21 +136,24 @@ crisis.DivisionDetails.prototype.commitEdit = function() {
 
 /** 
  * @constructor
- * @param {crisis.UnitJson} unitJson 
+ * @param {crisisJson.Unit} unitJson 
  */ 
 crisis.Unit = function(unitJson) {
     /** @type{number} */
     this.amount = unitJson.Amount;
     /** @type{string} */
-    this.type = unitJson.Utype;
+    this.typeName = unitJson.TypeName;
+    /** @type{number} */
+    this.typeNum = unitJson.TypeNum;
     /** @type{jQuery} */
     this.$listItem = crisis.cloneProto(crisis.$g_protoUnitListItem);
+
     this.$listItem.find(".type").html(crisis.cloneProto(
-	      crisis.$g_protoUnitTypes.find("[type=" + this.type + "]")));
+	      crisis.$g_protoUnitTypes.find("[type=" + this.typeNum + "]")));
     this.$listItem.find(".value").html(this.amount);
 }
 
-/** @param {crisis.UnitJson} unitJson */
+/** @param {crisisJson.Unit} unitJson */
 crisis.Unit.fromData = function(unitJson) {
     return new crisis.Unit(unitJson);
 }
