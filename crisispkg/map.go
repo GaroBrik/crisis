@@ -2,7 +2,7 @@ package crisis
 
 type searchTrack struct {
 	prevCoords Coords
-	used       Bool
+	used       boolean
 	minCost    int
 }
 
