@@ -1,25 +1,22 @@
 /** @export */
 crisis = {
     /** @type{jQuery} */
-    $g_protoDivisionMarker: null,
+    $protoDivisionMarker: null,
     /** @type{jQuery} */
-    $g_protoDivisionDetails: null,
+    $protoDivisionDetails: null,
     /** @type{jQuery} */
-    $g_protoUnitListItem: null,
+    $protoUnitListItem: null,
     /** @type{jQuery} */
-    $g_protoUnitTypes: null,
-    /** @type{jQuery} */
-    $g_mapHolder: null
+    $protoUnitTypes: null
 }
 
 /** @export */
 crisis.init = function() {
 	  var $prototypes = $("#htmlObjectPrototypes");
-	  crisis.$g_protoDivisionMarker = $prototypes.find("#protoDivisionMarker");
-	  crisis.$g_protoDivisionDetails = $prototypes.find("#protoDivisionDetails");
-	  crisis.$g_protoUnitListItem = $prototypes.find("#protoUnitListItem");
-	  crisis.$g_protoUnitTypes = $prototypes.find("#protoUnitTypes");
-    crisis.$g_mapHolder = $("#mapHolder");
+	  crisis.$protoDivisionMarker = $prototypes.find("#protoDivisionMarker");
+	  crisis.$protoDivisionDetails = $prototypes.find("#protoDivisionDetails");
+	  crisis.$protoUnitListItem = $prototypes.find("#protoUnitListItem");
+	  crisis.$protoUnitTypes = $prototypes.find("#protoUnitTypes");
 }
 
 /** @param {jQuery} $proto */

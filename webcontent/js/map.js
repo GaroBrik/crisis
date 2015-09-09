@@ -1,33 +1,42 @@
-/**
- * @constructor
- * @export
- * @param {crisisJson.Crisis} crisisData
- */
-crisis.Map = function(crisisData) {
-    var map = this;
-
+/** @export */
+crisis.map = {
     /** @type{Array<crisis.Division>} */
-    this.divisions = _.map(crisisData.Divisions, function(divData) {
+    divisions: null,
+    /** @type{crisis.Coords} */
+    loc: null,
+    /** @type{crisis.Bounds} */
+    bounds: null,
+    /** @type{crisis.Bounds} */
+    maxBounds: null
+    /** @type{jQuery} */
+    $mapholder: null
+};
+
+/** @param {crisisJson.Crisis} */
+crisis.map.init = function(crisisData) { 
+    crisis.map.divisions = _.map(crisisData.Divisions, function(divData) {
 	      return new crisis.Division(divData, map);
     });
-    /** @type{crisis.Coords} */ 
-    this.loc = {
+    crisis.map.loc = {
 	      x: 0,
 	      y: 0
     }
-    /** @type{crisis.Bounds} */
-    this.bounds = { height: crisisData.MapBounds.Height, width: crisisData.MapBounds.Width };
-    /** @type{crisis.Bounds} */
-    this.maxBounds = { height: crisisData.MapBounds.Height, width: crisisData.MapBounds.Width }; 
+    crisis.map.bounds = { height: crisisData.MapBounds.Height, width: crisisData.MapBounds.Width };
+    crisis.map.maxBounds = { height: crisisData.MapBounds.Height, width: crisisData.MapBounds.Width }; 
+    crisis.$mapHolder = $("#mapHolder");
 
-    this.positionDivisions();
+    $(window).on("crisis.resize", function() {
+        crisis.map.positionDivisions();
+    });
+
+    crisis.map.positionDivisions();
 }
 
 /**
  * @param {jQuery} $dropdown
  * @param {jQuery} $source
  */ 
-crisis.Map.prototype.positionDropdown = function($dropdown, $source) {
+crisis.map.positionDropdown = function($dropdown, $source) {
     var canvasTop = 0;
     var canvasLeft = 0;
     var canvasBottom = $(window).height();
@@ -60,8 +69,8 @@ crisis.Map.prototype.positionDropdown = function($dropdown, $source) {
  * @param {crisis.Coords} absCoords 
  * @return {crisis.Coords}
  */
-crisis.Map.prototype.relativeCoords = function(absCoords) {
-    var map = this;
+crisis.map.relativeCoords = function(absCoords) {
+    var map = crisis.map;
     return {
 	      x: (absCoords.x - map.loc.x) * 100 / map.bounds.width,
 	      y: (absCoords.y - map.loc.y) * 100 / map.bounds.height
@@ -72,7 +81,7 @@ crisis.Map.prototype.relativeCoords = function(absCoords) {
  * @param {crisis.Coords}
  * @return {crisis.Coords}
  */
-crisis.Map.prototype.absCoords = function(relativeCoords) {
+crisis.map.absCoords = function(relativeCoords) {
     return {
 	      x: map.bounds.width * relativeCoords.x / 100 + map.loc.x,
 	      y: map.bounds.height * relativeCoords.y / 100 + map.loc.y	
@@ -83,8 +92,8 @@ crisis.Map.prototype.absCoords = function(relativeCoords) {
  * @param {number} factor
  * @param {number} center
  */ 
-crisis.Map.prototype.zoom = function(factor, center) {
-    var map = this;
+crisis.map.zoom = function(factor, center) {
+    var map = crisis.map;
     
     var newBounds = {
 	      height: Math.min(map.bounds.height * factor, map.maxBounds.height),
@@ -105,8 +114,8 @@ crisis.Map.prototype.zoom = function(factor, center) {
  * @param {number} xPercent
  * @param {number} yPercent
  */
-crisis.Map.prototype.move = function(xPercent, yPercent) {
-    var map = this;
+crisis.map.move = function(xPercent, yPercent) {
+    var map = crisis.map;
     map.loc = {
 	      x: Math.max(0, Math.min(map.maxBounds.width - newBounds.width,
 				                        map.loc.x - xPercent * map.bounds.Width)),
@@ -116,8 +125,8 @@ crisis.Map.prototype.move = function(xPercent, yPercent) {
     map.positionDivisions();
 }
 
-crisis.Map.prototype.positionDivisions = function() {
-    var map = this;
+crisis.map.positionDivisions = function() {
+    var map = crisis.map;
 
     _.each(map.divisions, function(div) {
 	      var rel = map.relativeCoords(div.absCoords);

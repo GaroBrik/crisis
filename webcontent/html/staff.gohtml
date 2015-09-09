@@ -6,7 +6,7 @@ $(document).ready(function() {
   crisis.init();
   $.ajax("ajax", {
     success: function(data) {
-      var t = new crisis.Map(data); 
+      crisis.map.init();
     }
   });
 });
