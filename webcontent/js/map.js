@@ -7,7 +7,7 @@ crisis.map = {
     /** @type{crisis.Bounds} */
     bounds: null,
     /** @type{crisis.Bounds} */
-    maxBounds: null
+    maxBounds: null,
     /** @type{jQuery} */
     $mapholder: null
 };
