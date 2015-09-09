@@ -12,7 +12,10 @@ crisis.map = {
     $mapholder: null
 };
 
-/** @param {crisisJson.Crisis} */
+/** 
+ * @export
+ * @param {crisisJson.Crisis} 
+ */
 crisis.map.init = function(crisisData) { 
     crisis.map.divisions = _.map(crisisData.Divisions, function(divData) {
 	      return new crisis.Division(divData, map);
