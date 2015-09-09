@@ -1,6 +1,6 @@
 /** @externs */
 
-crisisJson = {};
+var crisisJson = {};
 
 /**
  * @typedef{{
