@@ -5,7 +5,7 @@
 crisis.Division = function(divJson) { 
     /** @type{jQuery} */
     this.$marker = crisis.cloneProto(crisis.$protoDivisionMarker);
-    crisis.$mapHolder.append(this.$marker);
+    crisis.map.$mapHolder.append(this.$marker);
     /** @type{crisis.DivisionDetails} */
     this.details = new crisis.DivisionDetails(this);
     /** @type{boolean} */
@@ -99,7 +99,7 @@ crisis.DivisionDetails.prototype.reRender = function() {
             this.commitEdit(); 
         });
         
-        crisis.$mapHolder.append(dets.$pane);
+        crisis.map.$mapHolder.append(dets.$pane);
     }
 
     dets.$unitList.empty(); 
