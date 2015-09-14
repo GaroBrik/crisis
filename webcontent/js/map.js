@@ -18,7 +18,7 @@ crisis.map = {
  */
 crisis.map.init = function(crisisData) { 
     crisis.map.divisions = _.map(crisisData.Divisions, function(divData) {
-	      return new crisis.Division(divData, map);
+	      return new crisis.Division(divData);
     });
     crisis.map.loc = {
 	      x: 0,

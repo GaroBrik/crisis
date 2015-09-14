@@ -2,7 +2,7 @@
  * @constructor
  * @param {crisisJson.Division} divJson
  */
-crisis.Division = function(divJson, map) { 
+crisis.Division = function(divJson) { 
     /** @type{jQuery} */
     this.$marker = crisis.cloneProto(crisis.$protoDivisionMarker);
     crisis.$mapHolder.append(this.$marker);
@@ -16,8 +16,6 @@ crisis.Division = function(divJson, map) {
     this.absCoords = { x: divJson.AbsCoords.X, y: divJson.AbsCoords.Y };
     /** @type{Array<crisis.Unit> */
     this.units = _.map(divJson.Units, crisis.Unit.fromData);
-    /** @type{crisis.Map} */
-    this.map = map;
     
     var div = this;
     this.$marker.click(function() { div.details.toggle(); });
@@ -69,7 +67,7 @@ crisis.DivisionDetails.prototype.open = function() {
         dets.division.reRender = false;
     }
     console.log(dets.$pane);
-    dets.division.map.positionDropdown(dets.$pane, dets.division.$marker);
+    crisis.map.positionDropdown(dets.$pane, dets.division.$marker);
     dets.$pane.show();
     dets.isOpen = true;
 }
