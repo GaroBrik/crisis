@@ -9,7 +9,7 @@ crisis.map = {
     /** @type{crisis.Bounds} */
     maxBounds: null,
     /** @type{jQuery} */
-    $mapholder: null
+    $mapHolder: null
 };
 
 /** 
@@ -26,7 +26,7 @@ crisis.map.init = function(crisisData) {
     }
     crisis.map.bounds = { height: crisisData.MapBounds.Height, width: crisisData.MapBounds.Width };
     crisis.map.maxBounds = { height: crisisData.MapBounds.Height, width: crisisData.MapBounds.Width }; 
-    crisis.$mapHolder = $("#mapHolder");
+    crisis.map.$mapHolder = $("#mapHolder");
 
     $(window).on("crisis.resize", function() {
         crisis.map.positionDivisions();
