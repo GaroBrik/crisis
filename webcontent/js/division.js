@@ -41,10 +41,16 @@ crisis.DivisionDetails = function(div) {
     this.$unitList = null;
     /** @type{jQuery} */
     this.$editButton = null;
+    /** @type{jQuery} */
+    this.$cancelButton = null;
+    /** @type{jQuery} */
+    this.$commitButton = null;
     /** @type{crisis.Division} */
     this.division = div;
     /** @type{boolean} */
     this.isOpen = false;
+    /** @type{boolean} */
+    this.isEditing = false;
 }
 
 crisis.DivisionDetails.prototype.toggle = function() {
@@ -79,7 +85,22 @@ crisis.DivisionDetails.prototype.reRender = function() {
     if (dets.$pane === null) {
 	      dets.$pane = crisis.cloneProto(crisis.$protoDivisionDetails);
 	      dets.$unitList = dets.$pane.find("ul");
+        
 	      dets.$editButton = dets.$pane.find(".editButton");
+        dets.$editButton.on("click.crisis", function() {
+            this.enableEdit(); 
+        });
+        
+        dets.$cancelButton = dets.$pane.find(".cancelButton");
+        dets.$cancelButton.on("click.crisis", function () {
+            this.disableEdit();
+        });
+        
+	      dets.$commitButton = dets.$pane.find(".commitButton");
+        dets.$commitButton.on("click.crisis", function() {
+            this.commitEdit(); 
+        });
+        
         crisis.$mapHolder.append(dets.$pane);
     }
 
@@ -89,12 +110,22 @@ crisis.DivisionDetails.prototype.reRender = function() {
     });	
 }
 
+crisis.DivisionDetails.prototype.toggleEdit = function() {
+    if (this.isEditing) {
+        this.disableEdit();
+    } else {
+        this.enableEdit();
+    }
+}
+
 crisis.DivisionDetails.prototype.enableEdit = function() {
-    var dets = this;
+    var dets = this; 
+
+    dets.$editButton.hide();
+    dets.$cancelButton.show();
+    dets.$commitButton.show();
     
-    _.each(units, function() {
-	      var unit = this;
-	      
+    _.each(units, function(unit) {
 	      unit.$listItem.find(".editField").val(unit.amount).show();
 	      unit.$listItem.find(".value").hide();
     });
@@ -103,6 +134,10 @@ crisis.DivisionDetails.prototype.enableEdit = function() {
 crisis.DivisionDetails.prototype.disableEdit = function() {
     var dets = this;
 
+    dets.$editButton.show();
+    dets.$cancelButton.hide();
+    dets.$commitButton.hide();
+    
     dets.find(".paneInvalidAlert").hide();
     _.each(units, function(unit) {
 	      unit.$listItem.find(".editField").hide();
@@ -113,6 +148,8 @@ crisis.DivisionDetails.prototype.disableEdit = function() {
 
 crisis.DivisionDetails.prototype.commitEdit = function() {
     var dets = this;
+
+    if (!dets.isEditing) return;
 
     var changedUnits = [];
     var validSubmit = true;
