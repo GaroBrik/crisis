@@ -17,6 +17,8 @@ crisis.map = {
  * @param {crisisJson.Crisis} 
  */
 crisis.map.init = function(crisisData) { 
+    crisis.map.$mapHolder = $("#mapHolder");
+    
     crisis.map.divisions = _.map(crisisData.Divisions, function(divData) {
 	      return new crisis.Division(divData);
     });
@@ -26,7 +28,6 @@ crisis.map.init = function(crisisData) {
     }
     crisis.map.bounds = { height: crisisData.MapBounds.Height, width: crisisData.MapBounds.Width };
     crisis.map.maxBounds = { height: crisisData.MapBounds.Height, width: crisisData.MapBounds.Width }; 
-    crisis.map.$mapHolder = $("#mapHolder");
 
     $(window).on("crisis.resize", function() {
         crisis.map.positionDivisions();
