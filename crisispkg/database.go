@@ -38,7 +38,7 @@ func (db *Database) Close() {
 }
 
 func (db *Database) GetCrisisUnitTypes(crisisId int) []*UnitType {
-	rows, err := db.db.Query("SELECT unit_name, unit_id FROM unit_type "+
+	rows, err := db.db.Query("SELECT unit_name, id FROM unit_type "+
 		"WHERE crisis = $1", crisisId)
 	if err != nil {
 		panic(err)
