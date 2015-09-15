@@ -1,5 +1,7 @@
 #!/bin/bash
 
+export PATH="${PATH}:${OPENSHIFT_HOMEDIR}/.gem/bin"
+echo "-----> compiling scss"
 sass "${OPENSHIFT_REPO_DIR}webcontent/css/main.scss" "${OPENSHIFT_REPO_DIR}static/main.css"
 echo "-----> compiling js"
 pushd "${OPENSHIFT_REPO_DIR}webcontent/js" > /dev/null
