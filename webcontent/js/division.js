@@ -84,6 +84,7 @@ crisis.DivisionDetails.prototype.reRender = function() {
     if (dets.$pane === null) {
 	      dets.$pane = crisis.cloneProto(crisis.$protoDivisionDetails);
 	      dets.$unitList = dets.$pane.find("ul");
+        dets.$paneInvalidAlert = dets.$pane.find(".paneInvalidAlert");
 
         dets.$editButton = dets.$pane.find(".editButton");
         dets.$editButton.on("click.crisis", function() {
@@ -125,8 +126,8 @@ crisis.DivisionDetails.prototype.enableEdit = function() {
     dets.$commitButton.show();
     
     _.each(dets.division.units, function(unit) {
-	      unit.$listItem.find(".editField").val(unit.amount).show();
-	      unit.$listItem.find(".value").hide();
+	      unit.$editField.val(unit.amount).show();
+	      unit.$value.hide();
     });
 }
 
@@ -137,11 +138,11 @@ crisis.DivisionDetails.prototype.disableEdit = function() {
     dets.$cancelButton.hide();
     dets.$commitButton.hide();
     
-    dets.find(".paneInvalidAlert").hide();
+    dets.$paneInvalidAlert.hide();
     _.each(dets.division.units, function(unit) {
-	      unit.$listItem.find(".editField").hide();
-	      unit.$listItem.find(".value").show();
-	      unit.$listItem.find(".invalidAlert").hide();
+	      unit.$editField.hide();
+	      unit.$value.show();
+	      unit.$invalidAlert.hide();
     });
 }
 
@@ -153,11 +154,11 @@ crisis.DivisionDetails.prototype.commitEdit = function() {
     var changedUnits = [];
     var validSubmit = true;
     _.each(dets.division.units, function(unit) {
-	      var newVal = unit.$listItem.find(".editField").val();
+	      var newVal = unit.$editField.val();
 	      newVal = parseInt(newVal);
 	      if (newVal === null) {
-	          unit.$listItem.find(".invalidAlert").show();
-	          dets.$pane.find(".paneInvalidAlert").show();
+	          unit.$invalidAlert.show();
+	          dets.$paneInvalidAlert.show();
 	          validSubmit = false;
 	      } else {
 	          changedUnits.append(unit.type, newVal);
@@ -183,10 +184,15 @@ crisis.Unit = function(unitJson) {
     this.typeNum = unitJson.TypeNum;
     /** @type{jQuery} */
     this.$listItem = crisis.cloneProto(crisis.$protoUnitListItem);
-
-    this.$listItem.find(".type").html(crisis.cloneProto(
+    /** @type{jQuery} */
+    this.$value = this.$listItem.find(".value").html(this.amount);
+    /** @type{jQuery} */
+    this.$type = this.$listItem.find(".type").html(crisis.cloneProto(
 	      crisis.$protoUnitTypes.find("[type=" + this.typeNum + "]")));
-    this.$listItem.find(".value").html(this.amount);
+    /** @type{jQuery} */
+    this.$editField = this.$listItem.find(".editField");
+    /** @type{jQuery} */
+    this.$invalidAlert = this.$listItem.find(".invalidAlert");
 }
 
 /** @param {crisisJson.Unit} unitJson */
