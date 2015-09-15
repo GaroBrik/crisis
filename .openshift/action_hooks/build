@@ -1,14 +1,20 @@
 #!/bin/bash
 
-export PATH="${PATH}:${OPENSHIFT_HOMEDIR}/.gem/bin"
+export PATH="${PATH}:${OPENSHIFT_HOMEDIR}.gem/bin"
+
+STATIC_DIR="${OPENSHIFT_REPO_DIR}static"
+mkdir $STATIC_DIR
+WEBCONTENT_DIR="${OPENSHIFT_REPO_DIR}webcontent"
+
 echo "-----> compiling scss"
-sass "${OPENSHIFT_REPO_DIR}webcontent/css/main.scss" "${OPENSHIFT_REPO_DIR}static/main.css"
+sass "${WEBCONTENT_DIR}/css/main.scss" "${STATIC_DIR}/main.css"
+
 echo "-----> compiling js"
-pushd "${OPENSHIFT_REPO_DIR}webcontent/js" > /dev/null
+pushd "${WEBCONTENT_DIR}/js" > /dev/null
 {
-    output="${OPENSHIFT_REPO_DIR}static/compiled.js" 
-    input="goog.js main.js ajax.js division.js map.js"
-    externs="jsonexterns.js jquery-1.9.js"
+    OUTPUT="${STATIC_DIR}/compiled.js" 
+    INPUT="goog.js main.js ajax.js division.js map.js"
+    EXTERNS="jsonexterns.js jquery-1.9.js"
     java -jar compiler.jar --compilation_level ADVANCED_OPTIMIZATIONS \
-        --js $input --externs $externs --js_output_file $output --generate_exports
+        --js $INPUT --externs $EXTERNS --js_output_file $OUTPUT --generate_exports
 } >> "${OPENSHIFT_GO_LOG_DIR}go.log"
