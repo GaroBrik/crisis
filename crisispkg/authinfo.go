@@ -1,5 +1,9 @@
 package crisis
 
+import (
+	"net/http"
+)
+
 type AuthInfo struct {
 	CrisisId int
 }

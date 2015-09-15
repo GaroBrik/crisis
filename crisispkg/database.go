@@ -45,7 +45,7 @@ func (db *Database) GetCrisisUnitTypes(crisisId int) []*UnitType {
 	}
 	defer rows.Close()
 
-	types = make([]*UnitType, 0)
+	types := make([]*UnitType, 0)
 	for rows.Next() {
 		utype := UnitType{}
 		rows.Scan(&utype.Name, &utype.Id)

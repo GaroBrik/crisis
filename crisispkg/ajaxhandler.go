@@ -41,14 +41,14 @@ func (handler *AjaxHandler) HandleRequest(res http.ResponseWriter, req *http.Req
 
 		json, err := json.Marshal(Crisis{Bounds{100, 100}, make([][]int, 0), divisions})
 		if err != nil {
-			http.Error(w, err.Error(), http.StatusInternalServerError)
+			http.Error(res, err.Error(), http.StatusInternalServerError)
 			return
 		}
 
 		res.Write(json)
 
 	default:
-		http.Error(w, "Invalid request path", http.StatusBadRequest)
+		http.Error(res, "Invalid request path", http.StatusBadRequest)
 	}
 }
 
