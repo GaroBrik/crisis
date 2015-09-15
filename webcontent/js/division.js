@@ -45,6 +45,8 @@ crisis.DivisionDetails = function(div) {
     this.$cancelButton = null;
     /** @type{jQuery} */
     this.$commitButton = null;
+    /** @type{jQuery} */
+    this.$closeButton = null;
     /** @type{crisis.Division} */
     this.division = div;
     /** @type{boolean} */
@@ -74,7 +76,7 @@ crisis.DivisionDetails.prototype.open = function() {
 }
 
 crisis.DivisionDetails.prototype.close = function () {
-    this.$pane.show();
+    this.$pane.hide();
     this.isOpen = false;
 }
 
@@ -99,6 +101,11 @@ crisis.DivisionDetails.prototype.reRender = function() {
 	      dets.$commitButton = dets.$pane.find(".commitButton");
         dets.$commitButton.on("click.crisis", function() {
             dets.commitEdit(); 
+        });
+
+        dets.$closeButton = dets.$pane.find(".closeButton");
+        dets.$closeButton.on("click.crisis", function() {
+            dets.close();
         });
         
         crisis.map.$mapHolder.append(dets.$pane);
