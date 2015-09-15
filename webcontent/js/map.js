@@ -36,6 +36,26 @@ crisis.map.init = function(crisisData) {
     crisis.map.positionDivisions();
 }
 
+crisis.map.updateData = function(crisisData) {
+    /** @type{Array<crisis.Division>} */
+    var newDivisions = [];
+    _.each(crisis.map.divisions, function(div) {
+        var updated = _.findWhere(crisisData.Divisions, {Id: div.id});
+        if (updated === undefined) {
+            div.destroy();
+        } else {
+            div.updateData(updated);
+        }
+        crisisData.Divisions = _.without(crisisData.Divisions, updated);
+    });
+
+    _.each(crisisData.Divisions, function(divJson) {
+        newDivisions.push(new Division(divJson));
+    });
+
+    crisis.map.positionDivisions();
+}
+
 /**
  * @param {jQuery} $dropdown
  * @param {jQuery} $source
@@ -129,24 +149,26 @@ crisis.map.move = function(xPercent, yPercent) {
     map.positionDivisions();
 }
 
-crisis.map.positionDivisions = function() {
-    var map = crisis.map;
-
-    _.each(map.divisions, function(div) {
-	      var rel = map.relativeCoords(div.absCoords);
-	      if (0 <= rel.x && rel.x <= 100 && 0 <= rel.y && rel.y <= 100) {
-	          div.$marker.css({
-		            "left": rel.x + "%",
-		            "top": rel.y + "%"
-	          });
-	          div.$marker.show();
-	          if (div.details.isOpen) {
-		            map.positionDropdown(div.details.$pane, div.$marker);
-		            div.details.$pane.show();
-	          }
-        } else {
-            div.$marker.hide();
-            div.details.$pane.hide();
-        }
-    });
+/** @param{crisis.Division} division */
+crisis.map.positionDivision = function(division) {
+	  var rel = map.relativeCoords(division.absCoords);
+	  if (0 <= rel.x && rel.x <= 100 && 0 <= rel.y && rel.y <= 100) {
+	      division.$marker.css({
+		        "left": rel.x + "%",
+		        "top": rel.y + "%"
+	      });
+	      division.$marker.show();
+	      if (division.details.isOpen) {
+		        map.positionDropdown(division.details.$pane, division.$marker);
+		        division.details.$pane.show();
+	      }
+    } else {
+        division.$marker.hide();
+        division.details.$pane.hide();
+    }
 }
+
+crisis.map.positionDivisions = function() {
+    _.each(crisis.map.divisions, crisis.map.positionDivision);
+}
+

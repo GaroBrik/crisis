@@ -13,6 +13,7 @@ crisisJson.Crisis;
 
 /**
  * @typedef{{
+ *   Id: number,
  *   AbsCoords: crisisJson.Coords,
  *   Units: Array<crisisJson.Unit>
  * }}

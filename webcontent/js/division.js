@@ -14,9 +14,11 @@ crisis.Division = function(divJson) {
     this.reRender = true;
     /** @type{boolean} */
     this.editing = false;
-    /** @type{crisis.Coords} */ 
-    this.absCoords = null;
-    /** @type{Array<crisis.Unit> */
+    /** @type{number} */
+    this.id = divJson.Id;
+    /** @type{crisis.coords} */ 
+    this.abscoords = null;
+    /** @type{array<crisis.unit> */
     this.units = null;
     this.updateData(divJson);
      
@@ -28,6 +30,11 @@ crisis.Division.prototype.updateData = function(divJson) {
     this.absCoords = { x: divJson.AbsCoords.X, y: divJson.AbsCoords.Y };
     this.units = _.map(divJson.Units, crisis.Unit.fromData);
     this.reRender = true;
+}
+
+crisis.Division.prototype.destroy = function() {
+    this.$marker.remove();
+    this.details.$pane.remove();
 }
 
 /** 
@@ -158,7 +165,8 @@ crisis.DivisionDetails.prototype.commitEdit = function() {
 
     if (!dets.isEditing) return;
 
-    var changedUnits = [];
+    /** @type{Array<crisisJson.Unit>} */
+    var newUnits = [];
     var validSubmit = true;
     _.each(dets.division.units, function(unit) {
 	      var newVal = unit.$editField.val();
@@ -168,14 +176,12 @@ crisis.DivisionDetails.prototype.commitEdit = function() {
 	          dets.$paneInvalidAlert.show();
 	          validSubmit = false;
 	      } else {
-	          changedUnits.append(unit.type, newVal);
+	          newUnits.push({TypeNum: unit.typeNum, Amount: newVal});
 	      }
     });
 
     if (!validSubmit) return;
-    // if (changedUnits.length > 0) {
-	      
-    // }
+	  crisis.ajax.postDivisionUpdate({Units: newUnits});
 }
 
 /** 
