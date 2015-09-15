@@ -12,15 +12,10 @@ const (
 	htmlPath   = "webcontent/html/"
 )
 
-type unitType struct {
-	Id   int
-	Name string
-}
-
 type headInfo struct {
 	JSUrl  string
 	CSSUrl string
-	Types  []unitType
+	Types  []UnitType
 }
 
 var headerTmpl *template.Template
