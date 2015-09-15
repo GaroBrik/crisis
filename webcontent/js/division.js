@@ -3,6 +3,8 @@
  * @param {crisisJson.Division} divJson
  */
 crisis.Division = function(divJson) { 
+    var div = this;
+
     /** @type{jQuery} */
     this.$marker = crisis.cloneProto(crisis.$protoDivisionMarker);
     crisis.map.$mapHolder.append(this.$marker);
@@ -13,17 +15,17 @@ crisis.Division = function(divJson) {
     /** @type{boolean} */
     this.editing = false;
     /** @type{crisis.Coords} */ 
-    this.absCoords = { x: divJson.AbsCoords.X, y: divJson.AbsCoords.Y };
+    this.absCoords = null;
     /** @type{Array<crisis.Unit> */
-    this.units = _.map(divJson.Units, crisis.Unit.fromData);
-    
-    var div = this;
+    this.units = null;
+    this.updateData(divJson);
+     
     this.$marker.click(function() { div.details.toggle(); });
 }
 
 /** @param {crisisJson.Division} divJson */
 crisis.Division.prototype.updateData = function(divJson) {
-    this.absCoords = divJson.AbsCoords;
+    this.absCoords = { x: divJson.AbsCoords.X, y: divJson.AbsCoords.Y };
     this.units = _.map(divJson.Units, crisis.Unit.fromData);
     this.reRender = true;
 }
@@ -86,17 +88,17 @@ crisis.DivisionDetails.prototype.reRender = function() {
         console.log(dets.$pane);
 	      dets.$editButton = dets.$pane.find(".editButton");
         dets.$editButton.on("click.crisis", function() {
-            this.enableEdit(); 
+            dets.enableEdit(); 
         });
         
         dets.$cancelButton = dets.$pane.find(".cancelButton");
         dets.$cancelButton.on("click.crisis", function () {
-            this.disableEdit();
+            dets.disableEdit();
         });
         
 	      dets.$commitButton = dets.$pane.find(".commitButton");
         dets.$commitButton.on("click.crisis", function() {
-            this.commitEdit(); 
+            dets.commitEdit(); 
         });
         
         crisis.map.$mapHolder.append(dets.$pane);
