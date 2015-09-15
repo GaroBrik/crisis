@@ -68,7 +68,6 @@ crisis.DivisionDetails.prototype.open = function() {
         dets.reRender();
         dets.division.reRender = false;
     }
-    console.log(dets.$pane);
     crisis.map.positionDropdown(dets.$pane, dets.division.$marker);
     dets.$pane.show();
     dets.isOpen = true;
@@ -85,8 +84,8 @@ crisis.DivisionDetails.prototype.reRender = function() {
     if (dets.$pane === null) {
 	      dets.$pane = crisis.cloneProto(crisis.$protoDivisionDetails);
 	      dets.$unitList = dets.$pane.find("ul");
-        console.log(dets.$pane);
-	      dets.$editButton = dets.$pane.find(".editButton");
+
+        dets.$editButton = dets.$pane.find(".editButton");
         dets.$editButton.on("click.crisis", function() {
             dets.enableEdit(); 
         });
@@ -103,7 +102,6 @@ crisis.DivisionDetails.prototype.reRender = function() {
         
         crisis.map.$mapHolder.append(dets.$pane);
     }
-    console.log(dets.$pane);
 
     dets.$unitList.empty(); 
     _.each(dets.division.units, function(unit) { 
@@ -126,7 +124,7 @@ crisis.DivisionDetails.prototype.enableEdit = function() {
     dets.$cancelButton.show();
     dets.$commitButton.show();
     
-    _.each(units, function(unit) {
+    _.each(dets.division.units, function(unit) {
 	      unit.$listItem.find(".editField").val(unit.amount).show();
 	      unit.$listItem.find(".value").hide();
     });
@@ -140,7 +138,7 @@ crisis.DivisionDetails.prototype.disableEdit = function() {
     dets.$commitButton.hide();
     
     dets.find(".paneInvalidAlert").hide();
-    _.each(units, function(unit) {
+    _.each(dets.division.units, function(unit) {
 	      unit.$listItem.find(".editField").hide();
 	      unit.$listItem.find(".value").show();
 	      unit.$listItem.find(".invalidAlert").hide();
@@ -154,7 +152,7 @@ crisis.DivisionDetails.prototype.commitEdit = function() {
 
     var changedUnits = [];
     var validSubmit = true;
-    _.each(dets.units, function(unit) {
+    _.each(dets.division.units, function(unit) {
 	      var newVal = unit.$listItem.find(".editField").val();
 	      newVal = parseInt(newVal);
 	      if (newVal === null) {

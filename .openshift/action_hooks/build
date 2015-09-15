@@ -1,9 +1,9 @@
 #!/bin/bash
 
 cp -r "${OPENSHIFT_REPO_DIR}webcontent/css" "${OPENSHIFT_REPO_DIR}static/"
+echo "-----> compiling js"
 pushd "${OPENSHIFT_REPO_DIR}webcontent/js" > /dev/null
 {
-    echo "-----> compiling js"
     output="${OPENSHIFT_REPO_DIR}static/compiled.js" 
     input="goog.js main.js division.js map.js"
     externs="jsonexterns.js jquery-1.9.js"
