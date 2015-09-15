@@ -83,7 +83,7 @@ crisis.DivisionDetails.prototype.reRender = function() {
     if (dets.$pane === null) {
 	      dets.$pane = crisis.cloneProto(crisis.$protoDivisionDetails);
 	      dets.$unitList = dets.$pane.find("ul");
-        
+        console.log(dets.$pane);
 	      dets.$editButton = dets.$pane.find(".editButton");
         dets.$editButton.on("click.crisis", function() {
             this.enableEdit(); 
@@ -101,6 +101,7 @@ crisis.DivisionDetails.prototype.reRender = function() {
         
         crisis.map.$mapHolder.append(dets.$pane);
     }
+    console.log(dets.$pane);
 
     dets.$unitList.empty(); 
     _.each(dets.division.units, function(unit) { 
