@@ -15,7 +15,7 @@ const (
 type headInfo struct {
 	JSUrl  string
 	CSSUrl string
-	Types  []UnitType
+	Types  []*UnitType
 }
 
 var headerTmpl *template.Template
