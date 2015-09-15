@@ -1,6 +1,6 @@
+crisis.ajax = {};
+crisis.ajax.path = "ajax/";
 /** @export */
-crisis.ajax = {
-    ajaxPath: "ajax/",
-    mapPath: ajaxPath + "map/",
-    modifyDivisionPath: ajaxPath + "modDiv/"
-}
+crisis.ajax.mapPath = crisis.ajax.path + "map/";
+crisis.ajax.modifyDivisionPath = ajaxPath + "modDiv/";
+
