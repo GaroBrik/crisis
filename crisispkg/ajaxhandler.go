@@ -18,19 +18,19 @@ func GetAjaxHandlerInstance() *AjaxHandler {
 	return m_ajaxHandler
 }
 
-func (handler *AjaxHandler) HandleRequest(w http.ResponseWriter, r *http.Request) {
-	requestPath := getRequestPath(r)
-	w.Header().Set("Content-Type", "application/json")
+func (handler *AjaxHandler) HandleRequest(res http.ResponseWriter, req *http.Request) {
+	requestPath := getRequestPath(req)
+	res.Header().Set("Content-Type", "application/json")
 
-	crisisId := getCrisisId(r)
-	canEdit := getCanEdit(r)
-	factionId := getFactionId(r)
+	authInfo := AuthInfoOf(req)
+	canEdit := getCanEdit(req)
+	factionId := getFactionId(req)
 
 	switch requestPath {
 	case "getMapData":
 		var divisions []*Division
 		if canEdit {
-			for _, divs := range handler.db.GetCrisisDivisions(crisisId) {
+			for _, divs := range handler.db.GetCrisisDivisions(authInfo.CrisisId) {
 				for _, div := range divs {
 					divisions = append(divisions, div)
 				}
@@ -45,25 +45,21 @@ func (handler *AjaxHandler) HandleRequest(w http.ResponseWriter, r *http.Request
 			return
 		}
 
-		w.Write(json)
+		res.Write(json)
 
 	default:
 		http.Error(w, "Invalid request path", http.StatusBadRequest)
 	}
 }
 
-func getRequestPath(r *http.Request) string {
+func getRequestPath(req *http.Request) string {
 	return "getMapData"
 }
 
-func getCrisisId(r *http.Request) int {
-	return 1
-}
-
-func getCanEdit(r *http.Request) bool {
+func getCanEdit(req *http.Request) bool {
 	return true
 }
 
-func getFactionId(r *http.Request) int {
+func getFactionId(req *http.Request) int {
 	return 1
 }

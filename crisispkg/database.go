@@ -37,11 +37,28 @@ func (db *Database) Close() {
 	db.db.Close()
 }
 
-func (db *Database) GetCrisisDivisions(crisis_id int) map[int][]*Division {
+func (db *Database) GetCrisisUnitTypes(crisisId int) []*UnitType {
+	rows, err := db.db.Query("SELECT unit_name, unit_id FROM unit_type "+
+		"WHERE crisis = $1", crisisId)
+	if err != nil {
+		panic(err)
+	}
+	defer rows.Close()
+
+	types = make([]*UnitType, 0)
+	for rows.Next() {
+		utype := UnitType{}
+		rows.Scan(&utype.Name, &utype.Id)
+		types = append(types, &utype)
+	}
+	return types
+}
+
+func (db *Database) GetCrisisDivisions(crisisId int) map[int][]*Division {
 	rows, err := db.db.Query("SELECT faction.id, faction.faction_name, division.id, "+
 		"division.coord_x, division.coord_y, division.division_name "+
 		"FROM division INNER JOIN faction ON (faction.id = division.faction) "+
-		"WHERE faction.crisis = $1", crisis_id)
+		"WHERE faction.crisis = $1", crisisId)
 	if err != nil {
 		panic(err)
 	}
@@ -50,12 +67,12 @@ func (db *Database) GetCrisisDivisions(crisis_id int) map[int][]*Division {
 	return db.getCrisisDivisionsFromRows(rows)
 }
 
-func (db *Database) GetFactionDivisions(faction_id int) []*Division {
+func (db *Database) GetFactionDivisions(factionId int) []*Division {
 	rows, err := db.db.Query("SELECT faction.faction_name, division.id, division.coord_x, "+
 		"division.coord_y, division.division_name "+
 		"FROM division INNER JOIN faction ON (faction.id = division.faction) "+
 		"INNER JOIN division_view ON (division_view.division_id = division.id) "+
-		"WHERE division_view.faction_id = $1 ", faction_id)
+		"WHERE division_view.faction_id = $1 ", factionId)
 	if err != nil {
 		panic(err)
 	}
@@ -107,18 +124,18 @@ func (db *Database) loadUnitsFor(div *Division) {
 		amount int
 		speed  int
 	)
-	min_speed := 1<<16 - 1
+	minSpeed := 1<<16 - 1
 	div.Units = make(map[string]int)
 	for rows.Next() {
 		if err = rows.Scan(&name, &amount, &speed); err != nil {
 			panic(err)
 		}
 		div.Units[name] = amount
-		if speed < min_speed {
-			min_speed = speed
+		if speed < minSpeed {
+			minSpeed = speed
 		}
 	}
-	div.Speed = min_speed
+	div.Speed = minSpeed
 }
 
 // func (db *Database) getAllCrises() {

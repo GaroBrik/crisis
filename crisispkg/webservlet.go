@@ -52,11 +52,11 @@ func StartListening() {
 
 func wrapAndListen(path string, handler servlet) {
 	http.HandleFunc(path, func(res http.ResponseWriter, req *http.Request) {
-		//authInfo := GetAuthInfoOf(req)
+		authInfo := AuthInfoOf(req)
 		headerTmpl.Execute(res, headInfo{
 			JSUrl:  "static/compiled.js",
 			CSSUrl: "static/main.css",
-			Types:  make([]unitType, 0),
+			Types:  GetDatabaseInstance().GetCrisisUnitTypes(authInfo.CrisisId),
 		})
 		handler(res, req)
 		footerTmpl.Execute(res, nil)
@@ -64,6 +64,7 @@ func wrapAndListen(path string, handler servlet) {
 }
 
 func staffPage(res http.ResponseWriter, req *http.Request) {
-	divisions := GetDatabaseInstance().GetCrisisDivisions(1)
+	authInfo := AuthInfoOf(req)
+	divisions := GetDatabaseInstance().GetCrisisDivisions(authInfo.CrisisId)
 	staffPageTmpl.Execute(res, divisions)
 }

@@ -61,8 +61,10 @@ ul {
     ul {
         width: 100%;
 
-        .editField {
-            width: 50px;
+        li {
+            .editField {
+                width: 50px;
+            }
         }
     }
 
