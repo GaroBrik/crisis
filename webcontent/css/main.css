@@ -58,10 +58,10 @@ ul {
     width: 100px;
     min-height: 10px;
 
-    ul {
+    .unitList {
         width: 100%;
 
-        li {
+        .unitListItem {
             .editField {
                 width: 50px;
             }
