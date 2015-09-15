@@ -1,6 +1,6 @@
 #!/bin/bash
 
-cp -r "${OPENSHIFT_REPO_DIR}webcontent/css" "${OPENSHIFT_REPO_DIR}static/"
+sass "${OPENSHIFT_REPO_DIR}webcontent/css/main.scss" "${OPENSHIFT_REPO_DIR}static/main.css"
 echo "-----> compiling js"
 pushd "${OPENSHIFT_REPO_DIR}webcontent/js" > /dev/null
 {
