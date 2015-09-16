@@ -189,7 +189,7 @@ crisis.DivisionDetails.prototype.commitEdit = function() {
     console.log(validSubmit);
     
     if (!validSubmit) return;
-	  crisis.ajax.postDivisionUpdate(dets.div.id, newUnits);
+	  crisis.ajax.postDivisionUpdate(dets.division.id, newUnits);
 }
 
 /** 
