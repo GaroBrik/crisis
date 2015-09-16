@@ -62,7 +62,7 @@ func (handler *AjaxHandler) HandleRequest(res http.ResponseWriter, req *http.Req
 		json.NewDecoder(req.Body).Decode(&jsonSent)
 		log.Println(jsonSent.DivId)
 		log.Println(len(jsonSent.Units))
-		if len(jsonSent.Units > 0) {
+		if len(jsonSent.Units) > 0 {
 			log.Println(jsonSent.Units[0].TypeNum)
 			log.Println(jsonSent.Units[0].Amount)
 		}
