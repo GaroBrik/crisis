@@ -1,5 +1,5 @@
 /** @enum{string} */
-crisis.MapState = Objects.freeze({
+crisis.MapState = Object.freeze({
     NORMAL: "NORMAL",
     ADDING_DIV: "ADDING_DIV"
 });
