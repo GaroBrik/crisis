@@ -143,6 +143,8 @@ crisis.DivisionDetails.prototype.enableEdit = function() {
 	      unit.$editField.val(unit.amount).show();
 	      unit.$value.hide();
     });
+
+    dets.isEditing = true;
 }
 
 crisis.DivisionDetails.prototype.disableEdit = function() {
@@ -158,11 +160,15 @@ crisis.DivisionDetails.prototype.disableEdit = function() {
 	      unit.$value.show();
 	      unit.$invalidAlert.hide();
     });
+
+    dets.isEditing = false;
 }
 
 crisis.DivisionDetails.prototype.commitEdit = function() {
     var dets = this;
 
+    console.log(dets.isEditing);
+    
     if (!dets.isEditing) return;
 
     /** @type{Array<crisisJson.Unit>} */
@@ -180,6 +186,8 @@ crisis.DivisionDetails.prototype.commitEdit = function() {
 	      }
     });
 
+    console.log(validSubmit);
+    
     if (!validSubmit) return;
 	  crisis.ajax.postDivisionUpdate(dets.div.id, newUnits);
 }
