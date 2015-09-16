@@ -15,7 +15,7 @@ crisis.ajax.postData = function(path, data, options) {
     options.data = JSON.stringify(data);
     options.dataType = 'json';
     options.contentType = 'application/json; charset=utf-8';
-    $.ajax(path);
+    $.ajax(path, options);
 }
 
 /** @param{Array<crisisJson.Unit>} */
