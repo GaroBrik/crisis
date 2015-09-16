@@ -13,6 +13,7 @@ crisis.ajax.postData = function(path, data, options) {
     if (options === null || options === undefined) options = {};
     options.type = "POST";
     options.data = JSON.stringify(data);
+    console.log(options.data);
     options.dataType = 'json';
     options.contentType = 'application/json; charset=utf-8';
     $.ajax(path, options);
