@@ -222,7 +222,7 @@ crisis.DivisionDetails.prototype.commitEdit = function() {
     var newUnits = [];
     var validSubmit = true;
     _.each(dets.division.units.concat(dets.newUnits), function(unit) {
-        if (_.contains(removedUnits, unit)) return;
+        if (_.contains(dets.removedUnits, unit)) return;
         
 	      var newVal = unit.$editField.val();
 	      newVal = parseInt(newVal);

@@ -48,8 +48,3 @@ crisis.Unit.typeHtml = function(typeId) {
     return crisis.cloneProto(
 	      crisis.$protoUnitTypes.find(crisis.unitTypeSelector(typeId)));
 }
-
-/** @param{crisisJson.Unit} unitJson */
-crisis.Unit.fromData = function(unitJson) {
-    return new crisis.Unit(unitJson);
-}
