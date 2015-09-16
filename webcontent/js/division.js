@@ -16,7 +16,6 @@ crisis.Division = function(divJson) {
     this.editing = false;
     /** @type{number} */
     this.id = divJson.Id;
-    console.log(this.id);
     /** @type{crisis.coords} */ 
     this.abscoords = null;
     /** @type{array<crisis.unit> */
