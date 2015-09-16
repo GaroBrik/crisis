@@ -55,19 +55,13 @@ func (handler *AjaxHandler) HandleRequest(res http.ResponseWriter, req *http.Req
 
 	case updateDivisionPath:
 		type UpdateDivisionJson struct {
-			DivId int
+			Id    int
 			Units []Unit
 		}
 		var jsonSent UpdateDivisionJson
 		json.NewDecoder(req.Body).Decode(&jsonSent)
-		log.Println(jsonSent.DivId)
-		log.Println(len(jsonSent.Units))
-		if len(jsonSent.Units) > 0 {
-			log.Println(jsonSent.Units[0].TypeNum)
-			log.Println(jsonSent.Units[0].Amount)
-		}
 
-		handler.db.UpdateDivision(jsonSent.DivId, jsonSent.Units)
+		handler.db.UpdateDivision(jsonSent.Id, jsonSent.Units)
 
 	default:
 		http.Error(res, "Invalid request path", http.StatusBadRequest)

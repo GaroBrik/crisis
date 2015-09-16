@@ -185,7 +185,6 @@ crisis.DivisionDetails.prototype.commitEdit = function() {
     });
  
     if (!validSubmit) return;
-    console.log(dets.division.id);
 	  crisis.ajax.postDivisionUpdate(dets.division.id, newUnits);
 }
 
