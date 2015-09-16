@@ -167,9 +167,7 @@ crisis.DivisionDetails.prototype.disableEdit = function() {
 
 crisis.DivisionDetails.prototype.commitEdit = function() {
     var dets = this;
-
-    console.log(dets.isEditing);
-    
+ 
     if (!dets.isEditing) return;
 
     /** @type{Array<crisisJson.Unit>} */
@@ -186,10 +184,9 @@ crisis.DivisionDetails.prototype.commitEdit = function() {
 	          newUnits.push({TypeNum: unit.typeNum, Amount: newVal});
 	      }
     });
-
-    console.log(validSubmit);
-    
+ 
     if (!validSubmit) return;
+    console.log(dets.division.id);
 	  crisis.ajax.postDivisionUpdate(dets.division.id, newUnits);
 }
 
