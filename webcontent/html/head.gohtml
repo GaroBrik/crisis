@@ -17,7 +17,7 @@
       <input type="button" class="editButton" value="Edit">
       <input type="button" class="cancelButton" style="display: none" value="Cancel">
       <input type="button" class="commitButton" style="display: none" value="Commit">
-      <input type="button" class="addUnitButton" style="display: none" value="+" >
+      <input type="button" class="addUnitButton" style="display: none" value="+">
     </div>
     <ul>
       <li id="protoUnitListItem" class="unitListItem">
@@ -40,6 +40,7 @@
         <li data-type="{{.Id}}">
           <input type="button" value="{{.Name}}">
         </li>
+      {{end}}
     </ul>
   </div>
   <div id="header">
