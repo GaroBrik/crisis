@@ -59,9 +59,8 @@ func (handler *AjaxHandler) HandleRequest(res http.ResponseWriter, req *http.Req
 			Units []Unit
 		}
 		var jsonSent UpdateDivisionJson
-		json.NewDecoder(req.Body).Decode(&jsonSent)
-		log.Println(jsonSent.DivId)
-		log.Println(len(jsonSent.Units))
+		log.Println(req.Body)
+		//json.NewDecoder(req.Body).Decode(&jsonSent)
 
 		handler.db.UpdateDivision(jsonSent.DivId, jsonSent.Units)
 
