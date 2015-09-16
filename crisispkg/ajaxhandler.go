@@ -2,6 +2,7 @@ package crisis
 
 import (
 	"encoding/json"
+	"log"
 	"net/http"
 )
 
@@ -25,16 +26,15 @@ func GetAjaxHandlerInstance() *AjaxHandler {
 }
 
 func (handler *AjaxHandler) HandleRequest(res http.ResponseWriter, req *http.Request) {
-	requestPath := getRequestPath(req)
 	res.Header().Set("Content-Type", "application/json")
 
 	authInfo := AuthInfoOf(req)
 	canEdit := getCanEdit(req)
 	factionId := getFactionId(req)
 
-	log.Println(req.Url.Path)
+	log.Println(req.URL.Path)
 
-	switch req.Url.Path {
+	switch req.URL.Path {
 	case mapPath:
 		var divisions []*Division
 		if canEdit {

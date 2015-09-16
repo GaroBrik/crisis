@@ -1,5 +1,10 @@
 package crisis
 
+import (
+	"database/sql"
+	"github.com/lib/pq"
+)
+
 func (db *Database) UpdateDivision(divisionId int, units []Unit) {
 	tx, err := db.db.Begin()
 	if err != nil {
@@ -13,7 +18,7 @@ func (db *Database) UpdateDivision(divisionId int, units []Unit) {
 
 	stmt, err := tx.Prepare(pq.CopyIn("unit", "division", "unit_type", "amount"))
 
-	for unit := range units {
+	for _, unit := range units {
 		_, err = stmt.Exec(divisionId, unit.UnitType, unit.Amount)
 		if err != nil {
 			panic(err)
