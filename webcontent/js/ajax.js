@@ -19,6 +19,10 @@ crisis.ajax.postData = function(path, data, options) {
 }
 
 /** @param{Array<crisisJson.Unit>} */
-crisis.ajax.postDivisionUpdate = function(units, options) {
-    crisis.ajax.postData(crisis.ajax.updateDivisionPath, units, options);
+crisis.ajax.postDivisionUpdate = function(divisionId, units, options) {
+    var data = {
+        DivId: divisionId,
+        Units: units
+    };
+    crisis.ajax.postData(crisis.ajax.updateDivisionPath, data, options);
 }

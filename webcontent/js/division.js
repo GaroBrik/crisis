@@ -181,7 +181,7 @@ crisis.DivisionDetails.prototype.commitEdit = function() {
     });
 
     if (!validSubmit) return;
-	  crisis.ajax.postDivisionUpdate({Units: newUnits});
+	  crisis.ajax.postDivisionUpdate(dets.div.id, newUnits);
 }
 
 /** 

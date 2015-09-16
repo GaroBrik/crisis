@@ -9,6 +9,12 @@ type AjaxHandler struct {
 	db *Database
 }
 
+const (
+	ajaxPath           = "ajax/"
+	mapPath            = ajaxPath + "map/"
+	updateDivisionPath = ajaxPath + "updateDivision/"
+)
+
 var m_ajaxHandler *AjaxHandler
 
 func GetAjaxHandlerInstance() *AjaxHandler {
@@ -26,8 +32,10 @@ func (handler *AjaxHandler) HandleRequest(res http.ResponseWriter, req *http.Req
 	canEdit := getCanEdit(req)
 	factionId := getFactionId(req)
 
-	switch requestPath {
-	case "getMapData":
+	log.Println(req.Url.Path)
+
+	switch req.Url.Path {
+	case mapPath:
 		var divisions []*Division
 		if canEdit {
 			for _, divs := range handler.db.GetCrisisDivisions(authInfo.CrisisId) {
@@ -47,13 +55,19 @@ func (handler *AjaxHandler) HandleRequest(res http.ResponseWriter, req *http.Req
 
 		res.Write(json)
 
+	case updateDivisionPath:
+		type UpdateDivisionJson struct {
+			DivId int
+			Units []Unit
+		}
+		var jsonSent UpdateDivisionJson
+		json.NewDecoder(req.Body).Decode(&jsonSent)
+
+		handler.db.UpdateDivision(jsonSent.DivId, jsonSent.Units)
+
 	default:
 		http.Error(res, "Invalid request path", http.StatusBadRequest)
 	}
-}
-
-func getRequestPath(req *http.Request) string {
-	return "getMapData"
 }
 
 func getCanEdit(req *http.Request) bool {
