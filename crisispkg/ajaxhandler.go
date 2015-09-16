@@ -32,8 +32,6 @@ func (handler *AjaxHandler) HandleRequest(res http.ResponseWriter, req *http.Req
 	canEdit := getCanEdit(req)
 	factionId := getFactionId(req)
 
-	log.Println(req.URL.Path[1:])
-
 	switch req.URL.Path[1:] {
 	case mapPath:
 		var divisions []*Division
@@ -62,6 +60,8 @@ func (handler *AjaxHandler) HandleRequest(res http.ResponseWriter, req *http.Req
 		}
 		var jsonSent UpdateDivisionJson
 		json.NewDecoder(req.Body).Decode(&jsonSent)
+		log.Println(jsonSent.DivId)
+		log.Println(len(jsonSent.Units))
 
 		handler.db.UpdateDivision(jsonSent.DivId, jsonSent.Units)
 
