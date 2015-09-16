@@ -52,7 +52,7 @@ crisis.map.updateData = function(crisisData) {
     });
 
     _.each(crisisData.Divisions, function(divJson) {
-        newDivisions.push(new Division(divJson));
+        newDivisions.push(new crisis.Division(divJson));
     });
 
     crisis.map.loc = {
