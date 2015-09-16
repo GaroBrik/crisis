@@ -32,9 +32,9 @@ func (handler *AjaxHandler) HandleRequest(res http.ResponseWriter, req *http.Req
 	canEdit := getCanEdit(req)
 	factionId := getFactionId(req)
 
-	log.Println(req.URL.Path)
+	log.Println(req.URL.Path[1:])
 
-	switch req.URL.Path {
+	switch req.URL.Path[1:] {
 	case mapPath:
 		var divisions []*Division
 		if canEdit {
