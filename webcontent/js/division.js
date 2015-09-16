@@ -201,7 +201,7 @@ crisis.DivisionDetails.prototype.removeUnit = function(unit) {
     var dets = this;
     
     if (_.contains(dets.newUnits, unit)) {
-        dets.newUnits = _.reject(dets.newUnits, function(unit_) { return unit_ === unit });
+        dets.newUnits = _.without(dets.newUnits, unit);
         unit.$listItem.remove();
     } else {
         dets.removedUnits.push(unit);

@@ -40,19 +40,24 @@ crisis.map.init = function(crisisData) {
 
 crisis.map.updateData = function(crisisData) {
     /** @type{Array<crisis.Division>} */
-    var newDivisions = [];
+    var removedDivisions = [];
     _.each(crisis.map.divisions, function(div) {
         var updated = _.findWhere(crisisData.Divisions, {Id: div.id});
         if (updated === undefined) {
             div.destroy();
+            removedDivisions.push(div);
         } else {
             div.updateData(updated);
         }
         crisisData.Divisions = _.without(crisisData.Divisions, updated);
     });
 
+    _.each(removedDivisions, function(removedDivision) {
+        crisis.map.divisions = _.without(crisis.map.divisions, removedDivision);
+    });
+
     _.each(crisisData.Divisions, function(divJson) {
-        newDivisions.push(new crisis.Division(divJson));
+        crisis.map.divisions.push(new crisis.Division(divJson));
     });
 
     crisis.map.loc = {
