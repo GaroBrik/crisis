@@ -7,7 +7,7 @@ crisis.MapState = Object.freeze({
 /** @export */
 crisis.map = {
     /** @type{Array<crisis.Division>} */
-    divisions: null,
+    divisions: [],
     /** @type{crisis.Coords} */
     loc: null,
     /** @type{crisis.Bounds} */
