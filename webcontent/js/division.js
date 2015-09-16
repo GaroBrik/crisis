@@ -152,7 +152,7 @@ crisis.DivisionDetails.prototype.enableEdit = function() {
     dets.$addUnitButton.show();
     
     _.each(dets.division.units, function(unit) {
-        unit.$editOn();
+        unit.editOn();
     });
 
     dets.isEditing = true;
