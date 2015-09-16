@@ -98,7 +98,7 @@ func (db *Database) getFactionDivisionsFromRows(rows *sql.Rows) []*Division {
 }
 
 func (db *Database) loadUnitsFor(div *Division) {
-	rows, err := db.db.Query("SELECT unit_type.unit_name, unit_type.id, unit.id, unit.amount, unit_type.unit_speed "+
+	rows, err := db.db.Query("SELECT unit_type.unit_name, unit_type.id, unit.amount, unit_type.unit_speed "+
 		"FROM unit INNER JOIN unit_type ON (unit.unit_type = unit_type.id) "+
 		"WHERE unit.division = $1", div.Id)
 	if err != nil {
@@ -112,7 +112,7 @@ func (db *Database) loadUnitsFor(div *Division) {
 	div.Units = make([]Unit, 0)
 	for rows.Next() {
 		unit := Unit{}
-		err = rows.Scan(&unit.TypeName, &unit.TypeNum, &unit.Id, &unit.Amount, &speed)
+		err = rows.Scan(&unit.TypeName, &unit.TypeNum, &unit.Amount, &speed)
 		if err != nil {
 			panic(err)
 		}
