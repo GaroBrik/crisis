@@ -4,26 +4,31 @@
  * @param{crisis.DivisionDetails} dets
  */ 
 crisis.Unit = function(unitJson, dets) {
+    var unit = this;
+    
     /** @type{crisis.DivisionDetails} */
-    this.details = dets;
+    unit.details = dets;
     /** @type{number} */
-    this.amount = unitJson.Amount;
+    unit.amount = unitJson.Amount;
     /** @type{string} */
-    this.typeName = unitJson.TypeName;
+    unit.typeName = unitJson.TypeName;
     /** @type{number} */
-    this.typeNum = unitJson.TypeNum;
+    unit.typeNum = unitJson.TypeNum;
     /** @type{jQuery} */
-    this.$listItem = crisis.cloneProto(crisis.$protoUnitListItem);
+    unit.$listItem = crisis.cloneProto(crisis.$protoUnitListItem);
     /** @type{jQuery} */
-    this.$value = this.$listItem.find(".value").html(this.amount);
+    unit.$value = unit.$listItem.find(".value").html(unit.amount);
     /** @type{jQuery} */
-    this.$type = this.$listItem.find(".type").html(crisis.Unit.typeHtml(this.typeNum));
+    unit.$type = unit.$listItem.find(".type").html(crisis.Unit.typeHtml(unit.typeNum));
     /** @type{jQuery} */
-    this.$editField = this.$listItem.find(".editField");
+    unit.$editField = unit.$listItem.find(".editField");
     /** @type{jQuery} */
-    this.$removeUnitButton = this.$listItem.find(".removeUnitButton");
+    unit.$removeUnitButton = unit.$listItem.find(".removeUnitButton");
+    unit.$removeUnitButton.on("click.crisis", function() {
+        unit.details.removeUnit(unit);
+    });
     /** @type{jQuery} */
-    this.$invalidAlert = this.$listItem.find(".invalidAlert");
+    unit.$invalidAlert = unit.$listItem.find(".invalidAlert");
 }
 
 crisis.Unit.prototype.editOn = function() {

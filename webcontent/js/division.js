@@ -191,7 +191,7 @@ crisis.DivisionDetails.prototype.addUnit = function() {
             TypeNum: num,
             Amount: 0
         }, dets);
-        newUnit.$editOn();
+        newUnit.editOn();
         dets.newUnits.push(newUnit);
         dets.$unitList.append(newUnit.$listItem);
     });

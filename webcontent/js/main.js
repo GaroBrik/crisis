@@ -19,7 +19,7 @@ crisis.init = function() {
 	  crisis.$protoDivisionDetails = $prototypes.find("#protoDivisionDetails");
 	  crisis.$protoUnitListItem = $prototypes.find("#protoUnitListItem");
 	  crisis.$protoUnitTypes = $prototypes.find("#protoUnitTypes");
-    $protoUnitTypeFinder = $prototypes.find("#protoUnitTypeFinder");
+    crisis.$protoUnitTypeFinder = $prototypes.find("#protoUnitTypeFinder");
 }
 
 /** @param {jQuery} $proto */
