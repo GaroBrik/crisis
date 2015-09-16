@@ -24,7 +24,7 @@ crisis.Unit = function(unitJson) {
 /** @param{number} typeId */
 crisis.Unit.typeHtml = function(typeId) {
     return crisis.cloneProto(
-	      crisis.$protoUnitTypes.find("[data-type=" + typeId + "]")));
+	      crisis.$protoUnitTypes.find("[data-type=" + typeId + "]"));
 }
 
 /** @param{crisisJson.Unit} unitJson */
