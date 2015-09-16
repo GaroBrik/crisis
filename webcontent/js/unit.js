@@ -1,13 +1,13 @@
 /** 
  * @constructor
  * @param{crisisJson.Unit} unitJson 
- * @param{crisis.DivisionDetails} dets
+ * @param{crisis.Division} div
  */ 
-crisis.Unit = function(unitJson, dets) {
+crisis.Unit = function(unitJson, div) {
     var unit = this;
     
-    /** @type{crisis.DivisionDetails} */
-    unit.details = dets;
+    /** @type{crisis.Division} */
+    unit.division = div;
     /** @type{number} */
     unit.amount = unitJson.Amount;
     /** @type{string} */
@@ -25,7 +25,7 @@ crisis.Unit = function(unitJson, dets) {
     /** @type{jQuery} */
     unit.$removeUnitButton = unit.$listItem.find(".removeUnitButton");
     unit.$removeUnitButton.on("click.crisis", function() {
-        unit.details.removeUnit(unit);
+        unit.division.details.removeUnit(unit);
     });
     /** @type{jQuery} */
     unit.$invalidAlert = unit.$listItem.find(".invalidAlert");

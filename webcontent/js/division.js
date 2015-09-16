@@ -27,9 +27,13 @@ crisis.Division = function(divJson) {
 
 /** @param {crisisJson.Division} divJson */
 crisis.Division.prototype.updateData = function(divJson) {
-    this.absCoords = { x: divJson.AbsCoords.X, y: divJson.AbsCoords.Y };
-    this.units = _.map(divJson.Units, crisis.Unit.fromData);
-    this.reRender = true;
+    var div = this;
+    
+    div.absCoords = { x: divJson.AbsCoords.X, y: divJson.AbsCoords.Y };
+    div.units = _.map(divJson.Units, function(unitJson) {
+        return new crisis.Unit(unitJson, div); 
+    });
+    div.reRender = true;
 }
 
 crisis.Division.prototype.destroy = function() {
@@ -199,7 +203,7 @@ crisis.DivisionDetails.prototype.addUnit = function() {
 
 crisis.DivisionDetails.prototype.removeUnit = function(unit) {
     var dets = this;
-    
+    console.log(dets);
     if (_.contains(dets.newUnits, unit)) {
         dets.newUnits = _.without(dets.newUnits, unit);
         unit.$listItem.remove();
