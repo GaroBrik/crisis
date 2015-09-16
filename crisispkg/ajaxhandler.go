@@ -2,7 +2,6 @@ package crisis
 
 import (
 	"encoding/json"
-	"log"
 	"net/http"
 )
 
