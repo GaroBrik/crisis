@@ -151,6 +151,8 @@ crisis.map.move = function(xPercent, yPercent) {
 
 /** @param{crisis.Division} division */
 crisis.map.positionDivision = function(division) {
+    var map = crisis.map;
+    
 	  var rel = map.relativeCoords(division.absCoords);
 	  if (0 <= rel.x && rel.x <= 100 && 0 <= rel.y && rel.y <= 100) {
 	      division.$marker.css({
