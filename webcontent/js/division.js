@@ -187,32 +187,3 @@ crisis.DivisionDetails.prototype.commitEdit = function() {
     if (!validSubmit) return;
 	  crisis.ajax.postDivisionUpdate(dets.division.id, newUnits);
 }
-
-/** 
- * @constructor
- * @param {crisisJson.Unit} unitJson 
- */ 
-crisis.Unit = function(unitJson) {
-    /** @type{number} */
-    this.amount = unitJson.Amount;
-    /** @type{string} */
-    this.typeName = unitJson.TypeName;
-    /** @type{number} */
-    this.typeNum = unitJson.TypeNum;
-    /** @type{jQuery} */
-    this.$listItem = crisis.cloneProto(crisis.$protoUnitListItem);
-    /** @type{jQuery} */
-    this.$value = this.$listItem.find(".value").html(this.amount);
-    /** @type{jQuery} */
-    this.$type = this.$listItem.find(".type").html(crisis.cloneProto(
-	      crisis.$protoUnitTypes.find("[type=" + this.typeNum + "]")));
-    /** @type{jQuery} */
-    this.$editField = this.$listItem.find(".editField");
-    /** @type{jQuery} */
-    this.$invalidAlert = this.$listItem.find(".invalidAlert");
-}
-
-/** @param {crisisJson.Unit} unitJson */
-crisis.Unit.fromData = function(unitJson) {
-    return new crisis.Unit(unitJson);
-}
