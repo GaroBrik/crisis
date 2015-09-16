@@ -1,6 +1,5 @@
 crisis.ajax = {};
 crisis.ajax.path = "ajax/";
-/** @export */
 crisis.ajax.mapPath = crisis.ajax.path + "map/";
 crisis.ajax.updateDivisionPath = crisis.ajax.path + "updateDivision/";
 
@@ -27,4 +26,28 @@ crisis.ajax.postDivisionUpdate = function(divisionId, units, options) {
         Units: units
     };
     crisis.ajax.postData(crisis.ajax.updateDivisionPath, data, options);
+}
+
+/**
+ * @param{string} url
+ * @param{Object} ajaxSettings
+ * @param{number} frequency
+ */
+crisis.ajax.poll = function(url, ajaxSettings, frequency) {
+    if (frequency === undefined) frequency = 10000;
+    
+    setTimeout(frequency, function() {
+        $.ajax(url, ajaxSetings);
+        crisis.ajax.poll(url, ajaxSetings, frequency);
+    });
+}
+
+/**
+ * @param{string} url
+ * @param{Object} ajaxSettings
+ * @param{number} frequency
+ */
+crisis.ajax.pollNow = function(url, ajaxSettings, frequency) {
+    $.ajax(url, ajaxSettings);
+    crisis.ajax.poll(url, ajaxSetings, frequency);
 }

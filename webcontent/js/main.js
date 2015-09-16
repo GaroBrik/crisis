@@ -8,6 +8,8 @@ crisis = {
     $protoUnitListItem: null,
     /** @type{jQuery} */
     $protoUnitTypes: null
+    /** @type{jQuery} */
+    $protoUnitTypeFinder: null
 }
 
 /** @export */
@@ -17,6 +19,7 @@ crisis.init = function() {
 	  crisis.$protoDivisionDetails = $prototypes.find("#protoDivisionDetails");
 	  crisis.$protoUnitListItem = $prototypes.find("#protoUnitListItem");
 	  crisis.$protoUnitTypes = $prototypes.find("#protoUnitTypes");
+    $protoUnitTypeFinder = $prototypes.find("#protoUnitTypeFinder");
 }
 
 /** @param {jQuery} $proto */
@@ -24,6 +27,14 @@ crisis.cloneProto = function($proto) {
     var ret = $proto.clone();
     ret.attr("id", "");
     return ret;
+}
+
+/** 
+ * @param{number} typeNum 
+ * @return{string} 
+ */
+crisis.unitTypeSelector = function(typeNum) {
+    return "[data-type=" + typeNum + "]"
 }
 
 /**

@@ -1,3 +1,9 @@
+/** @enum{string} */
+crisis.MapState = Objects.freeze({
+    NORMAL: "NORMAL",
+    ADDING_DIV: "ADDING_DIV"
+});
+
 /** @export */
 crisis.map = {
     /** @type{Array<crisis.Division>} */
@@ -8,6 +14,8 @@ crisis.map = {
     bounds: null,
     /** @type{crisis.Bounds} */
     maxBounds: null,
+    /** @type{crisis.MapState} */
+    state: crisis.MapState.NORMAL,
     /** @type{jQuery} */
     $mapHolder: null
 };
@@ -19,21 +27,15 @@ crisis.map = {
 crisis.map.init = function(crisisData) { 
     crisis.map.$mapHolder = $("#mapHolder");
     
-    crisis.map.divisions = _.map(crisisData.Divisions, function(divData) {
-	      return new crisis.Division(divData);
-    });
-    crisis.map.loc = {
-	      x: 0,
-	      y: 0
-    }
-    crisis.map.bounds = { height: crisisData.MapBounds.Height, width: crisisData.MapBounds.Width };
-    crisis.map.maxBounds = { height: crisisData.MapBounds.Height, width: crisisData.MapBounds.Width }; 
-
     $(window).on("crisis.resize", function() {
         crisis.map.positionDivisions();
     });
 
-    crisis.map.positionDivisions();
+    crisis.ajax.pollNow(crisis.ajax.mapPath, {
+        success: function(data) {
+            crisis.map.updateData(data);
+        }
+    });
 }
 
 crisis.map.updateData = function(crisisData) {
@@ -53,6 +55,13 @@ crisis.map.updateData = function(crisisData) {
         newDivisions.push(new Division(divJson));
     });
 
+    crisis.map.loc = {
+	      x: 0,
+	      y: 0
+    }
+    crisis.map.bounds = { height: crisisData.MapBounds.Height, width: crisisData.MapBounds.Width };
+    crisis.map.maxBounds = { height: crisisData.MapBounds.Height, width: crisisData.MapBounds.Width };
+    
     crisis.map.positionDivisions();
 }
 
@@ -174,3 +183,36 @@ crisis.map.positionDivisions = function() {
     _.each(crisis.map.divisions, crisis.map.positionDivision);
 }
 
+/** 
+ * @param{Array<number>} notInclude 
+ * @param{jQuery} $positionIn
+ * @param{function(number)} callback
+ * @return{function()} a function which cancels this process
+ */
+crisis.map.showUnitTypeFinder = function(notInclude, $positionIn, callback) {
+    var $thisFinder = crisis.cloneProto(crisis.$protoUnitTypeFinder);
+
+    _.each(notInclude, function(num) {
+        $thisFinder.children(crisis.unitTypeSelector(num)).remove();
+    });
+
+    /** @type{function()} */
+    var cancel;
+    
+    $thisFinder.children().on("click.crisis", function() {
+        callback($(this).data("type"));
+        cancel();
+    });
+
+    var $children = $positionIn.children();
+
+    cancel = function() {
+        $thisFinder.remove();
+        $positionIn.append($children);
+    }
+
+    $children.detach();
+    $positionIn.append($thisFinder);
+
+    return cancel;
+}

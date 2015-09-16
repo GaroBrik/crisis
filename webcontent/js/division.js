@@ -49,6 +49,8 @@ crisis.DivisionDetails = function(div) {
     /** @type{jQuery} */
     this.$editButton = null;
     /** @type{jQuery} */
+    this.$addUnitButton = null;
+    /** @type{jQuery} */
     this.$cancelButton = null;
     /** @type{jQuery} */
     this.$commitButton = null;
@@ -60,6 +62,10 @@ crisis.DivisionDetails = function(div) {
     this.isOpen = false;
     /** @type{boolean} */
     this.isEditing = false;
+    /** @type{Array<crisis.Unit>} */
+    this.newUnits = [];
+    /** @type{Array<crisis.Unit>} */
+    this.removedUnits = [];
 }
 
 crisis.DivisionDetails.prototype.toggle = function() {
@@ -98,6 +104,11 @@ crisis.DivisionDetails.prototype.reRender = function() {
         dets.$editButton = dets.$pane.find(".editButton");
         dets.$editButton.on("click.crisis", function() {
             dets.enableEdit(); 
+        });
+
+        dets.$addUnitButton = dets.$pane.find(".addUnitButton");
+        dets.$addUnitButton.on("click.crisis", function() {
+            dets.addUnit();
         });
         
         dets.$cancelButton = dets.$pane.find(".cancelButton");
@@ -138,10 +149,10 @@ crisis.DivisionDetails.prototype.enableEdit = function() {
     dets.$editButton.hide();
     dets.$cancelButton.show();
     dets.$commitButton.show();
+    dets.$addUnitButton.show();
     
     _.each(dets.division.units, function(unit) {
-	      unit.$editField.val(unit.amount).show();
-	      unit.$value.hide();
+        unit.$editOn();
     });
 
     dets.isEditing = true;
@@ -153,15 +164,49 @@ crisis.DivisionDetails.prototype.disableEdit = function() {
     dets.$editButton.show();
     dets.$cancelButton.hide();
     dets.$commitButton.hide();
+    dets.$addUnitButton.hide();
     
     dets.$paneInvalidAlert.hide();
     _.each(dets.division.units, function(unit) {
-	      unit.$editField.hide();
-	      unit.$value.show();
-	      unit.$invalidAlert.hide();
+	      unit.editOff();
+    });
+    _.each(dets.division.removedUnits, function(unit) {
+        unit.$listItem.show();
     });
 
     dets.isEditing = false;
+}
+
+crisis.DivisionDetails.prototype.addUnit = function() {
+    var dets = this;
+
+    if (!dets.isEditing) return;
+
+    var currentIds = _.map(dets.division.units.concat(dets.newUnits), function(unit) {
+        return unit.typeNum;
+    });
+    
+    crisis.map.showUnitTypeFinder(currentIds, dets.$pane, function(num) {
+        var newUnit = new crisis.Unit({
+            TypeNum: num,
+            Amount: 0
+        }, dets);
+        newUnit.$editOn();
+        dets.newUnits.push(newUnit);
+        dets.$unitList.append(newUnit.$listItem);
+    });
+}
+
+crisis.DivisionDetails.prototype.removeUnit = function(unit) {
+    var dets = this;
+    
+    if (_.contains(dets.newUnits, unit)) {
+        dets.newUnits = _.reject(dets.newUnits, function(unit_) { return unit_ === unit });
+        unit.$listItem.remove();
+    } else {
+        dets.removedUnits.push(unit);
+        unit.$listItem.hide();
+    }
 }
 
 crisis.DivisionDetails.prototype.commitEdit = function() {
@@ -172,7 +217,9 @@ crisis.DivisionDetails.prototype.commitEdit = function() {
     /** @type{Array<crisisJson.Unit>} */
     var newUnits = [];
     var validSubmit = true;
-    _.each(dets.division.units, function(unit) {
+    _.each(dets.division.units.concat(dets.newUnits), function(unit) {
+        if (_.contains(removedUnits, unit)) return;
+        
 	      var newVal = unit.$editField.val();
 	      newVal = parseInt(newVal);
 	      if (newVal === null) {

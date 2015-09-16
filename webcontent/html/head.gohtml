@@ -17,22 +17,30 @@
       <input type="button" class="editButton" value="Edit">
       <input type="button" class="cancelButton" style="display: none" value="Cancel">
       <input type="button" class="commitButton" style="display: none" value="Commit">
+      <input type="button" class="addUnitButton" style="display: none" value="+" >
     </div>
     <ul>
       <li id="protoUnitListItem" class="unitListItem">
-        <div class="type"></div>
+        <span class="type"></span>
         <span class="value"></span>
-        <input type="text" class="editField" style="display: none">    
+        <input type="text" class="editField" style="display: none">
+        <input type="button" class="removeUnitButton" style="display: none" value="x">
         <span class="invalidAlert" style="display: none"></span>
       </li>
     </ul>
     <div id="protoUnitTypes">
       {{range .Types}}
         <span data-type="{{.Id}}">
-	        {{.Name}}
+	        {{.Name}}:
         </span>
       {{end}}
     </div>
+    <ul id="protouUnitTypeFinder" class="unitTypeFinder">
+      {{range .Types}}
+        <li data-type="{{.Id}}">
+          <input type="button" value="{{.Name}}">
+        </li>
+    </ul>
   </div>
   <div id="header">
     <input type="button" id="newDivisionButton" value="Create New Division" >
