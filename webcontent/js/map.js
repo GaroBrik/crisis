@@ -196,11 +196,13 @@ crisis.map.positionDivisions = function() {
  */
 crisis.map.showUnitTypeFinder = function(notInclude, $positionIn, callback) {
     var $thisFinder = crisis.cloneProto(crisis.$protoUnitTypeFinder);
+    console.log($thisFinder);
 
     _.each(notInclude, function(num) {
         $thisFinder.children(crisis.unitTypeSelector(num)).remove();
     });
 
+    console.log($thisFinder);
     /** @type{function()} */
     var cancel;
     
@@ -219,5 +221,6 @@ crisis.map.showUnitTypeFinder = function(notInclude, $positionIn, callback) {
     $children.detach();
     $positionIn.append($thisFinder);
 
+    console.log($thisFinder);
     return cancel;
 }
