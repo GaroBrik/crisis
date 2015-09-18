@@ -41,7 +41,7 @@ crisis.ajax.poll = function(url, ajaxSettings, frequency) {
     if (frequency === undefined) frequency = 10000;
 
     setTimeout(frequency, function() {
-        $.ajax(url, ajaxSetings);
+        $.ajax(url, ajaxSettings);
         crisis.ajax.poll(url, ajaxSetings, frequency);
     });
 };
