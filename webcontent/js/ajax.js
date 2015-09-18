@@ -1,12 +1,16 @@
-crisis.ajax = {};
-crisis.ajax.path = 'ajax/';
-crisis.ajax.mapPath = crisis.ajax.path + 'map/';
-crisis.ajax.updateDivisionPath = crisis.ajax.path + 'updateDivision/';
+crisis.ajax = {
+    /** @type {string} */
+    crisis.ajax.path: 'ajax/',
+    /** @type {string} */
+    crisis.ajax.mapPath: crisis.ajax.path + 'map/',
+    /** @type {string} */
+    crisis.ajax.updateDivisionPath: crisis.ajax.path + 'updateDivision/'
+};
 
 /**
  * @param {string} path
  * @param {Object} data
- * @param {Object} options
+ * @param {jQueryAjaxSettings=} options
  */
 crisis.ajax.postData = function(path, data, options) {
     if (options === null || options === undefined) options = {};
@@ -21,10 +25,10 @@ crisis.ajax.postData = function(path, data, options) {
 /**
  * @param {number} divisionId
  * @param {Array<crisisJson.Unit>} units
- * @param {Object} options
+ * @param {jQueryAjaxSettings=} options
  */
 crisis.ajax.postDivisionUpdate = function(divisionId, units, options) {
-    /** @type {crisisJson.Division} */
+    /** @type {crisisJson.DivisionResponse} */
     var data = {
         Id: divisionId,
         Units: units
@@ -34,22 +38,22 @@ crisis.ajax.postDivisionUpdate = function(divisionId, units, options) {
 
 /**
  * @param {string} url
- * @param {Object} ajaxSettings
- * @param {number} frequency
+ * @param {jQueryAjaxSettings=} ajaxSettings
+ * @param {number=} frequency
  */
 crisis.ajax.poll = function(url, ajaxSettings, frequency) {
     if (frequency === undefined) frequency = 10000;
 
-    setTimeout(frequency, function() {
+    setTimeout(function() {
         $.ajax(url, ajaxSettings);
         crisis.ajax.poll(url, ajaxSettings, frequency);
-    });
+    }, frequency);
 };
 
 /**
  * @param {string} url
- * @param {Object} ajaxSettings
- * @param {number} frequency
+ * @param {jQueryAjaxSettings=} ajaxSettings
+ * @param {number=} frequency
  */
 crisis.ajax.pollNow = function(url, ajaxSettings, frequency) {
     $.ajax(url, ajaxSettings);

@@ -13,9 +13,9 @@ crisis.Division = function(divJson) {
     this.editing = false;
     /** @type {number} */
     this.id = divJson.Id;
-    /** @type {crisis.coords} */
+    /** @type {crisis.Coords} */
     this.abscoords = null;
-    /** @type {Array<crisis.unit>} */
+    /** @type {Array<crisis.Unit>} */
     this.units = null;
     /** @type {jQuery} */
     this.$marker = crisis.cloneProto(crisis.$protoDivisionMarker);
@@ -186,7 +186,7 @@ crisis.DivisionDetails.prototype.disableEdit = function() {
     _.each(dets.division.units, function(unit) {
         unit.editOff();
     });
-    _.each(dets.division.removedUnits, function(unit) {
+    _.each(dets.removedUnits, function(unit) {
         unit.$listItem.show();
     });
 
@@ -198,16 +198,17 @@ crisis.DivisionDetails.prototype.addUnit = function() {
 
     if (!dets.isEditing) return;
 
-    var currentIds = _.map(dets.division.units.concat(dets.newUnits),
-        function(unit) {
+    var currentIds = /** @type {Array<number>} */
+        (_.map(dets.division.units.concat(dets.newUnits), function(unit) {
             return unit.typeNum;
-        });
+        }));
 
     crisis.map.showUnitTypeFinder(currentIds, dets.$pane, function(num) {
         var newUnit = new crisis.Unit({
             TypeNum: num,
+            TypeName: 'temp',
             Amount: 0
-        }, dets);
+        }, dets.division);
         newUnit.editOn();
         dets.newUnits.push(newUnit);
         dets.$unitList.append(newUnit.$listItem);
@@ -219,7 +220,8 @@ crisis.DivisionDetails.prototype.removeUnit = function(unit) {
     var dets = this;
     console.log(dets);
     if (_.contains(dets.newUnits, unit)) {
-        dets.newUnits = _.without(dets.newUnits, unit);
+        dets.newUnits = /** @type {Array<crisis.Unit>} */
+            (_.without(dets.newUnits, unit));
         unit.$listItem.remove();
     } else {
         dets.removedUnits.push(unit);
@@ -239,7 +241,7 @@ crisis.DivisionDetails.prototype.commitEdit = function() {
         if (_.contains(dets.removedUnits, unit)) return;
 
         var newVal = unit.$editField.val();
-        newVal = parseInt(newVal);
+        newVal = parseInt(newVal, 10);
         if (newVal === null) {
             unit.$invalidAlert.show();
             dets.$paneInvalidAlert.show();
