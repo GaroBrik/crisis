@@ -19,7 +19,7 @@ crisis.map = {
     /** @type{jQuery} */
     $mapHolder: null,
     /** @type{jQuery} */
-    map.$mapBounds: null,
+    $mapBounds: null,
     /** @type{jQuery} */
     $addDivisionButton: null
 };
