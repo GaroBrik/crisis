@@ -31,7 +31,7 @@ crisis.Division.prototype.updateData = function(divJson) {
     var div = this;
 
     div.absCoords = { x: divJson.AbsCoords.X, y: divJson.AbsCoords.Y };
-    div.units = /** @type {Array<crisis.Unit> */
+    div.units = /** @type {Array<crisis.Unit>} */
         (_.map(divJson.Units, function(unitJson) {
         return new crisis.Unit(unitJson, div);
     }));

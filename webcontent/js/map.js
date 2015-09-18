@@ -8,9 +8,7 @@ crisis.MapState = {
 crisis.map = {
     /** @type {Array<crisis.Division>} */
     divisions: [],
-    /** @type {crisis.Coords} */
-    loc: null,
-    /** @type {crisis.Bounds} */
+    /** @type {?crisis.Bounds} */
     absBounds: null,
     /** @type {crisis.Bounds} */
     relBounds: {
@@ -59,14 +57,16 @@ crisis.map.init = function() {
 
 /** @param {crisisJson.Crisis} crisisData */
 crisis.map.updateData = function(crisisData) {
-    crisis.map.absBounds = {
+    var map = crisis.map;
+
+    map.absBounds = {
         height: crisisData.MapBounds.Height,
         width: crisisData.MapBounds.Width
     };
 
     /** @type {Array<crisis.Division>} */
     var removedDivisions = [];
-    _.each(crisis.map.divisions, function(div) {
+    _.each(map.divisions, function(div) {
         var updated = _.findWhere(crisisData.Divisions, {Id: div.id});
         if (updated === undefined) {
             div.destroy();
@@ -74,15 +74,17 @@ crisis.map.updateData = function(crisisData) {
         } else {
             div.updateData(updated);
         }
-        crisisData.Divisions = _.without(crisisData.Divisions, updated);
+        crisisData.Divisions = /** @type {Array<crisis.Division>} */
+            (_.without(crisisData.Divisions, updated));
     });
 
     _.each(removedDivisions, function(removedDivision) {
-        crisis.map.divisions = _.without(crisis.map.divisions, removedDivision);
+        map.divisions = /** @type {Array<crisis.Division>} */
+            (_.without(map.divisions, removedDivision));
     });
 
     _.each(crisisData.Divisions, function(divJson) {
-        crisis.map.divisions.push(new crisis.Division(divJson));
+        map.divisions.push(new crisis.Division(divJson));
     });
 };
 
@@ -97,8 +99,8 @@ crisis.map.positionDropdown = function($dropdown, $source, $container) {
     var containerBottom = containerTop + $container.height();
     var containerRight = containerLeft + $container.width();
     var idealY = $source.position().top + $source.height();
-    if (idealY + $dropdown.size() > containerBottom) {
-        idealY += containerBottom - (idealY + $dropdown.size());
+    if (idealY + $dropdown.length > containerBottom) {
+        idealY += containerBottom - (idealY + $dropdown.length);
     }
 
     if (idealY < containerTop) {
@@ -194,7 +196,7 @@ crisis.map.showUnitTypeFinder = function(notInclude, $positionIn, callback) {
     var cancel;
 
     $thisFinder.children().on('click.crisis', function() {
-        callback($(this).data('type'));
+        callback(crisis.getNumericData($(this), "type"));
         cancel();
     });
 

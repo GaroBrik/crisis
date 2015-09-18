@@ -1,5 +1,5 @@
 /** @export */
-var crisis = {
+crisis = {
     /** @type {jQuery} */
     $protoDivisionMarker: null,
     /** @type {jQuery} */
@@ -38,6 +38,16 @@ crisis.cloneProto = function($proto) {
  */
 crisis.unitTypeSelector = function(typeNum) {
     return '[data-type=' + typeNum + ']';
+};
+
+/**
+ * @param {jQuery} $elem
+ * @param {string} dataName
+ * @return {?number}
+ */
+crisis.getNumericData = function($elem, dataName) {
+    var numString = $elem.data(dataName);
+    return parseInt(numString, 10);
 };
 
 /**
