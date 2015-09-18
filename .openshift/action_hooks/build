@@ -17,5 +17,5 @@ pushd "${WEBCONTENT_DIR}/js" > /dev/null
     EXTERNS="jquiexterns.js jsonexterns.js jquery-1.9.js"
     java -jar compiler.jar --compilation_level ADVANCED_OPTIMIZATIONS \
          --js $INPUT --externs $EXTERNS --js_output_file $OUTPUT --generate_exports \
-         --warning_level VERBOSE
+         --warning_level VERBOSE --jscomp_warning=checkTypes
 } >> "${OPENSHIFT_GO_LOG_DIR}go.log"

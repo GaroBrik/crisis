@@ -165,7 +165,7 @@ crisis.map.zoom = function(factor) {
     map.$mapBounds.css({
         'height': (2 * map.bounds.height - 100) + '%',
         'width': (2 * map.bounds.width - 100) + '%',
-        'top': '-' + (map.bounds.height - 100) + '%'
+        'top': '-' + (map.bounds.height - 100) + '%',
         'left': '-' + (map.bounds.width - 100) + '%'
     });
     map.$mapHolder.animate({
