@@ -196,7 +196,7 @@ crisis.map.showUnitTypeFinder = function(notInclude, $positionIn, callback) {
     var cancel;
 
     $thisFinder.children().on('click.crisis', function() {
-        callback(crisis.getNumericData($(this), "type"));
+        callback(crisis.getNumericData($(this), 'type'));
         cancel();
     });
 

@@ -1,5 +1,5 @@
 /** @export */
-crisis = {
+var crisis = {
     /** @type {jQuery} */
     $protoDivisionMarker: null,
     /** @type {jQuery} */
