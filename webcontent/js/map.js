@@ -1,57 +1,57 @@
-/** @enum{string} */
+/** @enum {string} */
 crisis.MapState = Object.freeze({
-    NORMAL: "NORMAL",
-    ADDING_DIV: "ADDING_DIV"
+    NORMAL: 'NORMAL',
+    ADDING_DIV: 'ADDING_DIV'
 });
 
 /** @export */
 crisis.map = {
-    /** @type{Array<crisis.Division>} */
+    /** @type {Array<crisis.Division>} */
     divisions: [],
-    /** @type{crisis.Coords} */
+    /** @type {crisis.Coords} */
     loc: null,
-    /** @type{crisis.Bounds} */
+    /** @type {crisis.Bounds} */
     bounds: null,
-    /** @type{crisis.Bounds} */
+    /** @type {crisis.Bounds} */
     maxBounds: null,
-    /** @type{crisis.MapState} */
+    /** @type {crisis.MapState} */
     state: crisis.MapState.NORMAL,
-    /** @type{jQuery} */
+    /** @type {jQuery} */
     $mapHolder: null,
-    /** @type{jQuery} */
+    /** @type {jQuery} */
     $mapBounds: null,
-    /** @type{jQuery} */
+    /** @type {jQuery} */
     $addDivisionButton: null
 };
 
-/** 
+/**
  * @export
- * @param{crisisJson.Crisis} 
+ * @param {crisisJson.Crisis} crisisData
  */
 crisis.map.init = function(crisisData) {
     var map = crisis.map;
-    map.$mapHolder = $("#mapHolder");
-    map.$mapBounds = $("#mapBounds");
+    map.$mapHolder = $('#mapHolder');
+    map.$mapBounds = $('#mapBounds');
     map.$mapHolder.draggable({containment: map.$mapBounds});
-    
+
     crisis.ajax.pollNow(crisis.ajax.mapPath, {
         success: function(data) {
             map.updateData(data);
         }
     });
-}
+};
 
 crisis.map.updateData = function(crisisData) {
     crisis.map.loc = {
-	      x: 0,
-	      y: 0
+        x: 0,
+        y: 0
     }
     crisis.map.bounds = { height: crisisData.MapBounds.Height,
                           width: crisisData.MapBounds.Width };
     crisis.map.maxBounds = { height: crisisData.MapBounds.Height,
                              width: crisisData.MapBounds.Width };
-    
-    /** @type{Array<crisis.Division>} */
+
+    /** @type {Array<crisis.Division>} */
     var removedDivisions = [];
     _.each(crisis.map.divisions, function(div) {
         var updated = _.findWhere(crisisData.Divisions, {Id: div.id});
@@ -71,13 +71,13 @@ crisis.map.updateData = function(crisisData) {
     _.each(crisisData.Divisions, function(divJson) {
         crisis.map.divisions.push(new crisis.Division(divJson));
     });
-}
+};
 
 /**
- * @param{jQuery} $dropdown
- * @param{jQuery} $source
- * @param{jQuery} $container
- */ 
+ * @param {jQuery} $dropdown
+ * @param {jQuery} $source
+ * @param {jQuery} $container
+ */
 crisis.map.positionDropdown = function($dropdown, $source, $container) {
     var containerTop = $container.position().top;
     var containerLeft = $container.position().left;
@@ -85,34 +85,34 @@ crisis.map.positionDropdown = function($dropdown, $source, $container) {
     var containerRight = containerLeft + $container.width();
     var idealY = $source.position().top + $source.height();
     if (idealY + $dropdown.size() > containerBottom) {
-	      idealY += containerBottom - (idealY + $dropdown.size());
+        idealY += containerBottom - (idealY + $dropdown.size());
     }
 
     if (idealY < containerTop) {
-	      idealY += containerTop - idealY;
+        idealY += containerTop - idealY;
     }
 
     var idealX = $source.position().left + $source.width();
     if (idealX + $dropdown.width() > containerRight) {
-	      idealX += containerRight - (idealX + $dropdown.width());
+        idealX += containerRight - (idealX + $dropdown.width());
     }
 
     if (idealX < containerLeft) {
-	      idealX += containerLeft - idealX;
+        idealX += containerLeft - idealX;
     }
 
     $dropdown.css({
-	      "left": idealX,
-	      "top": idealY
+        'left': idealX,
+        'top': idealY
     });
-}
+};
 
 crisis.map.absCoordsOfClick = function(clickEvent) {
 
-}
+};
 
-/** 
- * @param{crisis.Coords} absCoords 
+/**
+ * @param {crisis.Coords} absCoords 
  * @return{crisis.Coords}
  */
 crisis.map.relativeCoords = function(absCoords) {
@@ -124,7 +124,7 @@ crisis.map.relativeCoords = function(absCoords) {
 }
 
 /**
- * @param{crisis.Coords}
+ * @param {crisis.Coords} relativeCoords
  * @return{crisis.Coords}
  */
 crisis.map.absCoordsOfRelative = function(relativeCoords) {
@@ -135,42 +135,42 @@ crisis.map.absCoordsOfRelative = function(relativeCoords) {
 }
 
 /**
- * @param{number} factor
- * @param{number} center
+ * @param {number} factor
+ * @param {number} center
  */ 
 crisis.map.zoom = function(factor, center) {
     var map = crisis.map;
-    
+
     var newBounds = {
-	      height: Math.min(map.bounds.height / factor, map.maxBounds.height),
-	      width: Math.min(map.bounds.width / factor, map.maxBounds.width)
+        height: Math.min(map.bounds.height / factor, map.maxBounds.height),
+        width: Math.min(map.bounds.width / factor, map.maxBounds.width)
     }
     var newLoc = {
-	      x: Math.max(0, Math.min(map.maxBounds.width - newBounds.width,
-				                        center - newBounds.width)),
-	      y: Math.max(0, Math.min(map.maxBounds.height - newBounds.height,
-				                        center - newBounds.height))
+        x: Math.max(0, Math.min(map.maxBounds.width - newBounds.width,
+  		                          center - newBounds.width)),
+        y: Math.max(0, Math.min(map.maxBounds.height - newBounds.height,
+  			                        center - newBounds.height))
     }
     map.bounds = newBounds;
     map.loc = newLoc;
     map.positionMap();
-}
+};
 
 crisis.map.positionMap = function() {
     var map = crisis.map;
     map.$mapHolder.css({
-        "height": (map.maxBounds.height / map.bounds.height * 100) + "%",
-        "width": (map.maxBounds.width / map.bounds.width * 100) + "%"
-//        "top": "-" + (map.loc.y / map.maxBounds.height * 100) + "%"
- //       "left": "-" + (map.loc.x / map.maxBounds.width * 100) + "%"
+        'height': (map.maxBounds.height / map.bounds.height * 100) + '%',
+        'width': (map.maxBounds.width / map.bounds.width * 100) + '%'
+//        'top': '-' + (map.loc.y / map.maxBounds.height * 100) + '%'
+//        'left': '-' + (map.loc.x / map.maxBounds.width * 100) + '%'
     });
-}
+};
 
-/** 
- * @param{Array<number>} notInclude 
- * @param{jQuery} $positionIn
- * @param{function(number)} callback
- * @return{function()} a function which cancels this process
+/**
+ * @param {Array<number>} notInclude
+ * @param {jQuery} $positionIn
+ * @param {function(number)} callback
+ * @return {function()} a function which cancels this process
  */
 crisis.map.showUnitTypeFinder = function(notInclude, $positionIn, callback) {
     var $thisFinder = crisis.cloneProto(crisis.$protoUnitTypeFinder);
@@ -179,11 +179,11 @@ crisis.map.showUnitTypeFinder = function(notInclude, $positionIn, callback) {
         $thisFinder.children(crisis.unitTypeSelector(num)).remove();
     });
 
-    /** @type{function()} */
+    /** @type {function()} */
     var cancel;
-    
-    $thisFinder.children().on("click.crisis", function() {
-        callback($(this).data("type"));
+
+    $thisFinder.children().on('click.crisis', function() {
+        callback($(this).data('type'));
         cancel();
     });
 
