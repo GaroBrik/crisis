@@ -38,6 +38,15 @@ crisis.map.init = function(crisisData) {
 }
 
 crisis.map.updateData = function(crisisData) {
+    crisis.map.loc = {
+	      x: 0,
+	      y: 0
+    }
+    crisis.map.bounds = { height: crisisData.MapBounds.Height,
+                          width: crisisData.MapBounds.Width };
+    crisis.map.maxBounds = { height: crisisData.MapBounds.Height,
+                             width: crisisData.MapBounds.Width };
+    
     /** @type{Array<crisis.Division>} */
     var removedDivisions = [];
     _.each(crisis.map.divisions, function(div) {
@@ -58,13 +67,6 @@ crisis.map.updateData = function(crisisData) {
     _.each(crisisData.Divisions, function(divJson) {
         crisis.map.divisions.push(new crisis.Division(divJson));
     });
-
-    crisis.map.loc = {
-	      x: 0,
-	      y: 0
-    }
-    crisis.map.bounds = { height: crisisData.MapBounds.Height, width: crisisData.MapBounds.Width };
-    crisis.map.maxBounds = { height: crisisData.MapBounds.Height, width: crisisData.MapBounds.Width };
     
     crisis.map.positionDivisions();
 }
