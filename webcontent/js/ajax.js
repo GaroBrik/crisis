@@ -1,10 +1,10 @@
 crisis.ajax = {
     /** @type {string} */
-    crisis.ajax.path: 'ajax/',
+    path: 'ajax/',
     /** @type {string} */
-    crisis.ajax.mapPath: crisis.ajax.path + 'map/',
+    mapPath: crisis.ajax.path + 'map/',
     /** @type {string} */
-    crisis.ajax.updateDivisionPath: crisis.ajax.path + 'updateDivision/'
+    updateDivisionPath: crisis.ajax.path + 'updateDivision/'
 };
 
 /**
