@@ -159,7 +159,7 @@ crisis.map.positionMap = function() {
     var map = crisis.map;
     map.$mapHolder.css({
         "height": (map.maxBounds.height / map.bounds.height * 100) + "%",
-        "width": (map.maxBounds.width / map.bounds.width * 100) + "%",
+        "width": (map.maxBounds.width / map.bounds.width * 100) + "%"
 //        "top": "-" + (map.loc.y / map.maxBounds.height * 100) + "%"
  //       "left": "-" + (map.loc.x / map.maxBounds.width * 100) + "%"
     });
