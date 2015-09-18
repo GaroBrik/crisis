@@ -8,7 +8,7 @@ var crisis = {
     $protoUnitListItem: null,
     /** @type {jQuery} */
     $protoUnitTypes: null,
-    /** @type {jQuery} */u
+    /** @type {jQuery} */
     $protoUnitTypeFinder: null
 }
 

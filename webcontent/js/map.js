@@ -32,11 +32,8 @@ crisis.map = {
     $addDivisionButton: null
 };
 
-/**
- * @export
- * @param {crisisJson.Crisis} crisisData
- */
-crisis.map.init = function(crisisData) {
+/** @export */
+crisis.map.init = function() {
     var map = crisis.map;
     map.$mapHolder = $('#mapHolder');
     map.$mapBounds = $('#mapBounds');
@@ -60,6 +57,7 @@ crisis.map.init = function(crisisData) {
     });
 };
 
+/** @param {crisisJson.Crisis} crisisData */
 crisis.map.updateData = function(crisisData) {
     crisis.map.absBounds = {
         height: crisisData.MapBounds.Height,
@@ -122,6 +120,7 @@ crisis.map.positionDropdown = function($dropdown, $source, $container) {
     });
 };
 
+/** @param {jQuery.Event} clickEvent */
 crisis.map.absCoordsOfClick = function(clickEvent) {
 
 };
@@ -135,7 +134,7 @@ crisis.map.relativeCoords = function(absCoords) {
     return {
         x: absCoords.x * 100 / map.absBounds.width,
         y: absCoords.y * 100 / map.absBounds.height
-    }
+    };
 };
 
 /**
@@ -147,7 +146,7 @@ crisis.map.absCoordsOfRelative = function(relativeCoords) {
     return {
         x: map.absBounds.width * relativeCoords.x / 100 + map.loc.x,
         y: map.absBounds.height * relativeCoords.y / 100 + map.loc.y
-    }
+    };
 };
 
 /**
@@ -159,7 +158,7 @@ crisis.map.zoom = function(factor) {
     var newBounds = {
         height: Math.max(map.minBounds.height, map.bounds.height * factor),
         width: Math.min(map.minBounds.width, map.bounds.width * factor)
-    }
+    };
 
     map.bounds = newBounds;
 
