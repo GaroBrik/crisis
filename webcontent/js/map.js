@@ -113,8 +113,8 @@ crisis.map.absCoordsOfClick = function(clickEvent) {
 crisis.map.relativeCoords = function(absCoords) {
     var map = crisis.map;
     return {
-	      x: (absCoords.x - map.loc.x) * 100 / map.bounds.width,
-	      y: (absCoords.y - map.loc.y) * 100 / map.bounds.height
+	      x: absCoords.x * 100 / map.maxBounds.width,
+	      y: absCoords.y * 100 / map.maxBounds.height
     }
 }
 
