@@ -17,19 +17,21 @@ crisis.Unit = function(unitJson, div) {
     /** @type {jQuery} */
     unit.$listItem = crisis.cloneProto(crisis.$protoUnitListItem);
     /** @type {jQuery} */
-    unit.$value = unit.$listItem.find('.value').html(unit.amount);
+    unit.$value = unit.$listItem.find('.value');
     /** @type {jQuery} */
-    unit.$type = unit.$listItem.find('.type').append(
-        crisis.Unit.typeHtml(unit.typeNum));
+    unit.$type = unit.$listItem.find('.type');
     /** @type {jQuery} */
     unit.$editField = unit.$listItem.find('.editField');
     /** @type {jQuery} */
     unit.$removeUnitButton = unit.$listItem.find('.removeUnitButton');
+    /** @type {jQuery} */
+    unit.$invalidAlert = unit.$listItem.find('.invalidAlert');
+
+    unit.$type.append(crisis.Unit.typeHtml(unit.typeNum));
     unit.$removeUnitButton.on('click.crisis', function() {
         unit.division.details.removeUnit(unit);
     });
-    /** @type {jQuery} */
-    unit.$invalidAlert = unit.$listItem.find('.invalidAlert');
+    unit.$value.html('' + unit.amount);
 };
 
 crisis.Unit.prototype.editOn = function() {
