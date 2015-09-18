@@ -1,7 +1,7 @@
 /* This code is copied from the google closure library for use in conjunction
    with the closure compiler. */
 
-goog = {};
+var goog = {};
 
 /**
  * Reference to the global context.  In most cases this will be 'window'.

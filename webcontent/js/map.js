@@ -143,6 +143,7 @@ crisis.map.relativeCoords = function(absCoords) {
  * @return {crisis.Coords}
  */
 crisis.map.absCoordsOfRelative = function(relativeCoords) {
+    var map = crisis.map;
     return {
         x: map.absBounds.width * relativeCoords.x / 100 + map.loc.x,
         y: map.absBounds.height * relativeCoords.y / 100 + map.loc.y
