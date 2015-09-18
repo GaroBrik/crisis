@@ -42,7 +42,7 @@ crisis.ajax.poll = function(url, ajaxSettings, frequency) {
 
     setTimeout(frequency, function() {
         $.ajax(url, ajaxSettings);
-        crisis.ajax.poll(url, ajaxSetings, frequency);
+        crisis.ajax.poll(url, ajaxSettings, frequency);
     });
 };
 
