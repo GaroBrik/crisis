@@ -53,5 +53,5 @@ crisis.ajax.poll = function(url, ajaxSettings, frequency) {
  */
 crisis.ajax.pollNow = function(url, ajaxSettings, frequency) {
     $.ajax(url, ajaxSettings);
-    crisis.ajax.poll(url, ajaxSetings, frequency);
+    crisis.ajax.poll(url, ajaxSettings, frequency);
 }
