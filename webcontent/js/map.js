@@ -19,8 +19,6 @@ crisis.map = {
     /** @type{jQuery} */
     $mapHolder: null,
     /** @type{jQuery} */
-    $mapImage: null,
-    /** @type{jQuery} */
     $addDivisionButton: null
 };
 
@@ -157,55 +155,14 @@ crisis.map.zoom = function(factor, center) {
     map.positionMap();
 }
 
-/**
- * @param{number} xPercent
- * @param{number} yPercent
- */
-crisis.map.move = function(xPercent, yPercent) {
-    var map = crisis.map;
-    map.loc = {
-	      x: Math.max(0, Math.min(map.maxBounds.width - newBounds.width,
-				                        map.loc.x - xPercent * map.bounds.Width)),
-	      y: Math.max(0, Math.min(map.maxBounds.height - newBounds.height,
-				                        map.loc.y - yPercent * map.bounds.height))
-    }
-    map.positionMap();
-}
-
 crisis.map.positionMap = function() {
     var map = crisis.map;
-    map.$mapImage.css({
+    map.$mapHolder.css({
         "height": (map.maxBounds.height / map.bounds.height * 100) + "%",
         "width": (map.maxBounds.width / map.bounds.width * 100) + "%",
-        "top": "-" + (map.loc.y / map.maxBounds.height * 100) + "%"
-        "left": "-" + (map.loc.x / map.maxBounds.width * 100) + "%"
+//        "top": "-" + (map.loc.y / map.maxBounds.height * 100) + "%"
+ //       "left": "-" + (map.loc.x / map.maxBounds.width * 100) + "%"
     });
-    map.positionDivisions();
-}
-
-/** @param{crisis.Division} division */
-crisis.map.positionDivision = function(division) {
-    var map = crisis.map;
-    
-	  var rel = map.relativeCoords(division.absCoords);
-	  if (0 <= rel.x && rel.x <= 100 && 0 <= rel.y && rel.y <= 100) {
-	      division.$marker.css({
-		        "left": rel.x + "%",
-		        "top": rel.y + "%"
-	      });
-	      division.$marker.show();
-	      if (division.details.isOpen) {
-		        map.positionDropdown(division.details.$pane, division.$marker);
-		        division.details.$pane.show();
-	      }
-    } else {
-        division.$marker.hide();
-        division.details.$pane.hide();
-    }
-}
-
-crisis.map.positionDivisions = function() {
-    _.each(crisis.map.divisions, crisis.map.positionDivision);
 }
 
 /** 

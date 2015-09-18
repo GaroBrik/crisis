@@ -5,9 +5,6 @@
 crisis.Division = function(divJson) { 
     var div = this;
 
-    /** @type{jQuery} */
-    this.$marker = crisis.cloneProto(crisis.$protoDivisionMarker);
-    crisis.map.$mapHolder.append(this.$marker);
     /** @type{crisis.DivisionDetails} */
     this.details = new crisis.DivisionDetails(this);
     /** @type{boolean} */
@@ -22,7 +19,12 @@ crisis.Division = function(divJson) {
     this.units = null;
     this.updateData(divJson);
      
+    /** @type{jQuery} */
+    this.$marker = crisis.cloneProto(crisis.$protoDivisionMarker);
     this.$marker.click(function() { div.details.toggle(); });
+
+    this.position();
+    crisis.map.$mapHolder.append(this.$marker);
 }
 
 /** @param {crisisJson.Division} divJson */
@@ -30,10 +32,19 @@ crisis.Division.prototype.updateData = function(divJson) {
     var div = this;
     
     div.absCoords = { x: divJson.AbsCoords.X, y: divJson.AbsCoords.Y };
+    div.position();
     div.units = _.map(divJson.Units, function(unitJson) {
         return new crisis.Unit(unitJson, div); 
     });
     div.reRender = true;
+}
+
+crisis.Division.prototype.position = function() {
+    var rel = crisis.map.relativeCoords(this.absCoords);
+	  this.$marker.css({
+		    "left": rel.x + "%",
+		    "top": rel.y + "%"
+	  });
 }
 
 crisis.Division.prototype.destroy = function() {
