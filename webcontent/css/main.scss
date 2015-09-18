@@ -25,7 +25,7 @@ ul {
     left: 0;
     top: $headerHeight;
     width: 100%;
-    height: calc(100% - $headerHeight);
+    height: calc(100% - #{$headerHeight});
 }
 
 #mapBounds {

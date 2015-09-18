@@ -1,8 +1,8 @@
 /** @enum {string} */
-crisis.MapState = Object.freeze({
+crisis.MapState = {
     NORMAL: 'NORMAL',
     ADDING_DIV: 'ADDING_DIV'
-});
+};
 
 /** @export */
 crisis.map = {
@@ -11,9 +11,17 @@ crisis.map = {
     /** @type {crisis.Coords} */
     loc: null,
     /** @type {crisis.Bounds} */
-    bounds: null,
+    absBounds: null,
     /** @type {crisis.Bounds} */
-    maxBounds: null,
+    relBounds: {
+        height: 100,
+        width: 100
+    }
+    /** @type {crisis.Bounds} */
+    minRelBounds: {
+        height: 100,
+        width: 100
+    }
     /** @type {crisis.MapState} */
     state: crisis.MapState.NORMAL,
     /** @type {jQuery} */
@@ -32,7 +40,18 @@ crisis.map.init = function(crisisData) {
     var map = crisis.map;
     map.$mapHolder = $('#mapHolder');
     map.$mapBounds = $('#mapBounds');
+    map.$zoomInButton = $('#zoomInButton');
+    map.$zoomOutButton = $('#zoomOutButton');
+
     map.$mapHolder.draggable({containment: map.$mapBounds});
+
+    map.$zoomInButton.on('click.crisis', function() {
+        map.zoom(2);
+    });
+
+    map.$zoomOutButton.on('click.crisis', function() {
+        map.zoom(0.5);
+    });
 
     crisis.ajax.pollNow(crisis.ajax.mapPath, {
         success: function(data) {
@@ -42,14 +61,10 @@ crisis.map.init = function(crisisData) {
 };
 
 crisis.map.updateData = function(crisisData) {
-    crisis.map.loc = {
-        x: 0,
-        y: 0
-    }
-    crisis.map.bounds = { height: crisisData.MapBounds.Height,
-                          width: crisisData.MapBounds.Width };
-    crisis.map.maxBounds = { height: crisisData.MapBounds.Height,
-                             width: crisisData.MapBounds.Width };
+    crisis.map.absBounds = {
+        height: crisisData.MapBounds.Height,
+        width: crisisData.MapBounds.Width
+    };
 
     /** @type {Array<crisis.Division>} */
     var removedDivisions = [];
@@ -112,58 +127,52 @@ crisis.map.absCoordsOfClick = function(clickEvent) {
 };
 
 /**
- * @param {crisis.Coords} absCoords 
- * @return{crisis.Coords}
+ * @param {crisis.Coords} absCoords
+ * @return {crisis.Coords}
  */
 crisis.map.relativeCoords = function(absCoords) {
     var map = crisis.map;
     return {
-	      x: absCoords.x * 100 / map.maxBounds.width,
-	      y: absCoords.y * 100 / map.maxBounds.height
+        x: absCoords.x * 100 / map.absBounds.width,
+        y: absCoords.y * 100 / map.absBounds.height
     }
-}
+};
 
 /**
  * @param {crisis.Coords} relativeCoords
- * @return{crisis.Coords}
+ * @return {crisis.Coords}
  */
 crisis.map.absCoordsOfRelative = function(relativeCoords) {
     return {
-	      x: map.bounds.width * relativeCoords.x / 100 + map.loc.x,
-	      y: map.bounds.height * relativeCoords.y / 100 + map.loc.y	
+        x: map.absBounds.width * relativeCoords.x / 100 + map.loc.x,
+        y: map.absBounds.height * relativeCoords.y / 100 + map.loc.y
     }
-}
+};
 
 /**
  * @param {number} factor
- * @param {number} center
- */ 
-crisis.map.zoom = function(factor, center) {
+ */
+crisis.map.zoom = function(factor) {
     var map = crisis.map;
 
     var newBounds = {
-        height: Math.min(map.bounds.height / factor, map.maxBounds.height),
-        width: Math.min(map.bounds.width / factor, map.maxBounds.width)
+        height: Math.max(map.minBounds.height, map.bounds.height * factor),
+        width: Math.min(map.minBounds.width, map.bounds.width * factor)
     }
-    var newLoc = {
-        x: Math.max(0, Math.min(map.maxBounds.width - newBounds.width,
-  		                          center - newBounds.width)),
-        y: Math.max(0, Math.min(map.maxBounds.height - newBounds.height,
-  			                        center - newBounds.height))
-    }
-    map.bounds = newBounds;
-    map.loc = newLoc;
-    map.positionMap();
-};
 
-crisis.map.positionMap = function() {
-    var map = crisis.map;
-    map.$mapHolder.css({
-        'height': (map.maxBounds.height / map.bounds.height * 100) + '%',
-        'width': (map.maxBounds.width / map.bounds.width * 100) + '%'
-//        'top': '-' + (map.loc.y / map.maxBounds.height * 100) + '%'
-//        'left': '-' + (map.loc.x / map.maxBounds.width * 100) + '%'
+    map.bounds = newBounds;
+
+    map.$mapBounds.css({
+        'height': (2 * map.bounds.height - 100) + '%',
+        'width': (2 * map.bounds.width - 100) + '%',
+        'top': '-' + (map.bounds.height - 100) + '%'
+        'left': '-' + (map.bounds.width - 100) + '%'
     });
+    map.$mapHolder.animate({
+        'height': map.bounds.height + '%',
+        'width': map.bounds.width + '%'
+    });
+
 };
 
 /**
@@ -192,7 +201,7 @@ crisis.map.showUnitTypeFinder = function(notInclude, $positionIn, callback) {
     cancel = function() {
         $thisFinder.remove();
         $positionIn.append($children);
-    }
+    };
 
     $children.detach();
     $positionIn.append($thisFinder);
