@@ -16,12 +16,12 @@ crisis.map = {
     relBounds: {
         height: 100,
         width: 100
-    }
+    },
     /** @type {crisis.Bounds} */
     minRelBounds: {
         height: 100,
         width: 100
-    }
+    },
     /** @type {crisis.MapState} */
     state: crisis.MapState.NORMAL,
     /** @type {jQuery} */

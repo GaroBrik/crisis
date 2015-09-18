@@ -1,90 +1,90 @@
-/** 
+/**
  * @constructor
  * @param {crisisJson.Division} divJson
  */
-crisis.Division = function(divJson) { 
+crisis.Division = function(divJson) {
     var div = this;
 
-    /** @type{crisis.DivisionDetails} */
+    /** @type {crisis.DivisionDetails} */
     this.details = new crisis.DivisionDetails(this);
-    /** @type{boolean} */
+    /** @type {boolean} */
     this.reRender = true;
-    /** @type{boolean} */
+    /** @type {boolean} */
     this.editing = false;
-    /** @type{number} */
+    /** @type {number} */
     this.id = divJson.Id;
-    /** @type{crisis.coords} */ 
+    /** @type {crisis.coords} */
     this.abscoords = null;
-    /** @type{array<crisis.unit> */
+    /** @type {Array<crisis.unit>} */
     this.units = null;
-    /** @type{jQuery} */
+    /** @type {jQuery} */
     this.$marker = crisis.cloneProto(crisis.$protoDivisionMarker);
 
-    this.updateData(divJson);  
+    this.updateData(divJson);
     this.$marker.click(function() { div.details.toggle(); });
 
     crisis.map.$mapHolder.append(this.$marker);
-}
+};
 
 /** @param {crisisJson.Division} divJson */
 crisis.Division.prototype.updateData = function(divJson) {
     var div = this;
-    
+
     div.absCoords = { x: divJson.AbsCoords.X, y: divJson.AbsCoords.Y };
     div.units = _.map(divJson.Units, function(unitJson) {
-        return new crisis.Unit(unitJson, div); 
+        return new crisis.Unit(unitJson, div);
     });
     div.reRender = true;
- 
+
     div.position();
-}
+};
 
 crisis.Division.prototype.position = function() {
     var rel = crisis.map.relativeCoords(this.absCoords);
-	  this.$marker.css({
-		    "left": rel.x + "%",
-		    "top": rel.y + "%"
-	  });
-}
+    this.$marker.css({
+        'left': rel.x + '%',
+        'top': rel.y + '%'
+    });
+};
 
 crisis.Division.prototype.destroy = function() {
     this.$marker.remove();
     this.details.$pane.remove();
-}
+};
 
-/** 
+/**
  * @constructor
  * @param {crisis.Division} div
  */
 crisis.DivisionDetails = function(div) {
-    /** @type{jQuery} */
+    /** @type {jQuery} */
     this.$pane = null;
-    /** @type{jQuery} */
+    /** @type {jQuery} */
     this.$unitList = null;
-    /** @type{jQuery} */
+    /** @type {jQuery} */
     this.$editButton = null;
-    /** @type{jQuery} */
+    /** @type {jQuery} */
     this.$addUnitButton = null;
-    /** @type{jQuery} */
+    /** @type {jQuery} */
     this.$cancelButton = null;
-    /** @type{jQuery} */
+    /** @type {jQuery} */
     this.$commitButton = null;
-    /** @type{jQuery} */
+    /** @type {jQuery} */
     this.$closeButton = null;
-    /** @type{crisis.Division} */
+    /** @type {crisis.Division} */
     this.division = div;
-    /** @type{boolean} */
+    /** @type {boolean} */
     this.isOpen = false;
-    /** @type{boolean} */
+    /** @type {boolean} */
     this.isEditing = false;
-    /** @type{Array<crisis.Unit>} */
+    /** @type {Array<crisis.Unit>} */
     this.newUnits = [];
-    /** @type{Array<crisis.Unit>} */
+    /** @type {Array<crisis.Unit>} */
     this.removedUnits = [];
-}
+};
 
 crisis.DivisionDetails.prototype.toggle = function() {
-	  if (this.isOpen) {
+    if (this.isOpen) {
         this.close();
     } else {
         this.open();
@@ -102,54 +102,54 @@ crisis.DivisionDetails.prototype.open = function() {
                                 crisis.map.$mapHolder);
     dets.$pane.show();
     dets.isOpen = true;
-}
+};
 
-crisis.DivisionDetails.prototype.close = function () {
+crisis.DivisionDetails.prototype.close = function() {
     this.$pane.hide();
     this.isOpen = false;
-}
+};
 
 crisis.DivisionDetails.prototype.reRender = function() {
     var dets = this;
 
     if (dets.$pane === null) {
-	      dets.$pane = crisis.cloneProto(crisis.$protoDivisionDetails);
-	      dets.$unitList = dets.$pane.find("ul");
-        dets.$paneInvalidAlert = dets.$pane.find(".paneInvalidAlert");
+        dets.$pane = crisis.cloneProto(crisis.$protoDivisionDetails);
+        dets.$unitList = dets.$pane.find('ul');
+        dets.$paneInvalidAlert = dets.$pane.find('.paneInvalidAlert');
 
-        dets.$editButton = dets.$pane.find(".editButton");
-        dets.$editButton.on("click.crisis", function() {
-            dets.enableEdit(); 
+        dets.$editButton = dets.$pane.find('.editButton');
+        dets.$editButton.on('click.crisis', function() {
+            dets.enableEdit();
         });
 
-        dets.$addUnitButton = dets.$pane.find(".addUnitButton");
-        dets.$addUnitButton.on("click.crisis", function() {
+        dets.$addUnitButton = dets.$pane.find('.addUnitButton');
+        dets.$addUnitButton.on('click.crisis', function() {
             dets.addUnit();
         });
-        
-        dets.$cancelButton = dets.$pane.find(".cancelButton");
-        dets.$cancelButton.on("click.crisis", function () {
+
+        dets.$cancelButton = dets.$pane.find('.cancelButton');
+        dets.$cancelButton.on('click.crisis', function() {
             dets.disableEdit();
         });
-        
-	      dets.$commitButton = dets.$pane.find(".commitButton");
-        dets.$commitButton.on("click.crisis", function() {
-            dets.commitEdit(); 
+
+        dets.$commitButton = dets.$pane.find('.commitButton');
+        dets.$commitButton.on('click.crisis', function() {
+            dets.commitEdit();
         });
 
-        dets.$closeButton = dets.$pane.find(".closeButton");
-        dets.$closeButton.on("click.crisis", function() {
+        dets.$closeButton = dets.$pane.find('.closeButton');
+        dets.$closeButton.on('click.crisis', function() {
             dets.close();
         });
-        
+
         crisis.map.$mapHolder.append(dets.$pane);
     }
 
-    dets.$unitList.empty(); 
-    _.each(dets.division.units, function(unit) { 
-        dets.$unitList.append(unit.$listItem); 
-    });	
-}
+    dets.$unitList.empty();
+    _.each(dets.division.units, function(unit) {
+        dets.$unitList.append(unit.$listItem);
+    });
+};
 
 crisis.DivisionDetails.prototype.toggleEdit = function() {
     if (this.isEditing) {
@@ -157,22 +157,22 @@ crisis.DivisionDetails.prototype.toggleEdit = function() {
     } else {
         this.enableEdit();
     }
-}
+};
 
 crisis.DivisionDetails.prototype.enableEdit = function() {
-    var dets = this; 
+    var dets = this;
 
     dets.$editButton.hide();
     dets.$cancelButton.show();
     dets.$commitButton.show();
     dets.$addUnitButton.show();
-    
+
     _.each(dets.division.units, function(unit) {
         unit.editOn();
     });
 
     dets.isEditing = true;
-}
+};
 
 crisis.DivisionDetails.prototype.disableEdit = function() {
     var dets = this;
@@ -181,27 +181,28 @@ crisis.DivisionDetails.prototype.disableEdit = function() {
     dets.$cancelButton.hide();
     dets.$commitButton.hide();
     dets.$addUnitButton.hide();
-    
+
     dets.$paneInvalidAlert.hide();
     _.each(dets.division.units, function(unit) {
-	      unit.editOff();
+        unit.editOff();
     });
     _.each(dets.division.removedUnits, function(unit) {
         unit.$listItem.show();
     });
 
     dets.isEditing = false;
-}
+};
 
 crisis.DivisionDetails.prototype.addUnit = function() {
     var dets = this;
 
     if (!dets.isEditing) return;
 
-    var currentIds = _.map(dets.division.units.concat(dets.newUnits), function(unit) {
-        return unit.typeNum;
-    });
-    
+    var currentIds = _.map(dets.division.units.concat(dets.newUnits),
+        function(unit) {
+            return unit.typeNum;
+        });
+
     crisis.map.showUnitTypeFinder(currentIds, dets.$pane, function(num) {
         var newUnit = new crisis.Unit({
             TypeNum: num,
@@ -211,8 +212,9 @@ crisis.DivisionDetails.prototype.addUnit = function() {
         dets.newUnits.push(newUnit);
         dets.$unitList.append(newUnit.$listItem);
     });
-}
+};
 
+/** @param {crisis.Unit} unit */
 crisis.DivisionDetails.prototype.removeUnit = function(unit) {
     var dets = this;
     console.log(dets);
@@ -223,30 +225,30 @@ crisis.DivisionDetails.prototype.removeUnit = function(unit) {
         dets.removedUnits.push(unit);
         unit.$listItem.hide();
     }
-}
+};
 
 crisis.DivisionDetails.prototype.commitEdit = function() {
     var dets = this;
- 
+
     if (!dets.isEditing) return;
 
-    /** @type{Array<crisisJson.Unit>} */
+    /** @type {Array<crisisJson.Unit>} */
     var newUnits = [];
     var validSubmit = true;
     _.each(dets.division.units.concat(dets.newUnits), function(unit) {
         if (_.contains(dets.removedUnits, unit)) return;
-        
-	      var newVal = unit.$editField.val();
-	      newVal = parseInt(newVal);
-	      if (newVal === null) {
-	          unit.$invalidAlert.show();
-	          dets.$paneInvalidAlert.show();
-	          validSubmit = false;
-	      } else {
-	          newUnits.push({TypeNum: unit.typeNum, Amount: newVal});
-	      }
+
+        var newVal = unit.$editField.val();
+        newVal = parseInt(newVal);
+        if (newVal === null) {
+            unit.$invalidAlert.show();
+            dets.$paneInvalidAlert.show();
+            validSubmit = false;
+        } else {
+            newUnits.push({TypeNum: unit.typeNum, Amount: newVal});
+        }
     });
- 
+
     if (!validSubmit) return;
-	  crisis.ajax.postDivisionUpdate(dets.division.id, newUnits);
+    crisis.ajax.postDivisionUpdate(dets.division.id, newUnits);
 }
