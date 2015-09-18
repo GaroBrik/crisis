@@ -72,28 +72,29 @@ crisis.map.updateData = function(crisisData) {
 /**
  * @param{jQuery} $dropdown
  * @param{jQuery} $source
+ * @param{jQuery} $container
  */ 
-crisis.map.positionDropdown = function($dropdown, $source) {
-    var canvasTop = 0;
-    var canvasLeft = 0;
-    var canvasBottom = $(window).height();
-    var canvasRight = $(window).width();
-    var idealY = $source.position().top + $source.height() / 2;
-    if (idealY + $dropdown.size() > canvasBottom) {
-	      idealY += canvasBottom - (idealY + $dropdown.size());
+crisis.map.positionDropdown = function($dropdown, $source, $container) {
+    var containerTop = $container.position().top;
+    var containerLeft = $container.position().left;
+    var containerBottom = containerTop + $container.height();
+    var containerRight = containerLeft + $container.width();
+    var idealY = $source.position().top + $source.height();
+    if (idealY + $dropdown.size() > containerBottom) {
+	      idealY += containerBottom - (idealY + $dropdown.size());
     }
 
-    if (idealY < canvasTop) {
-	      idealY += canvasTop - idealY;
+    if (idealY < containerTop) {
+	      idealY += containerTop - idealY;
     }
 
-    var idealX = $source.position().left + $source.width() / 2;
-    if (idealX + $dropdown.width() > canvasRight) {
-	      idealX += canvasRight - (idealX + $dropdown.width());
+    var idealX = $source.position().left + $source.width();
+    if (idealX + $dropdown.width() > containerRight) {
+	      idealX += containerRight - (idealX + $dropdown.width());
     }
 
-    if (idealX < canvasLeft) {
-	      idealX += canvasLeft - idealX;
+    if (idealX < containerLeft) {
+	      idealX += containerLeft - idealX;
     }
 
     $dropdown.css({

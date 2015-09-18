@@ -98,7 +98,8 @@ crisis.DivisionDetails.prototype.open = function() {
         dets.reRender();
         dets.division.reRender = false;
     }
-    crisis.map.positionDropdown(dets.$pane, dets.division.$marker);
+    crisis.map.positionDropdown(dets.$pane, dets.division.$marker,
+                                crisis.map.$mapHolder);
     dets.$pane.show();
     dets.isOpen = true;
 }
