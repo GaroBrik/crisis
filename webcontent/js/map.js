@@ -17,23 +17,28 @@ crisis.map = {
     /** @type{crisis.MapState} */
     state: crisis.MapState.NORMAL,
     /** @type{jQuery} */
-    $mapHolder: null
+    $mapHolder: null,
+    /** @type{jQuery} */
+    $mapImage: null,
+    /** @type{jQuery} */
+    $addDivisionButton: null
 };
 
 /** 
  * @export
- * @param {crisisJson.Crisis} 
+ * @param{crisisJson.Crisis} 
  */
-crisis.map.init = function(crisisData) { 
-    crisis.map.$mapHolder = $("#mapHolder");
+crisis.map.init = function(crisisData) {
+    var map = crisis.map;
+    map.$mapHolder = $("#mapHolder");
     
     $(window).on("crisis.resize", function() {
-        crisis.map.positionDivisions();
+        map.positionDivisions();
     });
 
     crisis.ajax.pollNow(crisis.ajax.mapPath, {
         success: function(data) {
-            crisis.map.updateData(data);
+            map.updateData(data);
         }
     });
 }
@@ -71,8 +76,8 @@ crisis.map.updateData = function(crisisData) {
 }
 
 /**
- * @param {jQuery} $dropdown
- * @param {jQuery} $source
+ * @param{jQuery} $dropdown
+ * @param{jQuery} $source
  */ 
 crisis.map.positionDropdown = function($dropdown, $source) {
     var canvasTop = 0;
@@ -103,9 +108,13 @@ crisis.map.positionDropdown = function($dropdown, $source) {
     });
 }
 
+crisis.map.absCoordsOfClick = function(clickEvent) {
+
+}
+
 /** 
- * @param {crisis.Coords} absCoords 
- * @return {crisis.Coords}
+ * @param{crisis.Coords} absCoords 
+ * @return{crisis.Coords}
  */
 crisis.map.relativeCoords = function(absCoords) {
     var map = crisis.map;
@@ -116,10 +125,10 @@ crisis.map.relativeCoords = function(absCoords) {
 }
 
 /**
- * @param {crisis.Coords}
- * @return {crisis.Coords}
+ * @param{crisis.Coords}
+ * @return{crisis.Coords}
  */
-crisis.map.absCoords = function(relativeCoords) {
+crisis.map.absCoordsOfRelative = function(relativeCoords) {
     return {
 	      x: map.bounds.width * relativeCoords.x / 100 + map.loc.x,
 	      y: map.bounds.height * relativeCoords.y / 100 + map.loc.y	
@@ -127,15 +136,15 @@ crisis.map.absCoords = function(relativeCoords) {
 }
 
 /**
- * @param {number} factor
- * @param {number} center
+ * @param{number} factor
+ * @param{number} center
  */ 
 crisis.map.zoom = function(factor, center) {
     var map = crisis.map;
     
     var newBounds = {
-	      height: Math.min(map.bounds.height * factor, map.maxBounds.height),
-	      width: Math.min(map.bounds.width * factor, map.maxBounds.width)
+	      height: Math.min(map.bounds.height / factor, map.maxBounds.height),
+	      width: Math.min(map.bounds.width / factor, map.maxBounds.width)
     }
     var newLoc = {
 	      x: Math.max(0, Math.min(map.maxBounds.width - newBounds.width,
@@ -145,12 +154,12 @@ crisis.map.zoom = function(factor, center) {
     }
     map.bounds = newBounds;
     map.loc = newLoc;
-    map.positionDivisions();
+    map.positionMap();
 }
 
 /**
- * @param {number} xPercent
- * @param {number} yPercent
+ * @param{number} xPercent
+ * @param{number} yPercent
  */
 crisis.map.move = function(xPercent, yPercent) {
     var map = crisis.map;
@@ -160,6 +169,17 @@ crisis.map.move = function(xPercent, yPercent) {
 	      y: Math.max(0, Math.min(map.maxBounds.height - newBounds.height,
 				                        map.loc.y - yPercent * map.bounds.height))
     }
+    map.positionMap();
+}
+
+crisis.map.positionMap = function() {
+    var map = crisis.map;
+    map.$mapImage.css({
+        "height": (map.maxBounds.height / map.bounds.height * 100) + "%",
+        "width": (map.maxBounds.width / map.bounds.width * 100) + "%",
+        "top": "-" + (map.loc.y / map.maxBounds.height * 100) + "%"
+        "left": "-" + (map.loc.x / map.maxBounds.width * 100) + "%"
+    });
     map.positionDivisions();
 }
 

@@ -14,7 +14,7 @@ pushd "${WEBCONTENT_DIR}/js" > /dev/null
 {
     OUTPUT="${STATIC_DIR}/compiled.js" 
     INPUT="goog.js main.js ajax.js division.js unit.js map.js"
-    EXTERNS="jsonexterns.js jquery-1.9.js"
+    EXTERNS="jquiexterns.js jsonexterns.js jquery-1.9.js"
     java -jar compiler.jar --compilation_level ADVANCED_OPTIMIZATIONS \
         --js $INPUT --externs $EXTERNS --js_output_file $OUTPUT --generate_exports
 } >> "${OPENSHIFT_GO_LOG_DIR}go.log"

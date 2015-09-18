@@ -4,8 +4,10 @@
   <title>Hi there</title>
   <script src="http://code.jquery.com/jquery-2.1.4.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.8.3/underscore-min.js"></script>
+  <script src="https://code.jquery.com/ui/1.11.3/jquery-ui.min.js"></script>
   <script src="{{.JSUrl}}"></script>
   <link rel="stylesheet" type="text/css" href="{{.CSSUrl}}">
+  <link rel="stylesheet" type="text/css" href="https://code.jquery.com/ui/1.11.3/themes/smoothness/jquery-ui.css">
 </head>
 <body>
   <div style="display: none" id="htmlObjectPrototypes">
@@ -45,5 +47,7 @@
   </div>
   <div id="header">
     <input type="button" id="newDivisionButton" value="Create New Division" >
+    <input type="button" id="zoomInButton" value="Zoom In" >
+    <input type="button" id="zoomOutButton" value="Zoom Out" >
   </div>
   <div id="main">
