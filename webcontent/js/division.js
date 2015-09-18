@@ -14,9 +14,9 @@ crisis.Division = function(divJson) {
     /** @type {number} */
     this.id = divJson.Id;
     /** @type {crisis.Coords} */
-    this.abscoords = null;
+    this.abscoords;
     /** @type {Array<crisis.Unit>} */
-    this.units = null;
+    this.units;
     /** @type {jQuery} */
     this.$marker = crisis.cloneProto(crisis.$protoDivisionMarker);
 
@@ -31,9 +31,10 @@ crisis.Division.prototype.updateData = function(divJson) {
     var div = this;
 
     div.absCoords = { x: divJson.AbsCoords.X, y: divJson.AbsCoords.Y };
-    div.units = _.map(divJson.Units, function(unitJson) {
+    div.units = /** @type {Array<crisis.Unit> */
+        (_.map(divJson.Units, function(unitJson) {
         return new crisis.Unit(unitJson, div);
-    });
+    }));
     div.reRender = true;
 
     div.position();
