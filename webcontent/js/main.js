@@ -10,7 +10,7 @@ var crisis = {
     $protoUnitTypes: null,
     /** @type {jQuery} */
     $protoUnitTypeFinder: null
-}
+};
 
 /** @export */
 crisis.init = function() {
@@ -37,7 +37,7 @@ crisis.cloneProto = function($proto) {
  * @return {string}
  */
 crisis.unitTypeSelector = function(typeNum) {
-    return '[data-type=' + typeNum + ']'
+    return '[data-type=' + typeNum + ']';
 };
 
 /**
