@@ -1,7 +1,7 @@
 /** @externs */
 
 /** @typedef{{
- *    
+ *    containment: jQuery
  *  }} 
  */
 var jQueryUiDraggableSettings;

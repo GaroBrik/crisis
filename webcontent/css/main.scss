@@ -28,6 +28,14 @@ ul {
     height: calc(100% - $headerHeight);
 }
 
+#mapBounds {
+    position: absolute;
+    left: -25%;
+    top: -25%;
+    width: 200%;
+    height: 200%;
+}
+
 #mapHolder {
     position: absolute;
     left: 0;

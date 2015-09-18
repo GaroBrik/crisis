@@ -19,6 +19,8 @@ crisis.map = {
     /** @type{jQuery} */
     $mapHolder: null,
     /** @type{jQuery} */
+    map.$mapBounds: null,
+    /** @type{jQuery} */
     $addDivisionButton: null
 };
 
@@ -29,6 +31,8 @@ crisis.map = {
 crisis.map.init = function(crisisData) {
     var map = crisis.map;
     map.$mapHolder = $("#mapHolder");
+    map.$mapBounds = $("#mapBounds");
+    map.$mapHolder.draggable({containment: map.$mapBounds);
     
     crisis.ajax.pollNow(crisis.ajax.mapPath, {
         success: function(data) {
