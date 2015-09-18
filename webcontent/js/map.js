@@ -30,10 +30,6 @@ crisis.map.init = function(crisisData) {
     var map = crisis.map;
     map.$mapHolder = $("#mapHolder");
     
-    $(window).on("crisis.resize", function() {
-        map.positionDivisions();
-    });
-
     crisis.ajax.pollNow(crisis.ajax.mapPath, {
         success: function(data) {
             map.updateData(data);

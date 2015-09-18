@@ -17,13 +17,12 @@ crisis.Division = function(divJson) {
     this.abscoords = null;
     /** @type{array<crisis.unit> */
     this.units = null;
-    this.updateData(divJson);
-     
     /** @type{jQuery} */
     this.$marker = crisis.cloneProto(crisis.$protoDivisionMarker);
+
+    this.updateData(divJson);  
     this.$marker.click(function() { div.details.toggle(); });
 
-    this.position();
     crisis.map.$mapHolder.append(this.$marker);
 }
 
@@ -32,11 +31,12 @@ crisis.Division.prototype.updateData = function(divJson) {
     var div = this;
     
     div.absCoords = { x: divJson.AbsCoords.X, y: divJson.AbsCoords.Y };
-    div.position();
     div.units = _.map(divJson.Units, function(unitJson) {
         return new crisis.Unit(unitJson, div); 
     });
     div.reRender = true;
+ 
+    div.position();
 }
 
 crisis.Division.prototype.position = function() {
