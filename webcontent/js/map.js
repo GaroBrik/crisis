@@ -160,7 +160,7 @@ crisis.map.zoom = function(factor) {
     var newBounds = {
         height: Math.max(map.minRelBounds.height,
                          map.relBounds.height * factor),
-        width: Math.min(map.minRelBounds.width,
+        width: Math.max(map.minRelBounds.width,
                         map.relBounds.width * factor)
     };
 
