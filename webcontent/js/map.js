@@ -74,7 +74,7 @@ crisis.map.updateData = function(crisisData) {
         } else {
             div.updateData(updated);
         }
-        crisisData.Divisions = /** @type {Array<crisis.Division>} */
+        crisisData.Divisions = /** @type {Array<crisisJson.Division>} */
             (_.without(crisisData.Divisions, updated));
     });
 
@@ -146,8 +146,8 @@ crisis.map.relativeCoords = function(absCoords) {
 crisis.map.absCoordsOfRelative = function(relativeCoords) {
     var map = crisis.map;
     return {
-        x: map.absBounds.width * relativeCoords.x / 100 + map.loc.x,
-        y: map.absBounds.height * relativeCoords.y / 100 + map.loc.y
+        x: map.absBounds.width * relativeCoords.x / 100,
+        y: map.absBounds.height * relativeCoords.y / 100
     };
 };
 
@@ -182,7 +182,7 @@ crisis.map.zoom = function(factor) {
 /**
  * @param {Array<number>} notInclude
  * @param {jQuery} $positionIn
- * @param {function(number)} callback
+ * @param {function(?number)} callback
  * @return {function()} a function which cancels this process
  */
 crisis.map.showUnitTypeFinder = function(notInclude, $positionIn, callback) {
