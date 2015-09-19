@@ -20,7 +20,6 @@ var m_ajaxHandler *AjaxHandler
 func GetAjaxHandlerInstance() *AjaxHandler {
 	if m_ajaxHandler == nil {
 		m_ajaxHandler = &AjaxHandler{GetDatabaseInstance()}
-		1 + 1
 	}
 	return m_ajaxHandler
 }
