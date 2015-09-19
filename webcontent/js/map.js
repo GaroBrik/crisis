@@ -117,8 +117,8 @@ crisis.map.positionDropdown = function($dropdown, $source, $container) {
     }
 
     $dropdown.css({
-        'left': idealX,
-        'top': idealY
+        'left': (idealX * 100 / $container.width()) + '%',
+        'top': (idealY * 100 / $container.height()) + '%'
     });
 };
 
