@@ -4,7 +4,7 @@ crisis.ajax.path = 'ajax/';
 /** @type {string} */
 crisis.ajax.mapPath = crisis.ajax.path + 'map/';
 /** @type {string} */
-crisis.ajax.updateDivisionPath: crisis.ajax.path + 'updateDivision/';
+crisis.ajax.updateDivisionPath = crisis.ajax.path + 'updateDivision/';
 
 /**
  * @param {string} path
