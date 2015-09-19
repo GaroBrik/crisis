@@ -205,6 +205,7 @@ crisis.DivisionDetails.prototype.addUnit = function() {
         }));
 
     crisis.map.showUnitTypeFinder(currentIds, dets.$pane, function(num) {
+        if (num === null) return;
         var newUnit = new crisis.Unit({
             TypeNum: num,
             TypeName: 'temp',
