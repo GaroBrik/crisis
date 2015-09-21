@@ -1,9 +1,9 @@
 /**
  * @constructor
- * @param {number} ix
- * @param {number} iy
+ * @param {number} x
+ * @param {number} y
  */
-crisis.Coords = function(ix, iy) {
+crisis.Coords = function(x, y) {
     /** @type {number} */
     this.x = x;
     /** @type {number} */

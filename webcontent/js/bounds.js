@@ -1,9 +1,9 @@
 /**
  * @constructor
- * @param {number} iwidth
- * @param {number} iheight
+ * @param {number} width
+ * @param {number} height
  */
-crisis.Bounds = function(iwidth, iheight) {
+crisis.Bounds = function(width, height) {
     /** @type {number} */
     this.width = width;
     /** @type {number} */
