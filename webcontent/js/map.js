@@ -236,7 +236,7 @@ crisis.map.getClick = function(callback) {
 
     crisis.map.$holder.on('click' + crisis.event.getClickNameSpace,
         function(clickEvent) {
-            absCoordsOfClick = crisis.map.absCoordsOfRelative({
+            var absCoordsOfClick = crisis.map.absCoordsOfRelative({
                 x: clickEvent.offsetX * 100 / crisis.map.$holder.width(),
                 y: clickEvent.offsetY * 100 / crisis.map.$holder.height()
             });
