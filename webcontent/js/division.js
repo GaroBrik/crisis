@@ -119,27 +119,27 @@ crisis.DivisionDetails.prototype.reRender = function() {
         dets.$paneInvalidAlert = dets.$pane.find('.paneInvalidAlert');
 
         dets.$editButton = dets.$pane.find('.editButton');
-        dets.$editButton.on('click.crisis', function() {
+        dets.$editButton.on('click' + crisis.event.baseNameSpace, function() {
             dets.enableEdit();
         });
 
         dets.$addUnitButton = dets.$pane.find('.addUnitButton');
-        dets.$addUnitButton.on('click.crisis', function() {
+        dets.$addUnitButton.on('click' + crisis.event.baseNameSpace, function() {
             dets.addUnit();
         });
 
         dets.$cancelButton = dets.$pane.find('.cancelButton');
-        dets.$cancelButton.on('click.crisis', function() {
+        dets.$cancelButton.on('click' + crisis.event.baseNameSpace, function() {
             dets.disableEdit();
         });
 
         dets.$commitButton = dets.$pane.find('.commitButton');
-        dets.$commitButton.on('click.crisis', function() {
+        dets.$commitButton.on('click' + crisis.event.baseNameSpace, function() {
             dets.commitEdit();
         });
 
         dets.$closeButton = dets.$pane.find('.closeButton');
-        dets.$closeButton.on('click.crisis', function() {
+        dets.$closeButton.on('click' + crisis.event.baseNameSpace, function() {
             dets.close();
         });
 
