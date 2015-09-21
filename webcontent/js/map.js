@@ -42,7 +42,7 @@ crisis.map.init = function() {
 
     crisis.map.$holder.draggable({containment: crisis.map.$mapBounds});
 
-    crisis.map.$newDivisionButton.on('click.crisis', function() {
+    crisis.map.$newDivisionButton.on('click' + crisis.event.baseNameSpace, function() {
         crisis.map.getClick(function(absCoords) {
             var tmpDiv = new crisis.Division({
                 Id: -1,
@@ -53,11 +53,11 @@ crisis.map.init = function() {
         });
     });
 
-    crisis.map.$zoomInButton.on('click.crisis', function() {
+    crisis.map.$zoomInButton.on('click' + crisis.event.baseNameSpace, function() {
         crisis.map.zoom(2);
     });
 
-    crisis.map.$zoomOutButton.on('click.crisis', function() {
+    crisis.map.$zoomOutButton.on('click' + crisis.event.baseNameSpace, function() {
         crisis.map.zoom(0.5);
     });
 
@@ -212,7 +212,7 @@ crisis.map.showUnitTypeFinder = function(notInclude, $positionIn, callback) {
     /** @type {function()} */
     var cancel;
 
-    $thisFinder.children().on('click.crisis', function() {
+    $thisFinder.children().on('click' + crisis.event.baseNameSpace, function() {
         callback(crisis.getNumericData($(this), 'type'));
         cancel();
     });
@@ -246,7 +246,7 @@ crisis.map.getClick = function(callback) {
         });
 };
 
-crisis.map.stopGettingClick() {
+crisis.map.stopGettingClick = function() {
     if (!crisis.map.state === crisis.MapState.GETTING_CLICK) return;
     crisis.map.$holder.off('click' + crisis.event.getClickNameSpace);
     crisis.map.state = crisis.MapState.NORMAL;
