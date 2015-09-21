@@ -234,19 +234,20 @@ crisis.map.showUnitTypeFinder = function(notInclude, $positionIn, callback) {
 crisis.map.getClick = function(callback) {
     crisis.map.state = crisis.MapState.GETTING_CLICK;
 
-    crisis.map.$holder.on(crisis.event.getClickNameSpace, function(clickEvent) {
-        absCoordsOfClick = crisis.map.absCoordsOfRelative({
-            x: clickEvent.offsetX * 100 / crisis.map.$holder.width(),
-            y: clickEvent.offsetY * 100 / crisis.map.$holder.height()
-        });
+    crisis.map.$holder.on('click' + crisis.event.getClickNameSpace,
+        function(clickEvent) {
+            absCoordsOfClick = crisis.map.absCoordsOfRelative({
+                x: clickEvent.offsetX * 100 / crisis.map.$holder.width(),
+                y: clickEvent.offsetY * 100 / crisis.map.$holder.height()
+            });
 
-        crisis.map.stopGettingClick();
-        callback(absCoordsOfClick);
-    });
+            crisis.map.stopGettingClick();
+            callback(absCoordsOfClick);
+        });
 };
 
 crisis.map.stopGettingClick() {
     if (!crisis.map.state === crisis.MapState.GETTING_CLICK) return;
-    crisis.map.$holder.off(crisis.event.getClickNameSpace);
+    crisis.map.$holder.off('click' + crisis.event.getClickNameSpace);
     crisis.map.state = crisis.MapState.NORMAL;
 };

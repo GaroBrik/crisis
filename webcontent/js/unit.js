@@ -28,7 +28,7 @@ crisis.Unit = function(unitJson, div) {
     unit.$invalidAlert = unit.$listItem.find('.invalidAlert');
 
     unit.$type.append(crisis.Unit.typeHtml(unit.typeNum));
-    unit.$removeUnitButton.on('click.crisis', function() {
+    unit.$removeUnitButton.on('click' + crisis.event.baseNameSpace, function() {
         unit.division.details.removeUnit(unit);
     });
     unit.$value.html('' + unit.amount);

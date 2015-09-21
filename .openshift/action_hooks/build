@@ -13,7 +13,7 @@ echo "-----> compiling js"
 pushd "${WEBCONTENT_DIR}/js" > /dev/null
 {
     OUTPUT="${STATIC_DIR}/compiled.js" 
-    INPUT="goog.js main.js ajax.js division.js unit.js map.js"
+    INPUT="goog.js main.js event.js ajax.js division.js unit.js map.js"
     EXTERNS="jquiexterns.js jsonexterns.js jquery-1.9.js underscore-1.5.1.js"
     java -jar compiler.jar --compilation_level ADVANCED_OPTIMIZATIONS \
          --js $INPUT --externs $EXTERNS --js_output_file $OUTPUT --generate_exports \
