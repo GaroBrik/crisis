@@ -179,8 +179,8 @@ crisis.map.zoom = function(factor) {
     map.$holder.animate({
         'height': map.relBounds.height + '%',
         'width': map.relBounds.width + '%',
-        'top': Math.min(crisis.getCssPx(map.$holder, 'top') + crisis.getCssPx(map.$holder, 'height') * factor / 2, 0),
-        'left': Math.min(crisis.getCssPx(map.$holder, 'left') + crisis.getCssPx(map.$holder, 'width') * factor / 2, 0)
+        'top': Math.max(crisis.getCssPx(map.$holder, 'top') + crisis.getCssPx(map.$holder, 'height') * factor / 2, 0),
+        'left': Math.max(crisis.getCssPx(map.$holder, 'left') + crisis.getCssPx(map.$holder, 'width') * factor / 2, 0)
     });
 };
 
@@ -235,7 +235,7 @@ crisis.map.getClick = function(callback) {
 };
 
 crisis.map.stopGettingClick = function() {
-    if (!crisis.map.state === crisis.MapState.GETTING_CLICK) return;
+    if (crisis.map.state !== crisis.MapState.GETTING_CLICK) return;
     crisis.map.$holder.off('click' + crisis.event.getClickNameSpace);
     crisis.map.state = crisis.MapState.NORMAL;
 };
