@@ -23,7 +23,7 @@ crisis.Division = function(divJson) {
     this.updateData(divJson);
     this.$marker.click(function() { div.details.toggle(); });
 
-    crisis.map.$mapHolder.append(this.$marker);
+    crisis.map.$holder.append(this.$marker);
 };
 
 /** @param {crisisJson.Division} divJson */
@@ -100,7 +100,7 @@ crisis.DivisionDetails.prototype.open = function() {
         dets.division.reRender = false;
     }
     crisis.map.positionDropdown(dets.$pane, dets.division.$marker,
-                                crisis.map.$mapHolder);
+                                crisis.map.$holder);
     dets.$pane.show();
     dets.isOpen = true;
 };
@@ -143,7 +143,7 @@ crisis.DivisionDetails.prototype.reRender = function() {
             dets.close();
         });
 
-        crisis.map.$mapHolder.append(dets.$pane);
+        crisis.map.$holder.append(dets.$pane);
     }
 
     dets.$unitList.empty();

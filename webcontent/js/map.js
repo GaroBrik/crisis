@@ -1,10 +1,12 @@
 /** @enum {string} */
 crisis.MapState = {
     NORMAL: 'NORMAL',
-    ADDING_DIV: 'ADDING_DIV'
+    GETTING_CLICK: 'GETTING_CLICK'
 };
 
-/** @export */
+/**
+ * @export
+ */
 crisis.map = {
     /** @type {Array<crisis.Division>} */
     divisions: [],
@@ -23,7 +25,7 @@ crisis.map = {
     /** @type {crisis.MapState} */
     state: crisis.MapState.NORMAL,
     /** @type {jQuery} */
-    $mapHolder: null,
+    $holder: null,
     /** @type {jQuery} */
     $mapBounds: null,
     /** @type {jQuery} */
@@ -32,25 +34,36 @@ crisis.map = {
 
 /** @export */
 crisis.map.init = function() {
-    var map = crisis.map;
-    map.$mapHolder = $('#mapHolder');
-    map.$mapBounds = $('#mapBounds');
-    map.$zoomInButton = $('#zoomInButton');
-    map.$zoomOutButton = $('#zoomOutButton');
+    crisis.map.$holder = $('#mapHolder');
+    crisis.map.$mapBounds = $('#mapBounds');
+    crisis.map.$newDivisionButton = $('#newDivisionButton');
+    crisis.map.$zoomInButton = $('#zoomInButton');
+    crisis.map.$zoomOutButton = $('#zoomOutButton');
 
-    map.$mapHolder.draggable({containment: map.$mapBounds});
+    crisis.map.$holder.draggable({containment: crisis.map.$mapBounds});
 
-    map.$zoomInButton.on('click.crisis', function() {
-        map.zoom(2);
+    crisis.map.$newDivisionButton.on('click.crisis', function() {
+        crisis.map.getClick(function(absCoords) {
+            var tmpDiv = new crisis.Division({
+                Id: -1,
+                AbsCoords: absCoords,
+                Units: []
+            });
+            tmpDiv.open();
+        });
     });
 
-    map.$zoomOutButton.on('click.crisis', function() {
-        map.zoom(0.5);
+    crisis.map.$zoomInButton.on('click.crisis', function() {
+        crisis.map.zoom(2);
+    });
+
+    crisis.map.$zoomOutButton.on('click.crisis', function() {
+        crisis.map.zoom(0.5);
     });
 
     crisis.ajax.pollNow(crisis.ajax.mapPath, {
         success: function(data) {
-            map.updateData(data);
+            crisis.map.updateData(data);
         }
     });
 };
@@ -131,7 +144,7 @@ crisis.map.absCoordsOfClick = function(clickEvent) {
  * @param {crisis.Coords} absCoords
  * @return {crisis.Coords}
  */
-crisis.map.relativeCoords = function(absCoords) {
+crisis.map.relativeCoordsOfAbs = function(absCoords) {
     var map = crisis.map;
     return {
         x: absCoords.x * 100 / map.absBounds.width,
@@ -172,9 +185,13 @@ crisis.map.zoom = function(factor) {
         'top': '-' + (map.bounds.height - 100) + '%',
         'left': '-' + (map.bounds.width - 100) + '%'
     });
-    map.$mapHolder.animate({
+    map.$holder.animate({
         'height': map.bounds.height + '%',
-        'width': map.bounds.width + '%'
+        'width': map.bounds.width + '%',
+        'top': map.$holder.css('top') +
+            Math.min(map.$holder.css('height') / 4, 0);
+        'left': map.$holder.css('left') +
+            Math.min(map.$holder.css('width') / 4, 0);
     });
 
 };
@@ -211,4 +228,25 @@ crisis.map.showUnitTypeFinder = function(notInclude, $positionIn, callback) {
     $positionIn.append($thisFinder);
 
     return cancel;
+};
+
+/** @param {function(crisis.Coords)} callback */
+crisis.map.getClick(callback) {
+    crisis.map.state = crisis.MapState.GETTING_CLICK;
+
+    crisis.map.$holder.on('click.crisis.getClick', function(clickEvent) {
+        absCoordsOfClick = crisis.map.absCoordsOfRelative({
+            x: clickEvent.offsetX * 100 / crisis.map.$holder.width();
+            y: clickEvent.offsetY * 100 / crisis.map.$holder.height();
+        });
+
+        crisis.map.stopGettingClick();
+        callback(absCoordsOfClick);
+    }); 
 }
+
+crisis.map.stopGettingClick() {
+    if (!crisis.map.state === crisis.MapState.GETTING_CLICK) return;
+    crisis.map.$holder.off('click.crisis.getClick');
+    crisis.map.state = crisis.MapState.NORMAL;
+};
