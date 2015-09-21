@@ -55,5 +55,5 @@ crisis.getNumericData = function($elem, dataName) {
  * @return {number}
  */
 crisis.getCssPx = function($elem, style) {
-    return parseInt($elem.css('style'), 10);
+    return parseInt($elem.css(style), 10);
 }
