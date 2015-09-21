@@ -13,15 +13,9 @@ crisis.map = {
     /** @type {?crisis.Bounds} */
     absBounds: null,
     /** @type {crisis.Bounds} */
-    relBounds: {
-        height: 100,
-        width: 100
-    },
+    relBounds: new crisis.Bounds(100, 100),
     /** @type {crisis.Bounds} */
-    minRelBounds: {
-        height: 100,
-        width: 100
-    },
+    minRelBounds: new crisis.Bounds(100, 100),
     /** @type {crisis.MapState} */
     state: crisis.MapState.NORMAL,
     /** @type {jQuery} */
@@ -42,24 +36,27 @@ crisis.map.init = function() {
 
     crisis.map.$holder.draggable({containment: crisis.map.$mapBounds});
 
-    crisis.map.$newDivisionButton.on('click' + crisis.event.baseNameSpace, function() {
-        crisis.map.getClick(function(absCoords) {
-            var tmpDiv = new crisis.Division({
-                Id: -1,
-                AbsCoords: absCoords,
-                Units: []
+    crisis.map.$newDivisionButton.on('click' + crisis.event.baseNameSpace,
+        function() {
+            crisis.map.getClick(function(absCoords) {
+                var tmpDiv = new crisis.Division({
+                    Id: -1,
+                    AbsCoords: absCoords.toJson(),
+                    Units: []
+                });
+                tmpDiv.open();
             });
-            tmpDiv.open();
         });
-    });
 
-    crisis.map.$zoomInButton.on('click' + crisis.event.baseNameSpace, function() {
-        crisis.map.zoom(2);
-    });
+    crisis.map.$zoomInButton.on('click' + crisis.event.baseNameSpace,
+        function() {
+            crisis.map.zoom(2);
+        });
 
-    crisis.map.$zoomOutButton.on('click' + crisis.event.baseNameSpace, function() {
-        crisis.map.zoom(0.5);
-    });
+    crisis.map.$zoomOutButton.on('click' + crisis.event.baseNameSpace,
+        function() {
+            crisis.map.zoom(0.5);
+        });
 
     crisis.ajax.pollNow(crisis.ajax.mapPath, {
         success: function(data) {
@@ -72,10 +69,7 @@ crisis.map.init = function() {
 crisis.map.updateData = function(crisisData) {
     var map = crisis.map;
 
-    map.absBounds = {
-        height: crisisData.MapBounds.Height,
-        width: crisisData.MapBounds.Width
-    };
+    map.absBounds = crisis.Bounds.fromJson(crisisData.MapBounds);
 
     /** @type {Array<crisis.Division>} */
     var removedDivisions = [];
@@ -135,9 +129,12 @@ crisis.map.positionDropdown = function($dropdown, $source, $container) {
     });
 };
 
-/** @param {jQuery.Event} clickEvent */
+/**
+ * @param {jQuery.Event} clickEvent
+ * @return {crisis.Coords}
+ */
 crisis.map.absCoordsOfClick = function(clickEvent) {
-
+    return new crisis.Coords(0, 0);
 };
 
 /**
@@ -146,10 +143,8 @@ crisis.map.absCoordsOfClick = function(clickEvent) {
  */
 crisis.map.relativeCoordsOfAbs = function(absCoords) {
     var map = crisis.map;
-    return {
-        x: absCoords.x * 100 / map.absBounds.width,
-        y: absCoords.y * 100 / map.absBounds.height
-    };
+    return new crisis.Coords(absCoords.x * 100 / map.absBounds.width,
+                             absCoords.y * 100 / map.absBounds.height);
 };
 
 /**
@@ -158,10 +153,8 @@ crisis.map.relativeCoordsOfAbs = function(absCoords) {
  */
 crisis.map.absCoordsOfRelative = function(relativeCoords) {
     var map = crisis.map;
-    return {
-        x: map.absBounds.width * relativeCoords.x / 100,
-        y: map.absBounds.height * relativeCoords.y / 100
-    };
+    return new crisis.Coords(map.absBounds.width * relativeCoords.x / 100,
+                             map.absBounds.height * relativeCoords.y / 100);
 };
 
 /**
@@ -170,12 +163,10 @@ crisis.map.absCoordsOfRelative = function(relativeCoords) {
 crisis.map.zoom = function(factor) {
     var map = crisis.map;
 
-    var newBounds = {
-        height: Math.max(map.minRelBounds.height,
-                         map.relBounds.height * factor),
-        width: Math.max(map.minRelBounds.width,
-                        map.relBounds.width * factor)
-    };
+    var newBounds = new crisis.Bounds(
+        Math.max(map.minRelBounds.width, map.relBounds.width * factor),
+        Math.max(map.minRelBounds.height, map.relBounds.height * factor)
+    );
 
     map.bounds = newBounds;
 
@@ -236,10 +227,10 @@ crisis.map.getClick = function(callback) {
 
     crisis.map.$holder.on('click' + crisis.event.getClickNameSpace,
         function(clickEvent) {
-            var absCoordsOfClick = crisis.map.absCoordsOfRelative({
-                x: clickEvent.offsetX * 100 / crisis.map.$holder.width(),
-                y: clickEvent.offsetY * 100 / crisis.map.$holder.height()
-            });
+            var absCoordsOfClick = crisis.map.absCoordsOfRelative(
+                new crisis.Coords(clickEvent.offsetX * 100 / crisis.map.$holder.width(),
+                                  clickEvent.offsetY * 100 / crisis.map.$holder.height())
+            );
 
             crisis.map.stopGettingClick();
             callback(absCoordsOfClick);

@@ -30,7 +30,8 @@ crisis.Division = function(divJson) {
 crisis.Division.prototype.updateData = function(divJson) {
     var div = this;
 
-    div.absCoords = { x: divJson.AbsCoords.X, y: divJson.AbsCoords.Y };
+    div.absCoords = crisis.Coords.fromJson(divJson.AbsCoords);
+
     div.units = /** @type {Array<crisis.Unit>} */
         (_.map(divJson.Units, function(unitJson) {
         return new crisis.Unit(unitJson, div);
@@ -41,7 +42,7 @@ crisis.Division.prototype.updateData = function(divJson) {
 };
 
 crisis.Division.prototype.position = function() {
-    var rel = crisis.map.relativeCoords(this.absCoords);
+    var rel = crisis.map.relativeCoordsOfAbs(this.absCoords);
     this.$marker.css({
         'left': rel.x + '%',
         'top': rel.y + '%'

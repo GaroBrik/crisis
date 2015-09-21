@@ -48,20 +48,4 @@ crisis.unitTypeSelector = function(typeNum) {
 crisis.getNumericData = function($elem, dataName) {
     var numString = $elem.data(dataName);
     return parseInt(numString, 10);
-};
-
-/**
- * @typedef {{
- *   x: number,
- *   y: number
- * }}
- */
-crisis.Coords;
-
-/**
- * @typedef {{
- *   height: number,
- *   width: number
- * }}
- */
-crisis.Bounds;
+}
