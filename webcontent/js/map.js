@@ -168,7 +168,7 @@ crisis.map.zoom = function(factor) {
         Math.max(map.minRelBounds.height, map.relBounds.height * factor)
     );
 
-    map.bounds = newBounds;
+    map.relBounds = newBounds;
 
     map.$mapBounds.css({
         'height': (2 * map.bounds.height - 100) + '%',
