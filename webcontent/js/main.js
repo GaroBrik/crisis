@@ -46,6 +46,14 @@ crisis.unitTypeSelector = function(typeNum) {
  * @return {?number}
  */
 crisis.getNumericData = function($elem, dataName) {
-    var numString = $elem.data(dataName);
-    return parseInt(numString, 10);
+    return parseInt($elem.data(dataName), 10);
+};
+
+/**
+ * @param {jQuery} $elem
+ * @param {string} style
+ * @return {number}
+ */
+crisis.getCssPx = function($elem, style) {
+    return parseInt($elem.css('style'), 10);
 }
