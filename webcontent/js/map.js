@@ -231,7 +231,7 @@ crisis.map.showUnitTypeFinder = function(notInclude, $positionIn, callback) {
 };
 
 /** @param {function(crisis.Coords)} callback */
-crisis.map.getClick(callback) {
+crisis.map.getClick = function(callback) {
     crisis.map.state = crisis.MapState.GETTING_CLICK;
 
     crisis.map.$holder.on('click.crisis.getClick', function(clickEvent) {
@@ -243,7 +243,7 @@ crisis.map.getClick(callback) {
         crisis.map.stopGettingClick();
         callback(absCoordsOfClick);
     }); 
-}
+};
 
 crisis.map.stopGettingClick() {
     if (!crisis.map.state === crisis.MapState.GETTING_CLICK) return;
