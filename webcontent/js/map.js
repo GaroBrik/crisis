@@ -171,14 +171,14 @@ crisis.map.zoom = function(factor) {
     map.relBounds = newBounds;
 
     map.$mapBounds.css({
-        'height': (2 * map.bounds.height - 100) + '%',
-        'width': (2 * map.bounds.width - 100) + '%',
-        'top': '-' + (map.bounds.height - 100) + '%',
-        'left': '-' + (map.bounds.width - 100) + '%'
+        'height': (2 * map.relBounds.height - 100) + '%',
+        'width': (2 * map.relBounds.width - 100) + '%',
+        'top': '-' + (map.relBounds.height - 100) + '%',
+        'left': '-' + (map.relBounds.width - 100) + '%'
     });
     map.$holder.animate({
-        'height': map.bounds.height + '%',
-        'width': map.bounds.width + '%',
+        'height': map.relBounds.height + '%',
+        'width': map.relBounds.width + '%',
         'top': Math.min(crisis.getCssPx(map.$holder, 'top') + crisis.getCssPx(map.$holder, 'height') * factor / 2, 0),
         'left': Math.min(crisis.getCssPx(map.$holder, 'left') + crisis.getCssPx(map.$holder, 'width') * factor / 2, 0)
     });
