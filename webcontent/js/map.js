@@ -187,8 +187,8 @@ crisis.map.zoom = function(factor, fixPoint) {
     );
 
     var absMapFixOrigPoint = new crisis.Coords(
-        fixPoint.x * (newBounds.width / map.relBounds.width),
-        fixPoint.y * (newBounds.height / map.relBounds.height)
+        fixPoint.x * newFactor + holderLeft,
+        fixPoint.y * newFactor + holderTop
     );
 
     var absMapFixDelta = new crisis.Coords(
