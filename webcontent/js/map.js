@@ -279,9 +279,9 @@ crisis.map.getClick = function(callback) {
 crisis.map.centerClick = function() {
     return new crisis.Coords(
         crisis.map.$outerMapDiv.width() / 2 -
-            crisis.getCssPx(crisis.map.$holder, 'width'),
+            crisis.getCssPx(crisis.map.$holder, 'left'),
         crisis.map.$outerMapDiv.height() / 2 -
-            crisis.getCssPx(crisis.map.$holder, 'height')
+            crisis.getCssPx(crisis.map.$holder, 'top')
     );
 };
 
