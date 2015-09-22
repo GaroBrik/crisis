@@ -167,8 +167,6 @@ crisis.map.absCoordsOfRelative = function(relativeCoords) {
 crisis.map.zoom = function(factor, fixPoint) {
     var map = crisis.map;
 
-    console.log(fixPoint);
-
     var newBounds = new crisis.Bounds(
         Math.max(map.minRelBounds.width, map.relBounds.width * factor),
         Math.max(map.minRelBounds.height, map.relBounds.height * factor)
@@ -180,6 +178,9 @@ crisis.map.zoom = function(factor, fixPoint) {
     var holderHeight = crisis.getCssPx(map.$holder, 'height');
     var outerWidth = crisis.getCssPx(map.$outerMapDiv, 'width');
     var outerHeight = crisis.getCssPx(map.$outerMapDiv, 'height');
+
+    console.log([holderTop, holderLeft, holderWidth, holderHeight,
+                 outerWidth, outerHeight]);
 
     var absOuterFixPoint = new crisis.Coords(
         fixPoint.x + holderLeft,
