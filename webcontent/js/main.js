@@ -56,7 +56,7 @@ crisis.getNumericData = function($elem, dataName) {
  */
 crisis.getCssPx = function($elem, style) {
     var num = parseInt($elem.css(style), 10);
-    if (num === null || num === NaN) {
+    if (num === null || isNan(num)) {
         console.log(['failed to get css style', $elem, style]);
     }
     return num;
