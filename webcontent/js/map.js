@@ -53,12 +53,12 @@ crisis.map.init = function() {
 
     crisis.map.$zoomInButton.on('click' + crisis.event.baseNameSpace,
         function() {
-            crisis.map.zoom(2);
+            crisis.map.zoom(2, crisis.map.centerClick());
         });
 
     crisis.map.$zoomOutButton.on('click' + crisis.event.baseNameSpace,
         function() {
-            crisis.map.zoom(0.5);
+            crisis.map.zoom(0.5, crisis.map.centerClick());
         });
 
     crisis.ajax.pollNow(crisis.ajax.mapPath, {
@@ -271,6 +271,14 @@ crisis.map.getClick = function(callback) {
             crisis.map.stopGettingClick();
             callback(absCoordsOfClick);
         });
+};
+
+/** @return {crisis.Coords} */
+crisis.map.centerClick() = function() {
+    return new crisis.Coords(
+        crisis.map.$outerMapDiv.width() / 2 - crisis.map.$holder.width(),
+        crisis.map.$outerMapDiv.height() / 2 - crisis.map.$holder.top()
+    );
 };
 
 crisis.map.stopGettingClick = function() {
