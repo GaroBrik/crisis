@@ -33,6 +33,11 @@ ul {
     height: calc(100% - #{$headerHeight});
 }
 
+#mapOuterDiv {
+    height: 100%;
+    width: 100%;
+}
+
 #mapBounds {
     position: absolute;
     left: 0;
