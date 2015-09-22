@@ -23,6 +23,8 @@ crisis.map = {
     /** @type {jQuery} */
     $mapBounds: null,
     /** @type {jQuery} */
+    $outerMapDiv: null,
+    /** @type {jQuery} */
     $addDivisionButton: null
 };
 
@@ -30,6 +32,7 @@ crisis.map = {
 crisis.map.init = function() {
     crisis.map.$holder = $('#mapHolder');
     crisis.map.$mapBounds = $('#mapBounds');
+    crisis.map.$outerMapDiv = $('#mapOuterDiv');
     crisis.map.$newDivisionButton = $('#newDivisionButton');
     crisis.map.$zoomInButton = $('#zoomInButton');
     crisis.map.$zoomOutButton = $('#zoomOutButton');
@@ -159,14 +162,50 @@ crisis.map.absCoordsOfRelative = function(relativeCoords) {
 
 /**
  * @param {number} factor
+ * @param {crisis.Coords} fixPoint
  */
-crisis.map.zoom = function(factor) {
+crisis.map.zoom = function(factor, fixPoint) {
     var map = crisis.map;
 
     var newBounds = new crisis.Bounds(
         Math.max(map.minRelBounds.width, map.relBounds.width * factor),
         Math.max(map.minRelBounds.height, map.relBounds.height * factor)
     );
+
+    var holderLeft = crisis.getCssPx(map.$holder, 'left');
+    var holderWidth = crisis.getCssPx(map.$holder, 'width');
+    var holderTop = crisis.getCssPx(map.$holder, 'top');
+    var holderHeight = crisis.getCssPx(map.$holder, 'height');
+    var outerWidth = crisis.getCssPx(map.$outerMapDiv, 'width');
+    var outerHeight = crisis.getCssPx(map.$outerMapDiv, 'height');
+
+    var absOuterFixPoint = new crisis.Coords(
+        fixPoint.x + holderLeft,
+        fixPoint.y + holderTop
+    );
+
+    var absMapFixOrigPoint = new crisis.Coords(
+        fixPoint.x * (newBounds.width / map.relBounds.width),
+        fixPoint.y * (newBounds.height / map.relBounds.height)
+    );
+
+    var absMapFixDelta = new crisis.Coords(
+        absOuterFixPoint.x - absMapFixOrigPoint.x,
+        absOuterFixPoint.y - absMapFixOrigPoint.y
+    );
+
+    if (holderLeft + holderWidth + absMapFixDelta.x < outerWidth) {
+        absMapFixDelta.x += outerWidth - (holderLeft + holderWidth + absMapFixDelta.x);
+    }
+    if (holderLeft + absMapFixDelta.x > 0) {
+        absMapFixDelta.x -= holderLeft + absMapFixDelta.x;
+    }
+    if (holderTop + holderHeight + absMapFixDelta.y < outerHeight) {
+        absMapFixDelta.y += outerHeight - (holderTop + holderHeight + absMapFixDelta.y);
+    }
+    if (holderTop + absMapFixDelta.y > 0) {
+        absMapFixDelta.y -= holderTop + absMapFixDelta.y;
+    }
 
     map.relBounds = newBounds;
 
@@ -179,8 +218,8 @@ crisis.map.zoom = function(factor) {
     map.$holder.animate({
         'height': map.relBounds.height + '%',
         'width': map.relBounds.width + '%',
-        'top': Math.max(crisis.getCssPx(map.$holder, 'top') + crisis.getCssPx(map.$holder, 'height') * factor / 2, 0),
-        'left': Math.max(crisis.getCssPx(map.$holder, 'left') + crisis.getCssPx(map.$holder, 'width') * factor / 2, 0)
+        'top': holderTop + absMapFixDelta.y,
+        'left': holderWidth + absMapFixDelta.x
     });
 };
 
