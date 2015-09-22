@@ -167,7 +167,7 @@ crisis.map.absCoordsOfRelative = function(relativeCoords) {
 crisis.map.zoom = function(factor, fixPoint) {
     var map = crisis.map;
 
-    console.log(fixPoint);
+    console.log([fixPoint, "yes"]);
     
     var newBounds = new crisis.Bounds(
         Math.max(map.minRelBounds.width, map.relBounds.width * factor),
