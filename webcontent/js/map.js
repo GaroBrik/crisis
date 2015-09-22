@@ -179,9 +179,6 @@ crisis.map.zoom = function(factor, fixPoint) {
     var outerWidth = crisis.getCssPx(map.$outerMapDiv, 'width');
     var outerHeight = crisis.getCssPx(map.$outerMapDiv, 'height');
 
-    console.log([holderTop, holderLeft, holderWidth, holderHeight,
-                 outerWidth, outerHeight]);
-
     var absOuterFixPoint = new crisis.Coords(
         fixPoint.x + holderLeft,
         fixPoint.y + holderTop
@@ -222,7 +219,7 @@ crisis.map.zoom = function(factor, fixPoint) {
         'height': map.relBounds.height + '%',
         'width': map.relBounds.width + '%',
         'top': holderTop + absMapFixDelta.y,
-        'left': holderWidth + absMapFixDelta.x
+        'left': holderLeft + absMapFixDelta.x
     });
 };
 
