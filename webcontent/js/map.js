@@ -194,8 +194,6 @@ crisis.map.zoom = function(factor, fixPoint) {
         absOuterFixPoint.y - absMapFixOrigPoint.y
     );
 
-    console.log(absMapFixDelta);
-
     if (holderLeft + holderWidth + absMapFixDelta.x < outerWidth) {
         absMapFixDelta.x += outerWidth - (holderLeft + holderWidth + absMapFixDelta.x);
     }
@@ -211,6 +209,7 @@ crisis.map.zoom = function(factor, fixPoint) {
 
     map.relBounds = newBounds;
 
+    console.log([holderTop, holderLeft, absMapFixDelta]);
     map.$mapBounds.css({
         'height': (2 * map.relBounds.height - 100) + '%',
         'width': (2 * map.relBounds.width - 100) + '%',
@@ -220,8 +219,8 @@ crisis.map.zoom = function(factor, fixPoint) {
     map.$holder.animate({
         'height': map.relBounds.height + '%',
         'width': map.relBounds.width + '%',
-        'top': holderTop + absMapFixDelta.y,
-        'left': holderLeft + absMapFixDelta.x
+        'top': (holderTop + absMapFixDelta.y) + 'px',
+        'left': (holderLeft + absMapFixDelta.x) + 'px'
     });
 };
 
