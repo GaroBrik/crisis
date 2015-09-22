@@ -198,18 +198,17 @@ crisis.map.zoom = function(factor, fixPoint) {
         absMapFixDelta.x += outerWidth - (holderLeft + holderWidth + absMapFixDelta.x);
     }
     if (holderLeft + absMapFixDelta.x > 0) {
-        absMapFixDelta.x -= holderLeft + absMapFixDelta.x;
+        absMapFixDelta.x -= (holderLeft + absMapFixDelta.x);
     }
     if (holderTop + holderHeight + absMapFixDelta.y < outerHeight) {
         absMapFixDelta.y += outerHeight - (holderTop + holderHeight + absMapFixDelta.y);
     }
     if (holderTop + absMapFixDelta.y > 0) {
-        absMapFixDelta.y -= holderTop + absMapFixDelta.y;
+        absMapFixDelta.y = (holderTop + absMapFixDelta.y);
     }
 
     map.relBounds = newBounds;
 
-    console.log([holderTop, holderLeft, absMapFixDelta]);
     map.$mapBounds.css({
         'height': (2 * map.relBounds.height - 100) + '%',
         'width': (2 * map.relBounds.width - 100) + '%',
