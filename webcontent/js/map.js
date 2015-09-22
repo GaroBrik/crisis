@@ -206,7 +206,7 @@ crisis.map.zoom = function(factor, fixPoint) {
         absMapFixDelta.y += outerHeight - (holderTop + holderHeight + absMapFixDelta.y);
     }
     if (holderTop + absMapFixDelta.y > 0) {
-        absMapFixDelta.y = (holderTop + absMapFixDelta.y);
+        absMapFixDelta.y -= (holderTop + absMapFixDelta.y);
     }
 
     console.log(absMapFixDelta);
