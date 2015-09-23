@@ -124,7 +124,7 @@ crisis.DivisionDetails.prototype.enableEdit = function() {
     var dets = this;
 
     dets.$nameSpan.hide();
-    dets.$editNameField.val(dets.$nameSpan().text());
+    dets.$editNameField.val(dets.$nameSpan.text());
     dets.$editNameField.show();
 
     dets.$editButton.hide();
@@ -245,10 +245,10 @@ crisis.DivisionDetails.prototype.create = function() {
     });
 
     if (!validSubmit) return;
-    crisis.ajax.postDivisionCreation(
-        dets.division.absCoords, newUnits, dets.$editNameField.val(), 1, {
-        success: function() {
-            dets.division.destroy();
-        }
-    });
+    crisis.ajax.postDivisionCreation(dets.division.absCoords, newUnits,
+        /** @type {string} */ (dets.$editNameField.val()), 1, {
+            success: function() {
+                dets.division.destroy();
+            }
+        });
 }
