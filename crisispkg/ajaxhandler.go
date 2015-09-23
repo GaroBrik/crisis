@@ -13,6 +13,7 @@ const (
 	ajaxPath           = "ajax/"
 	mapPath            = ajaxPath + "map/"
 	updateDivisionPath = ajaxPath + "updateDivision/"
+	createDivisionPath = ajaxPath + "createDivision/"
 )
 
 var m_ajaxHandler *AjaxHandler
@@ -61,6 +62,18 @@ func (handler *AjaxHandler) HandleRequest(res http.ResponseWriter, req *http.Req
 		json.NewDecoder(req.Body).Decode(&jsonSent)
 
 		handler.db.UpdateDivision(jsonSent.Id, jsonSent.Units)
+
+	case createDivisionPath:
+		type CreateDivisionJson struct {
+			Coords    Coords
+			Units     []Unit
+			Name      string
+			FactionId int
+		}
+		var jsonSent CreateDivisionJson
+		json.NewDecoder(req.Body).Decode(&jsonSent)
+
+		handler.db.CreateDivision(jsonSent.Coords, jsonSent.Units, jsonSent.Name, jsonSent.FactionId)
 
 	default:
 		http.Error(res, "Invalid request path", http.StatusBadRequest)

@@ -5,6 +5,8 @@ crisis.ajax.path = 'ajax/';
 crisis.ajax.mapPath = crisis.ajax.path + 'map/';
 /** @type {string} */
 crisis.ajax.updateDivisionPath = crisis.ajax.path + 'updateDivision/';
+/** @type {string} */
+crisis.ajax.createDivisionPath = crisis.ajax.path + 'createDivision/';
 
 /**
  * @param {string} path
@@ -27,12 +29,30 @@ crisis.ajax.postData = function(path, data, options) {
  * @param {jQueryAjaxSettings=} options
  */
 crisis.ajax.postDivisionUpdate = function(divisionId, units, options) {
-    /** @type {crisisJson.DivisionResponse} */
+    /** @type {crisisJson.DivisionUpdate} */
     var data = {
         Id: divisionId,
         Units: units
     };
     crisis.ajax.postData(crisis.ajax.updateDivisionPath, data, options);
+};
+
+/**
+ * @param {crisis.Coords} coords
+ * @param {Array<crisisJson.Unit>} units
+ * @param {string} name
+ * @param {number} factionId
+ * @param {jQueryAjaxSettings=} options
+ */
+crisis.ajax.postDivisionCreation = function(coords, units, name, factionId, options) {
+    /** @type {crisisJson.DivisionCreate} */
+    var data = {
+        Units: units,
+        Coords: coords,
+        Name: name,
+        FactionId: factionId
+    };
+    crisis.ajax.postData(crisis.ajax.createDivisionPath, data, options);
 };
 
 /**
