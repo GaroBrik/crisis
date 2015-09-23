@@ -235,7 +235,8 @@ crisis.DivisionDetails.prototype.create = function() {
     });
 
     if (!validSubmit) return;
-    crisis.ajax.postDivisionCreation(dets.division.absCoords, newUnits, {
+    crisis.ajax.postDivisionCreation(
+        dets.division.absCoords, newUnits, dets.$editNameField.value(), 1, {
         success: function() {
             dets.division.destroy();
         }

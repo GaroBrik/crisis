@@ -11,11 +11,8 @@ func (db *Database) CreateDivision(coords Coords, units []Unit, name string, fac
 		panic(err)
 	}
 
-	row, err := tx.QueryRow("INSERT INTO division (faction, division_name, route) "+
+	row := tx.QueryRow("INSERT INTO division (faction, division_name, route) "+
 		"VALUES($1, $2, ARRAY[($3, $4)]) RETURNING id", divisionId, name, coords.X, coords.Y)
-	if err != nil {
-		panic(err)
-	}
 
 	var divisionId int
 	err = row.Scan(&divisionId)
@@ -118,12 +115,12 @@ func (db *Database) getCrisisDivisionsFromRows(rows *sql.Rows) map[int][]*Divisi
 	var facId int
 	for rows.Next() {
 		div := Division{}
-		err := rows.Scan(&facId, &div.FacName, &div.Id, &div.CoordX, &div.CoordY, &div.DivName)
+		err := rows.Scan(&div.Id, &div.Coords.X, &div.Coords.Y, &div.Name, &div.FactionId)
 		if err != nil {
 			panic(err)
 		}
 		db.loadUnitsFor(&div)
-		m[facId] = append(m[facId], &div)
+		m[div.FactionId] = append(m[div.FactionId], &div)
 	}
 	return m
 }
