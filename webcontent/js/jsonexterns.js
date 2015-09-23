@@ -16,7 +16,7 @@ crisisJson.Crisis;
  *   Id: number,
  *   Name: string,
  *   AbsCoords: crisisJson.Coords,
- *   FactionId: number
+ *   FactionId: number,
  *   Units: Array<crisisJson.Unit>
  * }}
  */
@@ -35,6 +35,7 @@ crisisJson.DivisionUpdate;
  *   Units: Array<crisisJson.Unit>,
  *   Coords: crisisJson.Coords,
  *   Name: string
+ *   FactionId: number
  * }}
  */
 crisisJson.DivisionCreate;

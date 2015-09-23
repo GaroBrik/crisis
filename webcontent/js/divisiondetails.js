@@ -65,7 +65,7 @@ crisis.DivisionDetails.prototype.reRender = function() {
     if (dets.$pane === null) {
         dets.$pane = crisis.cloneProto(crisis.$protoDivisionDetails);
         dets.$nameSpan = dets.$pane.find('.nameSpan');
-        dets.$nameSpan.value(dets.division.name);
+        dets.$nameSpan.val(dets.division.name);
         dets.$unitList = dets.$pane.find('ul');
         dets.$paneInvalidAlert = dets.$pane.find('.paneInvalidAlert');
 
@@ -236,7 +236,7 @@ crisis.DivisionDetails.prototype.create = function() {
 
     if (!validSubmit) return;
     crisis.ajax.postDivisionCreation(
-        dets.division.absCoords, newUnits, dets.$editNameField.value(), 1, {
+        dets.division.absCoords, newUnits, dets.$editNameField.val(), 1, {
         success: function() {
             dets.division.destroy();
         }
