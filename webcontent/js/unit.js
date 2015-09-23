@@ -31,7 +31,7 @@ crisis.Unit = function(unitJson, div) {
     unit.$removeUnitButton.on('click' + crisis.event.baseNameSpace, function() {
         unit.division.details.removeUnit(unit);
     });
-    unit.$value.html('' + unit.amount);
+    unit.$value.text(unit.amount);
 };
 
 crisis.Unit.prototype.editOn = function() {

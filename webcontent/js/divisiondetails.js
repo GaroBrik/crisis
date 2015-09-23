@@ -8,6 +8,8 @@ crisis.DivisionDetails = function(div) {
     /** @type {jQuery} */
     this.$nameSpan = null;
     /** @type {jQuery} */
+    this.$editNameField = null;
+    /** @type {jQuery} */
     this.$unitList = null;
     /** @type {jQuery} */
     this.$editButton = null;
@@ -65,7 +67,7 @@ crisis.DivisionDetails.prototype.reRender = function() {
     if (dets.$pane === null) {
         dets.$pane = crisis.cloneProto(crisis.$protoDivisionDetails);
         dets.$nameSpan = dets.$pane.find('.nameSpan');
-        dets.$nameSpan.val(dets.division.name);
+        dets.$editNameField = dets.$pane.find('.editNameField');
         dets.$unitList = dets.$pane.find('ul');
         dets.$paneInvalidAlert = dets.$pane.find('.paneInvalidAlert');
 
@@ -100,6 +102,7 @@ crisis.DivisionDetails.prototype.reRender = function() {
             dets.close();
         });
 
+        dets.$nameSpan.text(dets.division.name);
         crisis.map.$holder.append(dets.$pane);
     }
 
@@ -120,6 +123,10 @@ crisis.DivisionDetails.prototype.toggleEdit = function() {
 crisis.DivisionDetails.prototype.enableEdit = function() {
     var dets = this;
 
+    dets.$nameSpan.hide();
+    dets.$editNameField.val(dets.$nameSpan().text());
+    dets.$editNameField.show();
+
     dets.$editButton.hide();
     dets.$cancelButton.show();
     dets.$commitButton.show();
@@ -134,6 +141,9 @@ crisis.DivisionDetails.prototype.enableEdit = function() {
 
 crisis.DivisionDetails.prototype.disableEdit = function() {
     var dets = this;
+
+    dets.$editNameField.hide();
+    dets.$nameSpan.show();
 
     dets.$editButton.show();
     dets.$cancelButton.hide();

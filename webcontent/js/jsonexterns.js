@@ -34,7 +34,7 @@ crisisJson.DivisionUpdate;
  * @typedef {{
  *   Units: Array<crisisJson.Unit>,
  *   Coords: crisisJson.Coords,
- *   Name: string
+ *   Name: string,
  *   FactionId: number
  * }}
  */
