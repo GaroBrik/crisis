@@ -5,6 +5,8 @@
 crisis.Division = function(divJson) {
     var div = this;
 
+    console.log(divJson);
+
     /** @type {crisis.DivisionDetails} */
     this.details = new crisis.DivisionDetails(this);
     /** @type {boolean} */
