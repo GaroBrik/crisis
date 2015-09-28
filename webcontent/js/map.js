@@ -70,13 +70,11 @@ crisis.map.init = function() {
 
 /** @param {crisisJson.Crisis} crisisData */
 crisis.map.updateData = function(crisisData) {
-    var map = crisis.map;
-
-    map.absBounds = crisis.Bounds.fromJson(crisisData.MapBounds);
+    crisis.map.absBounds = crisis.Bounds.fromJson(crisisData.MapBounds);
 
     /** @type {Array<crisis.Division>} */
     var removedDivisions = [];
-    _.each(map.divisions, function(div) {
+    _.each(crisis.map.divisions, function(div) {
         var updated = _.findWhere(crisisData.Divisions, {Id: div.id});
         if (updated === undefined) {
             div.destroy();
@@ -89,12 +87,12 @@ crisis.map.updateData = function(crisisData) {
     });
 
     _.each(removedDivisions, function(removedDivision) {
-        map.divisions = /** @type {Array<crisis.Division>} */
-            (_.without(map.divisions, removedDivision));
+        crisis.map.divisions = /** @type {Array<crisis.Division>} */
+            (_.without(crisis.map.divisions, removedDivision));
     });
 
     _.each(crisisData.Divisions, function(divJson) {
-        map.divisions.push(new crisis.Division(divJson));
+        crisis.map.divisions.push(new crisis.Division(divJson));
     });
 };
 
@@ -145,19 +143,17 @@ crisis.map.absCoordsOfClick = function(clickEvent) {
  * @return {crisis.Coords}
  */
 crisis.map.relativeCoordsOfAbs = function(absCoords) {
-    var map = crisis.map;
-    return new crisis.Coords(absCoords.x * 100 / map.absBounds.width,
-                             absCoords.y * 100 / map.absBounds.height);
+    return new crisis.Coords(absCoords.x * 100 / crisis.map.absBounds.width,
+                             absCoords.y * 100 / crisis.map.absBounds.height);
 };
 
 /**
- * @param {crisis.Coords} relativeCoords
+ * @param {crisis.Coords} relCoords
  * @return {crisis.Coords}
  */
-crisis.map.absCoordsOfRelative = function(relativeCoords) {
-    var map = crisis.map;
-    return new crisis.Coords(map.absBounds.width * relativeCoords.x / 100,
-                             map.absBounds.height * relativeCoords.y / 100);
+crisis.map.absCoordsOfRelative = function(relCoords) {
+    return new crisis.Coords(crisis.map.absBounds.width * relCoords.x / 100,
+                             crisis.map.absBounds.height * relCoords.y / 100);
 };
 
 /**
@@ -165,21 +161,21 @@ crisis.map.absCoordsOfRelative = function(relativeCoords) {
  * @param {crisis.Coords} fixPoint
  */
 crisis.map.zoom = function(factor, fixPoint) {
-    var map = crisis.map;
-
     var newBounds = new crisis.Bounds(
-        Math.max(map.minRelBounds.width, map.relBounds.width * factor),
-        Math.max(map.minRelBounds.height, map.relBounds.height * factor)
+        Math.max(crisis.map.minRelBounds.width,
+                 crisis.map.relBounds.width * factor),
+        Math.max(crisis.map.minRelBounds.height,
+                 crisis.map.relBounds.height * factor)
     );
 
-    var newFactor = newBounds.width / map.relBounds.width;
+    var newFactor = newBounds.width / crisis.map.relBounds.width;
 
-    var holderLeft = crisis.getCssPx(map.$holder, 'left');
-    var holderWidth = crisis.getCssPx(map.$holder, 'width');
-    var holderTop = crisis.getCssPx(map.$holder, 'top');
-    var holderHeight = crisis.getCssPx(map.$holder, 'height');
-    var outerWidth = crisis.getCssPx(map.$outerMapDiv, 'width');
-    var outerHeight = crisis.getCssPx(map.$outerMapDiv, 'height');
+    var holderLeft = crisis.getCssPx(crisis.map.$holder, 'left');
+    var holderWidth = crisis.getCssPx(crisis.map.$holder, 'width');
+    var holderTop = crisis.getCssPx(crisis.map.$holder, 'top');
+    var holderHeight = crisis.getCssPx(crisis.map.$holder, 'height');
+    var outerWidth = crisis.getCssPx(crisis.map.$outerMapDiv, 'width');
+    var outerHeight = crisis.getCssPx(crisis.map.$outerMapDiv, 'height');
 
     var absOuterFixPoint = new crisis.Coords(
         fixPoint.x + holderLeft,
@@ -197,13 +193,15 @@ crisis.map.zoom = function(factor, fixPoint) {
     );
 
     if (holderLeft + holderWidth * newFactor + absMapFixDelta.x < outerWidth) {
-        absMapFixDelta.x += outerWidth - (holderLeft + holderWidth + absMapFixDelta.x);
+        absMapFixDelta.x +=
+            outerWidth - (holderLeft + holderWidth + absMapFixDelta.x);
     }
     if (holderLeft + absMapFixDelta.x > 0) {
         absMapFixDelta.x -= (holderLeft + absMapFixDelta.x);
     }
     if (holderTop + holderHeight * newFactor + absMapFixDelta.y < outerHeight) {
-        absMapFixDelta.y += outerHeight - (holderTop + holderHeight + absMapFixDelta.y);
+        absMapFixDelta.y +=
+            outerHeight - (holderTop + holderHeight + absMapFixDelta.y);
     }
     if (holderTop + absMapFixDelta.y > 0) {
         absMapFixDelta.y -= (holderTop + absMapFixDelta.y);
@@ -211,17 +209,17 @@ crisis.map.zoom = function(factor, fixPoint) {
 
     console.log(absMapFixDelta);
 
-    map.relBounds = newBounds;
+    crisis.map.relBounds = newBounds;
 
-    map.$mapBounds.css({
-        'height': (2 * map.relBounds.height - 100) + '%',
-        'width': (2 * map.relBounds.width - 100) + '%',
-        'top': '-' + (map.relBounds.height - 100) + '%',
-        'left': '-' + (map.relBounds.width - 100) + '%'
+    crisis.map.$mapBounds.css({
+        'height': (2 * crisis.map.relBounds.height - 100) + '%',
+        'width': (2 * crisis.map.relBounds.width - 100) + '%',
+        'top': '-' + (crisis.map.relBounds.height - 100) + '%',
+        'left': '-' + (crisis.map.relBounds.width - 100) + '%'
     });
-    map.$holder.animate({
-        'height': map.relBounds.height + '%',
-        'width': map.relBounds.width + '%',
+    crisis.map.$holder.animate({
+        'height': crisis.map.relBounds.height + '%',
+        'width': crisis.map.relBounds.width + '%',
         'top': (holderTop + absMapFixDelta.y) + 'px',
         'left': (holderLeft + absMapFixDelta.x) + 'px'
     });
