@@ -19,7 +19,7 @@ CREATE TABLE faction (
 );
 ALTER SEQUENCE faction_id_seq OWNED BY faction.id;
 
-CREATE TYPE coords (
+CREATE TYPE coords AS (
        x INTEGER,
        y INTEGER 
 );

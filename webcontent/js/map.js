@@ -51,6 +51,7 @@ crisis.map.init = function() {
                 });
                 tmpDiv.$marker.hide();
                 tmpDiv.details.open();
+                tmpDiv.details.enableCreate();
             });
         });
 
