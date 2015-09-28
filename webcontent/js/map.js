@@ -44,7 +44,7 @@ crisis.map.init = function() {
             crisis.map.getClick(function(absCoords) {
                 var tmpDiv = new crisis.Division({
                     Id: -1,
-                    AbsCoords: absCoords.toJson(),
+                    Coords: absCoords.toJson(),
                     Units: [],
                     Name: '',
                     FactionId: -1
