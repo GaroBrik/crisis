@@ -1,10 +1,3 @@
-/** @enum {string} */
-crisis.DivisionDetails.State = {
-    VIEWING: 'VIEWING',
-    EDITING: 'EDITING',
-    CREATING: 'CREATING'
-};
-
 /**
  * @constructor
  * @param {crisis.Division} div
@@ -35,7 +28,7 @@ crisis.DivisionDetails = function(div) {
     /** @type {boolean} */
     this.isOpen = false;
     /** @type {crisis.DivisionDetails.State} */
-    this.state = false;
+    this.state = crisis.DivisionDetails.State.VIEWING;
     /** @type {Array<crisis.Unit>} */
     this.newUnits = [];
     /** @type {Array<crisis.Unit>} */
@@ -97,7 +90,7 @@ crisis.DivisionDetails.prototype.reRender = function() {
 
         dets.$createButton = dets.$pane.find('.createButton');
         dets.$createButton.on('click' + crisis.event.baseNameSpace, function() {
-            dets.create();
+            dets.commitCreate();
         });
 
 
@@ -125,7 +118,7 @@ crisis.DivisionDetails.prototype.enableEdit = function() {
     });
 
     dets.$nameSpan.hide();
-    dets.$editNameField.val(dets.$nameSpan.text());
+    dets.$editNameField.val(dets.division.name);
     dets.$editNameField.show();
 
     dets.$editButton.hide();
@@ -149,7 +142,7 @@ crisis.DivisionDetails.prototype.enableCreate = function() {
     });
 
     dets.$nameSpan.hide();
-    dets.$editNameField.val(dets.$nameSpan.text());
+    dets.$editNameField.val(dets.division.name);
     dets.$editNameField.show();
 
     dets.$cancelButton.show();
@@ -281,4 +274,11 @@ crisis.DivisionDetails.prototype.commitCreate = function() {
                 dets.division.destroy();
             }
         });
+};
+
+/** @enum {string} */
+crisis.DivisionDetails.State = {
+    VIEWING: 'VIEWING',
+    EDITING: 'EDITING',
+    CREATING: 'CREATING'
 }
