@@ -241,8 +241,9 @@ crisis.DivisionDetails.prototype.commitEdit = function() {
         }
     });
 
-    /** @type {string} */
+    /** @type {string?} */
     var name = dets.$editNameField.val();
+    if (name === dets.division.name) name = null;
 
     if (!validSubmit) return;
     crisis.ajax.postDivisionUpdate(dets.division.id, newUnits, name);
@@ -272,6 +273,10 @@ crisis.DivisionDetails.prototype.commitCreate = function() {
 
     /** @type {string} */
     var name = dets.$editNameField.val();
+    if (name === '') {
+        dets.$paneInvalidAlert.show();
+        validSubmit = false;
+    }
 
     if (!validSubmit) return;
     crisis.ajax.postDivisionCreation(

@@ -47,10 +47,17 @@ func (db *Database) CreateDivision(coords Coords, units []Unit, name string, fac
 	return divisionId
 }
 
-func (db *Database) UpdateDivision(divisionId int, units []Unit) {
+func (db *Database) UpdateDivision(divisionId int, units []Unit, name string) {
 	tx, err := db.db.Begin()
 	if err != nil {
 		panic(err)
+	}
+
+	if name != nil {
+		_, err = tx.Query("UPDATE division SET name = $1 WHERE id = $2", name, divisionId)
+		if err != nil {
+			panic(err)
+		}
 	}
 
 	_, err = tx.Query("DELETE FROM unit WHERE unit.division = $1", divisionId)
