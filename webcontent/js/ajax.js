@@ -26,7 +26,7 @@ crisis.ajax.postData = function(path, data, options) {
 /**
  * @param {number} divisionId
  * @param {Array<crisisJson.Unit>} units
- * @param {string} name
+ * @param {string?} name
  * @param {jQueryAjaxSettings=} options
  */
 crisis.ajax.postDivisionUpdate = function(divisionId, units, name, options) {

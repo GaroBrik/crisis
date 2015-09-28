@@ -241,8 +241,8 @@ crisis.DivisionDetails.prototype.commitEdit = function() {
         }
     });
 
-    /** @type {string?} */
-    var name = dets.$editNameField.val();
+
+    var name = /** @type {string?} */(dets.$editNameField.val());
     if (name === dets.division.name) name = null;
 
     if (!validSubmit) return;
@@ -271,8 +271,7 @@ crisis.DivisionDetails.prototype.commitCreate = function() {
         }
     });
 
-    /** @type {string} */
-    var name = dets.$editNameField.val();
+    var name = /** @type {string} */(dets.$editNameField.val());
     if (name === '') {
         dets.$paneInvalidAlert.show();
         validSubmit = false;
