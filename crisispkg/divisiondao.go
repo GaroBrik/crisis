@@ -121,10 +121,12 @@ func (db *Database) getCrisisDivisionsFromRows(rows *sql.Rows) map[int][]*Divisi
 	m := make(map[int][]*Division)
 	for rows.Next() {
 		div := Division{}
-		err := rows.Scan(&div.Id, &div.Coords.X, &div.Coords.Y, &div.Name, &div.FactionId)
+		coords := Coords{}
+		err := rows.Scan(&div.Id, &coords.X, &coords.Y, &div.Name, &div.FactionId)
 		if err != nil {
 			panic(err)
 		}
+		div.Coords = coords
 		db.loadUnitsFor(&div)
 		m[div.FactionId] = append(m[div.FactionId], &div)
 	}
@@ -135,10 +137,12 @@ func (db *Database) getDivisionsFromRows(rows *sql.Rows) []*Division {
 	var fs []*Division
 	for rows.Next() {
 		div := Division{}
-		err := rows.Scan(&div.Id, &div.Coords.X, &div.Coords.Y, &div.Name, &div.FactionId)
+		coords := Coords{}
+		err := rows.Scan(&div.Id, &coords.X, &coords.Y, &div.Name, &div.FactionId)
 		if err != nil {
 			panic(err)
 		}
+		div.Coords = coords
 		db.loadUnitsFor(&div)
 		fs = append(fs, &div)
 	}
