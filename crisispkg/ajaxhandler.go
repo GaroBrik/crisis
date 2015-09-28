@@ -57,11 +57,12 @@ func (handler *AjaxHandler) HandleRequest(res http.ResponseWriter, req *http.Req
 		type UpdateDivisionJson struct {
 			Id    int
 			Units []Unit
+			Name  string
 		}
 		var jsonSent UpdateDivisionJson
 		json.NewDecoder(req.Body).Decode(&jsonSent)
 
-		handler.db.UpdateDivision(jsonSent.Id, jsonSent.Units)
+		handler.db.UpdateDivision(jsonSent.Id, jsonSent.Units, jsonSent.Name)
 
 	case createDivisionPath:
 		type CreateDivisionJson struct {

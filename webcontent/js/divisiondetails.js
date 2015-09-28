@@ -241,8 +241,11 @@ crisis.DivisionDetails.prototype.commitEdit = function() {
         }
     });
 
+    /** @type {string} */
+    var name = dets.$editNameField.val();
+
     if (!validSubmit) return;
-    crisis.ajax.postDivisionUpdate(dets.division.id, newUnits);
+    crisis.ajax.postDivisionUpdate(dets.division.id, newUnits, name);
 };
 
 crisis.DivisionDetails.prototype.commitCreate = function() {
@@ -267,9 +270,12 @@ crisis.DivisionDetails.prototype.commitCreate = function() {
         }
     });
 
+    /** @type {string} */
+    var name = dets.$editNameField.val();
+
     if (!validSubmit) return;
-    crisis.ajax.postDivisionCreation(dets.division.absCoords, newUnits,
-        /** @type {string} */ (dets.$editNameField.val()), 1, {
+    crisis.ajax.postDivisionCreation(
+        dets.division.absCoords, newUnits, name, 1, {
             success: function() {
                 dets.division.destroy();
             }
