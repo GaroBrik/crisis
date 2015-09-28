@@ -92,7 +92,7 @@ func (db *Database) UpdateDivision(divisionId int, units []Unit, name *string) {
 
 func (db *Database) GetCrisisDivisions(crisisId int) map[int][]*Division {
 	rows, err := db.db.Query("SELECT division.id, "+
-		"division.route[0].x, division.route[0].y, division.division_name, faction.id, "+
+		"division.route[0].x, division.route[0].y, division.division_name, faction.id "+
 		"FROM division INNER JOIN faction ON (faction.id = division.faction) "+
 		"WHERE faction.crisis = $1", crisisId)
 	if err != nil {
