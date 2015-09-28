@@ -1,3 +1,10 @@
+/** @enum {string} */
+crisis.DivisionDetails.State = {
+    VIEWING: 'VIEWING',
+    EDITING: 'EDITING',
+    CREATING: 'CREATING'
+};
+
 /**
  * @constructor
  * @param {crisis.Division} div
@@ -27,8 +34,8 @@ crisis.DivisionDetails = function(div) {
     this.division = div;
     /** @type {boolean} */
     this.isOpen = false;
-    /** @type {boolean} */
-    this.isEditing = false;
+    /** @type {crisis.DivisionDetails.State} */
+    this.state = false;
     /** @type {Array<crisis.Unit>} */
     this.newUnits = [];
     /** @type {Array<crisis.Unit>} */
@@ -82,9 +89,6 @@ crisis.DivisionDetails.prototype.reRender = function() {
         });
 
         dets.$cancelButton = dets.$pane.find('.cancelButton');
-        dets.$cancelButton.on('click' + crisis.event.baseNameSpace, function() {
-            dets.disableEdit();
-        });
 
         dets.$commitButton = dets.$pane.find('.commitButton');
         dets.$commitButton.on('click' + crisis.event.baseNameSpace, function() {
@@ -112,16 +116,13 @@ crisis.DivisionDetails.prototype.reRender = function() {
     });
 };
 
-crisis.DivisionDetails.prototype.toggleEdit = function() {
-    if (this.isEditing) {
-        this.disableEdit();
-    } else {
-        this.enableEdit();
-    }
-};
-
 crisis.DivisionDetails.prototype.enableEdit = function() {
     var dets = this;
+
+    dets.$cancelButton.off('click' + crisis.event.baseNameSpace);
+    dets.$cancelButton.on('click' + crisis.event.baseNameSpace, function() {
+        dets.disableCreate();
+    });
 
     dets.$nameSpan.hide();
     dets.$editNameField.val(dets.$nameSpan.text());
@@ -136,7 +137,30 @@ crisis.DivisionDetails.prototype.enableEdit = function() {
         unit.editOn();
     });
 
-    dets.isEditing = true;
+    dets.state = crisis.DivisionDetails.State.EDITING;
+};
+
+crisis.DivisionDetails.prototype.enableCreate = function() {
+    var dets = this;
+
+    dets.$cancelButton.off('click' + crisis.event.baseNameSpace);
+    dets.$cancelButton.on('click' + crisis.event.baseNameSpace, function() {
+        dets.disableCreate();
+    });
+
+    dets.$nameSpan.hide();
+    dets.$editNameField.val(dets.$nameSpan.text());
+    dets.$editNameField.show();
+
+    dets.$cancelButton.show();
+    dets.$createButton.show();
+    dets.$addUnitButton.show();
+
+    _.each(dets.division.units, function(unit) {
+        unit.editOn();
+    });
+
+    dets.state = crisis.DivisionDetails.State.CREATING;
 };
 
 crisis.DivisionDetails.prototype.disableEdit = function() {
@@ -158,13 +182,17 @@ crisis.DivisionDetails.prototype.disableEdit = function() {
         unit.$listItem.show();
     });
 
-    dets.isEditing = false;
+    dets.state = crisis.DivisionDetails.State.VIEWING;
+};
+
+crisis.DivisionDetails.prototype.disableCreate = function() {
+    this.division.destroy();
 };
 
 crisis.DivisionDetails.prototype.addUnit = function() {
     var dets = this;
 
-    if (!dets.isEditing) return;
+    if (dets.state === crisis.DivisionDetails.State.VIEWING) return;
 
     var currentIds = /** @type {Array<number>} */
         (_.map(dets.division.units.concat(dets.newUnits), function(unit) {
@@ -187,7 +215,7 @@ crisis.DivisionDetails.prototype.addUnit = function() {
 /** @param {crisis.Unit} unit */
 crisis.DivisionDetails.prototype.removeUnit = function(unit) {
     var dets = this;
-    console.log(dets);
+
     if (_.contains(dets.newUnits, unit)) {
         dets.newUnits = /** @type {Array<crisis.Unit>} */
             (_.without(dets.newUnits, unit));
@@ -201,7 +229,7 @@ crisis.DivisionDetails.prototype.removeUnit = function(unit) {
 crisis.DivisionDetails.prototype.commitEdit = function() {
     var dets = this;
 
-    if (!dets.isEditing) return;
+    if (dets.state !== crisis.DivisionDetails.State.EDITING) return;
 
     /** @type {Array<crisisJson.Unit>} */
     var newUnits = [];
@@ -224,8 +252,10 @@ crisis.DivisionDetails.prototype.commitEdit = function() {
     crisis.ajax.postDivisionUpdate(dets.division.id, newUnits);
 };
 
-crisis.DivisionDetails.prototype.create = function() {
+crisis.DivisionDetails.prototype.commitCreate = function() {
     var dets = this;
+
+    if (dets.state !== crisis.DivisionDetails.State.CREATING) return;
 
     /** @type {Array<crisisJson.Unit>} */
     var newUnits = [];
