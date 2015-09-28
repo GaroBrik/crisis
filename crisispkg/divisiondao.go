@@ -5,7 +5,7 @@ import (
 	"github.com/lib/pq"
 )
 
-func (db *Database) CreateDivision(coords Coords, units []Unit, name *string, factionId int) int {
+func (db *Database) CreateDivision(coords Coords, units []Unit, name string, factionId int) int {
 	tx, err := db.db.Begin()
 	if err != nil {
 		panic(err)
@@ -47,7 +47,7 @@ func (db *Database) CreateDivision(coords Coords, units []Unit, name *string, fa
 	return divisionId
 }
 
-func (db *Database) UpdateDivision(divisionId int, units []Unit, name string) {
+func (db *Database) UpdateDivision(divisionId int, units []Unit, name *string) {
 	tx, err := db.db.Begin()
 	if err != nil {
 		panic(err)
