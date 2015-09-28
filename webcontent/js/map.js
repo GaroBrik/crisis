@@ -49,7 +49,8 @@ crisis.map.init = function() {
                     Name: '',
                     FactionId: -1
                 });
-                tmpDiv.open();
+                tmpDiv.$marker.hide();
+                tmpDiv.details.open();
             });
         });
 
