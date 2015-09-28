@@ -15,7 +15,7 @@ crisisJson.Crisis;
  * @typedef {{
  *   Id: number,
  *   Name: string,
- *   AbsCoords: crisisJson.Coords,
+ *   Coords: crisisJson.Coords,
  *   FactionId: number,
  *   Units: Array<crisisJson.Unit>
  * }}

@@ -5,8 +5,6 @@
 crisis.Division = function(divJson) {
     var div = this;
 
-    console.log(divJson);
-
     /** @type {crisis.DivisionDetails} */
     this.details = new crisis.DivisionDetails(this);
     /** @type {boolean} */
@@ -36,7 +34,7 @@ crisis.Division = function(divJson) {
 crisis.Division.prototype.updateData = function(divJson) {
     var div = this;
 
-    div.absCoords = crisis.Coords.fromJson(divJson.AbsCoords);
+    div.absCoords = crisis.Coords.fromJson(divJson.Coords);
 
     div.units = /** @type {Array<crisis.Unit>} */
         (_.map(divJson.Units, function(unitJson) {
