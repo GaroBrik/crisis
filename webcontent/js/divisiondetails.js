@@ -240,6 +240,8 @@ crisis.DivisionDetails.prototype.commitEdit = function() {
             dets.$paneInvalidAlert.show();
             validSubmit = false;
         } else {
+            console.log(newVal);
+            console.log(unit.typeNum);
             newUnits.push({TypeNum: unit.typeNum, Amount: newVal});
         }
     });
@@ -270,8 +272,6 @@ crisis.DivisionDetails.prototype.commitCreate = function() {
             dets.$paneInvalidAlert.show();
             validSubmit = false;
         } else {
-            console.log(newVal);
-            console.log(unit.typeNum);
             newUnits.push({TypeNum: unit.typeNum, Amount: newVal});
         }
     });
