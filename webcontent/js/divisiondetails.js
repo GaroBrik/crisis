@@ -66,7 +66,7 @@ crisis.DivisionDetails.prototype.reRender = function() {
 
     if (dets.$pane === null) {
         dets.$pane = crisis.cloneProto(crisis.$protoDivisionDetails);
-        dets.$nameSpan = dets.$pane.find('.nameSpan');
+        dets.$nameSpan = dets.$pane.find('.divisionNameSpan');
         dets.$editNameField = dets.$pane.find('.editNameField');
         dets.$unitList = dets.$pane.find('ul');
         dets.$paneInvalidAlert = dets.$pane.find('.paneInvalidAlert');
