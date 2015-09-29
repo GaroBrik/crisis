@@ -99,6 +99,8 @@ crisis.DivisionDetails.prototype.reRender = function() {
             dets.close();
         });
 
+        console.log(dets.$nameSpan);
+        console.log(dets.division.name);
         dets.$nameSpan.text(dets.division.name);
         crisis.map.$holder.append(dets.$pane);
     }
