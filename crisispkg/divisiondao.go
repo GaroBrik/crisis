@@ -54,7 +54,7 @@ func (db *Database) UpdateDivision(divisionId int, units []Unit, name *string) {
 	}
 
 	if name != nil {
-		_, err = tx.Query("UPDATE division SET name = $1 WHERE id = $2", name, divisionId)
+		_, err = tx.Query("UPDATE division SET division_name = $1 WHERE id = $2", name, divisionId)
 		if err != nil {
 			panic(err)
 		}
