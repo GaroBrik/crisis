@@ -114,7 +114,7 @@ crisis.DivisionDetails.prototype.enableEdit = function() {
 
     dets.$cancelButton.off('click' + crisis.event.baseNameSpace);
     dets.$cancelButton.on('click' + crisis.event.baseNameSpace, function() {
-        dets.disableCreate();
+        dets.disableEdit();
     });
 
     dets.$nameSpan.hide();
@@ -142,6 +142,7 @@ crisis.DivisionDetails.prototype.enableCreate = function() {
     });
 
     dets.$nameSpan.hide();
+    dets.$editButton.hide();
     dets.$editNameField.val(dets.division.name);
     dets.$editNameField.show();
 
