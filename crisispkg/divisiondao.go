@@ -12,7 +12,7 @@ func (db *Database) CreateDivision(coords Coords, units []Unit, name string, fac
 	}
 
 	row := tx.QueryRow("INSERT INTO division (faction, division_name, route) "+
-		"VALUES($1, $2, ARRAY[($3, $4)]) RETURNING id", factionId, name, coords.X, coords.Y)
+		"VALUES($1, $2, ARRAY[($3, $4)]::coords[]) RETURNING id", factionId, name, coords.X, coords.Y)
 
 	var divisionId int
 	err = row.Scan(&divisionId)
