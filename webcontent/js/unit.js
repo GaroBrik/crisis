@@ -30,6 +30,7 @@ crisis.Unit = function(unitJson, div) {
 
     unit.$type.append(crisis.Unit.typeHtml(unit.typeNum));
     unit.$removeUnitButton.on('click' + crisis.event.baseNameSpace, function() {
+        console.log('test1');
         unit.division.details.removeUnit(unit);
     });
     unit.$value.text(unit.amount);

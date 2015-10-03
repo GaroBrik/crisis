@@ -213,10 +213,10 @@ crisis.DivisionDetails.prototype.removeUnit = function(unit) {
     var dets = this;
 
     if (_.contains(dets.newUnits, unit)) {
-        dets.newUnits = /** @type {Array<crisis.Unit>} */
-            (_.without(dets.newUnits, unit));
-        unit.$listItem.remove();
+        dets.newUnits = _.without(dets.newUnits, unit);
+        unit.destroy();
     } else {
+        console.log('test2');
         dets.removedUnits.push(unit);
         unit.$listItem.hide();
     }
