@@ -46,6 +46,10 @@ crisis.Division.prototype.update = function(divJson) {
     div.position();
 };
 
+crisis.Division.prototype.removeUnit = function(unit) {
+    this.units = _.without(this.units, unit);
+};
+
 /** @inheritDoc */
 crisis.Division.prototype.updateDataMatch = function(data) {
     return this.id === data.Id;
