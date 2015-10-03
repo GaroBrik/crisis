@@ -30,7 +30,7 @@ crisis.init = function() {
 crisis.Updateable = function() {};
 /** @param {T} data */
 crisis.Updateable.prototype.update = function(data) {};
-crisis.Updateable.prototype.destroy = function();
+crisis.Updateable.prototype.destroy = function() {};
 /** @type {number} */
 crisis.Updateable.prototype.id;
 
