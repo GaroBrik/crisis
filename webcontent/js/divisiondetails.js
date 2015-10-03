@@ -118,6 +118,10 @@ crisis.DivisionDetails.prototype.enableEdit = function() {
     dets.$cancelButton.on('click' + crisis.event.baseNameSpace, function() {
         dets.disableEdit();
     });
+    dets.$commitButton.off('click' + crisis.event.baseNameSpace);
+    dets.$commitButton.on('click' + crisis.event.baseNameSpace, function() {
+        dets.commitEdit();
+    });
 
     dets.$nameSpan.hide();
     dets.$editNameField.val(dets.division.name);
@@ -141,6 +145,10 @@ crisis.DivisionDetails.prototype.enableCreate = function() {
     dets.$cancelButton.off('click' + crisis.event.baseNameSpace);
     dets.$cancelButton.on('click' + crisis.event.baseNameSpace, function() {
         dets.disableCreate();
+    });
+    dets.$commitButton.off('click' + crisis.event.baseNameSpace);
+    dets.$commitButton.on('click' + crisis.event.baseNameSpace, function() {
+        dets.commitCreate();
     });
 
     dets.$nameSpan.hide();
@@ -234,6 +242,7 @@ crisis.DivisionDetails.prototype.commitEdit = function() {
         if (_.contains(dets.removedUnits, unit)) return;
 
         /** @type {number} */
+        console.log(unit.$editField.val());
         var newVal = parseInt(unit.$editField.val(), 10);
         if (isNaN(newVal)) {
             unit.$invalidAlert.show();
@@ -265,9 +274,9 @@ crisis.DivisionDetails.prototype.commitCreate = function() {
     _.each(dets.division.units.concat(dets.newUnits), function(unit) {
         if (_.contains(dets.removedUnits, unit)) return;
 
-        var newVal = unit.$editField.val();
-        newVal = parseInt(newVal, 10);
-        if (newVal === null) {
+        /** @type {number} */
+        var newVal = parseInt(unit.$editField.val(), 10);
+        if (isNaN(newVal)) {
             unit.$invalidAlert.show();
             dets.$paneInvalidAlert.show();
             validSubmit = false;
