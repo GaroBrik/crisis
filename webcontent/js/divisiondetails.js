@@ -286,8 +286,9 @@ crisis.DivisionDetails.prototype.commitCreate = function() {
     if (!validSubmit) return;
     crisis.ajax.postDivisionCreation(
         dets.division.absCoords, newUnits, name, 1, {
-            success: function() {
+            success: function(divJson) {
                 dets.division.destroy();
+                crisis.map.addDivision(divJson);
             }
         });
 };

@@ -100,6 +100,11 @@ crisis.map.updateData = function(crisisData) {
     });
 };
 
+/** @param {crisisJson.Division} divJson */
+crisis.map.addDivision = function(divJson) {
+    crisis.map.divisions.push(new crisis.Division(divJson));
+};
+
 /**
  * @param {jQuery} $dropdown
  * @param {jQuery} $source
