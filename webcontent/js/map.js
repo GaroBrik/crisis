@@ -76,28 +76,31 @@ crisis.map.init = function() {
 crisis.map.updateData = function(crisisData) {
     crisis.map.absBounds = crisis.Bounds.fromJson(crisisData.MapBounds);
 
-    /** @type {Array<crisis.Division>} */
-    var removedDivisions = [];
-    _.each(crisis.map.divisions, function(div) {
-        var updated = _.findWhere(crisisData.Divisions, {Id: div.id});
-        if (updated === undefined) {
-            div.destroy();
-            removedDivisions.push(div);
-        } else {
-            div.updateData(updated);
-        }
-        crisisData.Divisions = /** @type {Array<crisisJson.Division>} */
-            (_.without(crisisData.Divisions, updated));
-    });
+    crisis.updateElements(crisis.map.divisions, crisisData.Divisions,
+        function(divJson) { return new crisis.Division(divJson); });
 
-    _.each(removedDivisions, function(removedDivision) {
-        crisis.map.divisions = /** @type {Array<crisis.Division>} */
-            (_.without(crisis.map.divisions, removedDivision));
-    });
+    // /** @type {Array<crisis.Division>} */
+    // var removedDivisions = [];
+    // _.each(crisis.map.divisions, function(div) {
+    //     var updated = _.findWhere(crisisData.Divisions, {Id: div.id});
+    //     if (updated === undefined) {
+    //         div.destroy();
+    //         removedDivisions.push(div);
+    //     } else {
+    //         div.updateData(updated);
+    //     }
+    //     crisisData.Divisions = /** @type {Array<crisisJson.Division>} */
+    //         (_.without(crisisData.Divisions, updated));
+    // });
 
-    _.each(crisisData.Divisions, function(divJson) {
-        crisis.map.divisions.push(new crisis.Division(divJson));
-    });
+    // _.each(removedDivisions, function(removedDivision) {
+    //     crisis.map.divisions = /** @type {Array<crisis.Division>} */
+    //         (_.without(crisis.map.divisions, removedDivision));
+    // });
+
+    // _.each(crisisData.Divisions, function(divJson) {
+    //     crisis.map.divisions.push(new crisis.Division(divJson));
+    // });
 };
 
 /** @param {crisisJson.Division} divJson */

@@ -2,6 +2,7 @@
  * @constructor
  * @param {crisisJson.Unit} unitJson
  * @param {crisis.Division} div
+ * @extends {crisis.Updateable}
  */
 crisis.Unit = function(unitJson, div) {
     var unit = this;

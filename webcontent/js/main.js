@@ -24,7 +24,6 @@ crisis.init = function() {
 
 /**
  * @interface
- * @param {T} data
  * @template T
  */
 crisis.Updateable = function() {};
@@ -43,7 +42,7 @@ crisis.Updateable.prototype.id;
 crisis.updateElements = function(elements, data, elementCreator) {
     var removedElements = [];
     _.each(elements, function(element) {
-        var updateData = _.findWhere(data, {Id: data.id});
+        var updateData = _.findWhere(data, {Id: element.id});
         if (updateData === undefined) {
             element.destroy();
             removedElements.push(elements);
@@ -51,11 +50,12 @@ crisis.updateElements = function(elements, data, elementCreator) {
             element.update(updateData);
         }
 
-        data = _.without(data, updateData);
+        data = /** @type {Array<T>} */ (_.without(data, updateData));
     });
 
-    _.each(removedElements, function(removedElement) {
-        elements = _.without(elements, removedElement);
+    _.each(removedElements, function(removed) {
+        elements = /** @type {Array<crisis.Updateable<T>>} */
+            (_.without(elements, removed));
     });
 
     _.each(data, function(datum) {

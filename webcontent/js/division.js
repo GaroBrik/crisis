@@ -25,7 +25,7 @@ crisis.Division = function(divJson) {
     /** @type {jQuery} */
     this.$marker = crisis.cloneProto(crisis.$protoDivisionMarker);
 
-    this.updateData(divJson);
+    this.update(divJson);
     this.$marker.click(function() { div.details.toggle(); });
 
     crisis.map.$holder.append(this.$marker);
