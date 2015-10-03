@@ -74,7 +74,15 @@ func (handler *AjaxHandler) HandleRequest(res http.ResponseWriter, req *http.Req
 		var jsonSent CreateDivisionJson
 		json.NewDecoder(req.Body).Decode(&jsonSent)
 
-		handler.db.CreateDivision(jsonSent.Coords, jsonSent.Units, jsonSent.Name, jsonSent.FactionId)
+		id := handler.db.CreateDivision(
+			jsonSent.Coords, jsonSent.Units, jsonSent.Name, jsonSent.FactionId)
+
+		div := handler.db.GetDivision(id)
+
+		json, err := json.Marshal(div)
+		maybePanic(err)
+
+		res.Write(json)
 
 	default:
 		http.Error(res, "Invalid request path", http.StatusBadRequest)

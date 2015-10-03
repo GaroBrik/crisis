@@ -5,53 +5,45 @@ import (
 	"github.com/lib/pq"
 )
 
+const (
+	divisionInfoSelector = " division.id, division.route[1].x, division.route[1].y, " +
+		"division.division_name, division.faction "
+)
+
 func (db *Database) CreateDivision(coords Coords, units []Unit, name string, factionId int) int {
 	tx, err := db.db.Begin()
-	if err != nil {
-		panic(err)
-	}
+	maybePanic(err)
 
 	row := tx.QueryRow("INSERT INTO division (faction, division_name, route) "+
 		"VALUES($1, $2, ARRAY[($3, $4)]::coords[]) RETURNING id", factionId, name, coords.X, coords.Y)
 
 	var divisionId int
 	err = row.Scan(&divisionId)
-	if err != nil {
-		panic(err)
-	}
+	maybePanic(err)
 
 	stmt, err := tx.Prepare(pq.CopyIn("unit", "division", "unit_type", "amount"))
+	maybePanic(err)
 
 	for _, unit := range units {
 		_, err = stmt.Exec(divisionId, unit.TypeNum, unit.Amount)
-		if err != nil {
-			panic(err)
-		}
+		maybePanic(err)
 	}
 
 	_, err = stmt.Exec()
-	if err != nil {
-		panic(err)
-	}
+	maybePanic(err)
 
 	err = stmt.Close()
-	if err != nil {
-		panic(err)
-	}
+	maybePanic(err)
 
 	err = tx.Commit()
-	if err != nil {
-		panic(err)
-	}
+	maybePanic(err)
 
 	return divisionId
 }
 
 func (db *Database) UpdateDivision(divisionId int, units []Unit, name *string) {
 	tx, err := db.db.Begin()
-	if err != nil {
-		panic(err)
-	}
+	maybePanic(err)
 
 	if name != nil {
 		_, err = tx.Query("UPDATE division SET division_name = $1 WHERE id = $2", name, divisionId)
@@ -61,9 +53,7 @@ func (db *Database) UpdateDivision(divisionId int, units []Unit, name *string) {
 	}
 
 	_, err = tx.Query("DELETE FROM unit WHERE unit.division = $1", divisionId)
-	if err != nil {
-		panic(err)
-	}
+	maybePanic(err)
 
 	stmt, err := tx.Prepare(pq.CopyIn("unit", "division", "unit_type", "amount"))
 
@@ -75,43 +65,45 @@ func (db *Database) UpdateDivision(divisionId int, units []Unit, name *string) {
 	}
 
 	_, err = stmt.Exec()
-	if err != nil {
-		panic(err)
-	}
+	maybePanic(err)
 
 	err = stmt.Close()
-	if err != nil {
-		panic(err)
-	}
+	maybePanic(err)
 
 	err = tx.Commit()
-	if err != nil {
-		panic(err)
-	}
+	maybePanic(err)
+}
+
+func (db *Database) GetDivision(divisionId int) Division {
+	row := db.db.QueryRow("SELECT "+divisionInfoSelector+
+		"FROM division WHERE division.id = $1", divisionId)
+	div := Division{}
+	coords := Coords{}
+
+	err = row.Scan(&div.Id, &coords.X, &coords.Y, &div.Name, &div.FactionId)
+	maybePanic(err)
+
+	div.Coords = coords
+	db.loadUnitsFor(&div)
+
+	return div
 }
 
 func (db *Database) GetCrisisDivisions(crisisId int) map[int][]*Division {
-	rows, err := db.db.Query("SELECT division.id, "+
-		"division.route[1].x, division.route[1].y, division.division_name, faction.id "+
+	rows, err := db.db.Query("SELECT "+divisionInfoSelector+
 		"FROM division INNER JOIN faction ON (faction.id = division.faction) "+
 		"WHERE faction.crisis = $1", crisisId)
-	if err != nil {
-		panic(err)
-	}
-	defer rows.Close()
+	maybePanic(err)
 
 	return db.getCrisisDivisionsFromRows(rows)
 }
 
 func (db *Database) GetFactionDivisions(factionId int) []*Division {
-	rows, err := db.db.Query("SELECT division.id, division.route[1].x, "+
-		"division.route[1].y, division.division_name, faction.id "+
+	rows, err := db.db.Query("SELECT "+divisionInfoSelector+
 		"FROM division INNER JOIN faction ON (faction.id = division.faction) "+
 		"INNER JOIN division_view ON (division_view.division_id = division.id) "+
 		"WHERE division_view.faction_id = $1 ", factionId)
-	if err != nil {
-		panic(err)
-	}
+	maybePanic(err)
 	defer rows.Close()
 
 	return db.getDivisionsFromRows(rows)
@@ -153,9 +145,7 @@ func (db *Database) loadUnitsFor(div *Division) {
 	rows, err := db.db.Query("SELECT unit_type.unit_name, unit_type.id, unit.amount, unit_type.unit_speed "+
 		"FROM unit INNER JOIN unit_type ON (unit.unit_type = unit_type.id) "+
 		"WHERE unit.division = $1", div.Id)
-	if err != nil {
-		panic(err)
-	}
+	maybePanic(err)
 	defer rows.Close()
 
 	var speed int
