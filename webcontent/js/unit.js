@@ -38,7 +38,7 @@ crisis.Unit = function(unitJson, div) {
 /** @inheritDoc */
 crisis.Unit.prototype.update = function(data) {
     this.amount = data.Amount;
-    unit.$value.text(this.amount);
+    this.$value.text(this.amount);
 };
 
 /** @inheritDoc */
