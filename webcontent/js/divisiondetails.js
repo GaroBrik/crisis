@@ -118,10 +118,6 @@ crisis.DivisionDetails.prototype.enableEdit = function() {
     dets.$cancelButton.on('click' + crisis.event.baseNameSpace, function() {
         dets.disableEdit();
     });
-    dets.$commitButton.off('click' + crisis.event.baseNameSpace);
-    dets.$commitButton.on('click' + crisis.event.baseNameSpace, function() {
-        dets.commitEdit();
-    });
 
     dets.$nameSpan.hide();
     dets.$editNameField.val(dets.division.name);
@@ -145,10 +141,6 @@ crisis.DivisionDetails.prototype.enableCreate = function() {
     dets.$cancelButton.off('click' + crisis.event.baseNameSpace);
     dets.$cancelButton.on('click' + crisis.event.baseNameSpace, function() {
         dets.disableCreate();
-    });
-    dets.$commitButton.off('click' + crisis.event.baseNameSpace);
-    dets.$commitButton.on('click' + crisis.event.baseNameSpace, function() {
-        dets.commitCreate();
     });
 
     dets.$nameSpan.hide();
