@@ -30,7 +30,6 @@ crisis.Unit = function(unitJson, div) {
 
     unit.$type.append(crisis.Unit.typeHtml(unit.typeNum));
     unit.$removeUnitButton.on('click' + crisis.event.baseNameSpace, function() {
-        console.log('test1');
         unit.division.details.removeUnit(unit);
     });
     unit.$value.text(unit.amount);
@@ -44,8 +43,6 @@ crisis.Unit.prototype.update = function(data) {
 
 /** @inheritDoc */
 crisis.Unit.prototype.updateDataMatch = function(data) {
-    console.log(this.typeNum);
-    console.log(data.TypeNum);
     return this.typeNum === data.TypeNum;
 };
 

@@ -48,6 +48,7 @@ crisis.updateElements = function(elements, data, elementCreator) {
         var updateData = _.find(data,
             function(datum) { return element.updateDataMatch(datum); });
         if (updateData === undefined) {
+            console.log('test');
             element.destroy();
             removedElements.push(elements);
         } else {
