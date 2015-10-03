@@ -47,11 +47,11 @@ func (db *Database) UpdateDivision(divisionId int, units []Unit, name *string) {
 	maybePanic(err)
 
 	if name != nil {
-		_, err = tx.Query("UPDATE division SET division_name = $1 WHERE id = $2", name, divisionId)
+		_, err = tx.Exec("UPDATE division SET division_name = $1 WHERE id = $2", name, divisionId)
 		maybePanic(err)
 	}
 
-	_, err = tx.Query("DELETE FROM unit WHERE unit.division = $1", divisionId)
+	_, err = tx.Exec("DELETE FROM unit WHERE unit.division = $1", divisionId)
 	maybePanic(err)
 
 	stmt, err := tx.Prepare(pq.CopyIn("unit", "division", "unit_type", "amount"))
