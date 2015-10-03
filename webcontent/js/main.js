@@ -35,16 +35,16 @@ crisis.Updateable.prototype.destroy = function() {};
 crisis.Updateable.prototype.id;
 
 /**
- * @param {Array<K>} elements
+ * @param {Array<crisis.Updateable<T>>} elements
  * @param {Array<T>} data
- * @param {function(T): K} elementCreator
- * @template T, K extends crisis.Updateable<T>
+ * @param {function(T): crisis.Updateable<T>} elementCreator
+ * @template T
  */
 crisis.updateElements = function(elements, data, elementCreator) {
     var removedElements = [];
     _.each(elements, function(element) {
         var updateData = _.findWhere(data, {Id: data.id});
-        if (updated === undefined) {
+        if (updateData === undefined) {
             element.destroy();
             removedElements.push(elements);
         } else {
