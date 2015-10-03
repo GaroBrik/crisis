@@ -30,8 +30,11 @@ crisis.Updateable = function() {};
 /** @param {T} data */
 crisis.Updateable.prototype.update = function(data) {};
 crisis.Updateable.prototype.destroy = function() {};
-/** @type {number} */
-crisis.Updateable.prototype.id;
+/**
+ * @param {T} data
+ * @return {boolean}
+ */
+crisis.Updateable.prototype.updateDataMatch = function(data) {};
 
 /**
  * @param {Array<crisis.Updateable<T>>} elements
@@ -42,7 +45,7 @@ crisis.Updateable.prototype.id;
 crisis.updateElements = function(elements, data, elementCreator) {
     var removedElements = [];
     _.each(elements, function(element) {
-        var updateData = _.findWhere(data, {Id: element.id});
+        var updateData = _.findWhere(data, updateData.isMatch);
         if (updateData === undefined) {
             element.destroy();
             removedElements.push(elements);
@@ -50,12 +53,11 @@ crisis.updateElements = function(elements, data, elementCreator) {
             element.update(updateData);
         }
 
-        data = /** @type {Array<T>} */ (_.without(data, updateData));
+        data = _.without(data, updateData);
     });
 
     _.each(removedElements, function(removed) {
-        elements = /** @type {Array<crisis.Updateable<T>>} */
-            (_.without(elements, removed));
+        elements = _.without(elements, removed);
     });
 
     _.each(data, function(datum) {

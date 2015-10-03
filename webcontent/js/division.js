@@ -9,8 +9,6 @@ crisis.Division = function(divJson) {
     /** @type {crisis.DivisionDetails} */
     this.details = new crisis.DivisionDetails(this);
     /** @type {boolean} */
-    this.reRender = true;
-    /** @type {boolean} */
     this.editing = false;
     /** @type {number} */
     this.id = divJson.Id;
@@ -31,19 +29,31 @@ crisis.Division = function(divJson) {
     crisis.map.$holder.append(this.$marker);
 };
 
-/** @param {crisisJson.Division} divJson */
+/** @inheritDoc */
 crisis.Division.prototype.update = function(divJson) {
     var div = this;
 
     div.absCoords = crisis.Coords.fromJson(divJson.Coords);
     div.name = divJson.Name;
-    div.units = /** @type {Array<crisis.Unit>} */
-        (_.map(divJson.Units, function(unitJson) {
-        return new crisis.Unit(unitJson, div);
-    }));
-    div.reRender = true;
-
+    crisis.updateElements(div.units, divJson.Units,
+        function(data) { return new crisis.Unit(data, div) });
+    
+    if (div.details.isOpen) {
+        div.details.reRender();
+    } else {
+        div.details.unRendered = true;
+    }
     div.position();
+};
+
+/** @inheritDoc */
+crisis.Division.prototype.updateDataMatch = function(data) {
+    return this.id === data.Id;
+};
+
+crisis.Division.prototype.destroy = function() {
+    this.$marker.remove();
+    this.details.$pane.remove();
 };
 
 crisis.Division.prototype.position = function() {
@@ -52,9 +62,5 @@ crisis.Division.prototype.position = function() {
         'left': rel.x + '%',
         'top': rel.y + '%'
     });
-};
+}
 
-crisis.Division.prototype.destroy = function() {
-    this.$marker.remove();
-    this.details.$pane.remove();
-};

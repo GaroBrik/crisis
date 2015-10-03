@@ -27,6 +27,8 @@ crisis.DivisionDetails = function(div) {
     this.division = div;
     /** @type {boolean} */
     this.isOpen = false;
+    /** @type {boolean} */
+    this.unRendered = false;
     /** @type {crisis.DivisionDetails.State} */
     this.state = crisis.DivisionDetails.State.VIEWING;
     /** @type {Array<crisis.Unit>} */
@@ -46,9 +48,9 @@ crisis.DivisionDetails.prototype.toggle = function() {
 crisis.DivisionDetails.prototype.open = function() {
     var dets = this;
 
-    if (dets.division.reRender) {
+    if (dets.unRendered) {
         dets.reRender();
-        dets.division.reRender = false;
+        dets.unRendered = false;
     }
     crisis.map.positionDropdown(dets.$pane, dets.division.$marker,
                                 crisis.map.$holder);

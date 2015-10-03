@@ -2,7 +2,7 @@
  * @constructor
  * @param {crisisJson.Unit} unitJson
  * @param {crisis.Division} div
- * @extends {crisis.Updateable}
+ * @implements {crisis.Updateable<crisisJson.Unit>}
  */
 crisis.Unit = function(unitJson, div) {
     var unit = this;
@@ -33,6 +33,21 @@ crisis.Unit = function(unitJson, div) {
         unit.division.details.removeUnit(unit);
     });
     unit.$value.text(unit.amount);
+};
+
+/** @inheritDoc */
+crisis.Unit.prototype.update = function(data) {
+    this.amount = data.Amount;
+    unit.$value.text(this.amount);
+};
+
+/** @inheritDoc */
+crisis.Unit.prototype.updateDataMatch = function(data) {
+    return this.typeNum === data.TypeNum;
+};
+
+crisis.Unit.prototype.destroy = function() {
+    this.$listItem.remove();
 };
 
 crisis.Unit.prototype.editOn = function() {
