@@ -105,6 +105,9 @@ crisis.DivisionDetails.prototype.reRender = function() {
         crisis.map.$holder.append(dets.$pane);
     }
 
+    _.each(dets.division.units, function(unit) {
+        unit.$listItem.detach();
+    });
     dets.$unitList.empty();
     _.each(dets.division.units, function(unit) {
         dets.$unitList.append(unit.$listItem);

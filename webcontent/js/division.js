@@ -37,7 +37,7 @@ crisis.Division.prototype.update = function(divJson) {
     div.name = divJson.Name;
     crisis.updateElements(div.units, divJson.Units,
         function(data) { return new crisis.Unit(data, div); });
-    
+
     if (div.details.isOpen) {
         div.details.reRender();
     } else {
@@ -56,7 +56,7 @@ crisis.Division.prototype.destroy = function() {
     this.details.$pane.remove();
 };
 
-/** @param {crisis.Unit} */
+/** @param {crisis.Unit} unit */
 crisis.Division.prototype.removeUnit = function(unit) {
     this.units = _.without(this.units, unit);
 };
@@ -68,4 +68,3 @@ crisis.Division.prototype.position = function() {
         'top': rel.y + '%'
     });
 }
-
