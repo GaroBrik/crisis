@@ -233,9 +233,9 @@ crisis.DivisionDetails.prototype.commitEdit = function() {
     _.each(dets.division.units.concat(dets.newUnits), function(unit) {
         if (_.contains(dets.removedUnits, unit)) return;
 
-        var newVal = unit.$editField.val();
-        newVal = parseInt(newVal, 10);
-        if (newVal === null) {
+        /** @type {number} */
+        var newVal = parseInt(unit.$editField.val(), 10);
+        if (isNaN(newVal)) {
             unit.$invalidAlert.show();
             dets.$paneInvalidAlert.show();
             validSubmit = false;
