@@ -55,6 +55,7 @@ func (db *Database) UpdateDivision(divisionId int, units []Unit, name *string) {
 	maybePanic(err)
 
 	stmt, err := tx.Prepare(pq.CopyIn("unit", "division", "unit_type", "amount"))
+	maybePanic(err)
 
 	for _, unit := range units {
 		log.Print(divisionId, unit)
