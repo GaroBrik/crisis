@@ -46,10 +46,6 @@ crisis.Division.prototype.update = function(divJson) {
     div.position();
 };
 
-crisis.Division.prototype.removeUnit = function(unit) {
-    this.units = _.without(this.units, unit);
-};
-
 /** @inheritDoc */
 crisis.Division.prototype.updateDataMatch = function(data) {
     return this.id === data.Id;
@@ -58,6 +54,11 @@ crisis.Division.prototype.updateDataMatch = function(data) {
 crisis.Division.prototype.destroy = function() {
     this.$marker.remove();
     this.details.$pane.remove();
+};
+
+/** @param {crisis.Unit} */
+crisis.Division.prototype.removeUnit = function(unit) {
+    this.units = _.without(this.units, unit);
 };
 
 crisis.Division.prototype.position = function() {

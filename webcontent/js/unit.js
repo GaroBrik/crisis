@@ -48,7 +48,7 @@ crisis.Unit.prototype.updateDataMatch = function(data) {
 
 crisis.Unit.prototype.destroy = function() {
     this.$listItem.remove();
-    this.division.remove(this);
+    this.division.removeUnit(this);
 };
 
 crisis.Unit.prototype.enableEdit = function() {
