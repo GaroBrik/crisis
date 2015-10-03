@@ -156,8 +156,10 @@ crisis.map.relativeCoordsOfAbs = function(absCoords) {
  * @return {crisis.Coords}
  */
 crisis.map.absCoordsOfRelative = function(relCoords) {
-    return new crisis.Coords(crisis.map.absBounds.width * relCoords.x / 100,
-                             crisis.map.absBounds.height * relCoords.y / 100);
+    return new crisis.Coords(
+        Math.round(crisis.map.absBounds.width * relCoords.x / 100),
+        Math.round(crisis.map.absBounds.height * relCoords.y / 100)
+    );
 };
 
 /**
