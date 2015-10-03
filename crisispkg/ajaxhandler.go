@@ -67,6 +67,7 @@ func (handler *AjaxHandler) HandleRequest(res http.ResponseWriter, req *http.Req
 		div := handler.db.GetDivision(jsonSent.Id)
 
 		json, err := json.Marshal(div)
+		maybePanic(err)
 
 		res.Write(json)
 
