@@ -25,6 +25,7 @@ func (db *Database) CreateDivision(coords Coords, units []Unit, name string, fac
 	maybePanic(err)
 
 	for _, unit := range units {
+		log.Print(divisionId, unit)
 		_, err = stmt.Exec(divisionId, unit.TypeNum, unit.Amount)
 		maybePanic(err)
 	}
@@ -47,9 +48,7 @@ func (db *Database) UpdateDivision(divisionId int, units []Unit, name *string) {
 
 	if name != nil {
 		_, err = tx.Query("UPDATE division SET division_name = $1 WHERE id = $2", name, divisionId)
-		if err != nil {
-			panic(err)
-		}
+		maybePanic(err)
 	}
 
 	_, err = tx.Query("DELETE FROM unit WHERE unit.division = $1", divisionId)
@@ -59,9 +58,7 @@ func (db *Database) UpdateDivision(divisionId int, units []Unit, name *string) {
 
 	for _, unit := range units {
 		_, err = stmt.Exec(divisionId, unit.TypeNum, unit.Amount)
-		if err != nil {
-			panic(err)
-		}
+		maybePanic(err)
 	}
 
 	_, err = stmt.Exec()
