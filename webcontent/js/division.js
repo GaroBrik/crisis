@@ -1,6 +1,7 @@
 /**
  * @constructor
  * @param {crisisJson.Division} divJson
+ * @implements {crisis.Updateable<crisisJson.Division>}
  */
 crisis.Division = function(divJson) {
     var div = this;
@@ -31,7 +32,7 @@ crisis.Division = function(divJson) {
 };
 
 /** @param {crisisJson.Division} divJson */
-crisis.Division.prototype.updateData = function(divJson) {
+crisis.Division.prototype.update = function(divJson) {
     var div = this;
 
     div.absCoords = crisis.Coords.fromJson(divJson.Coords);

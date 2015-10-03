@@ -23,6 +23,47 @@ crisis.init = function() {
 };
 
 /**
+ * @interface
+ * @param {T} data
+ * @template T
+ */
+crisis.Updateable = function() {};
+/** @param {T} data */
+crisis.Updateable.prototype.update = function(data) {};
+crisis.Updateable.prototype.destroy = function();
+/** @type {number} */
+crisis.Updateable.prototype.id;
+
+/**
+ * @param {Array<K>} elements
+ * @param {Array<T>} data
+ * @param {function(T): K} elementCreator
+ * @template T, K extends crisis.Updateable<T>
+ */
+crisis.updateElements = function(elements, data, elementCreator) {
+    var removedElements = [];
+    _.each(elements, function(element) {
+        var updateData = _.findWhere(data, {Id: data.id});
+        if (updated === undefined) {
+            element.destroy();
+            removedElements.push(elements);
+        } else {
+            element.update(updateData);
+        }
+
+        data = _.without(data, updateData);
+    });
+
+    _.each(removedElements, function(removedElement) {
+        elements = _.without(elements, removedElement);
+    });
+
+    _.each(data, function(datum) {
+        elements.push(elementCreator(datum));
+    });
+};
+
+/**
  * @param {jQuery} $proto
  * @return {jQuery}
  */
