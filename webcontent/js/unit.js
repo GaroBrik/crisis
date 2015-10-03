@@ -44,6 +44,8 @@ crisis.Unit.prototype.update = function(data) {
 
 /** @inheritDoc */
 crisis.Unit.prototype.updateDataMatch = function(data) {
+    console.log(this.typeNum);
+    console.log(data.TypeNum);
     return this.typeNum === data.TypeNum;
 };
 

@@ -58,7 +58,6 @@ func (db *Database) UpdateDivision(divisionId int, units []Unit, name *string) {
 	maybePanic(err)
 
 	for _, unit := range units {
-		log.Print(divisionId, unit)
 		_, err = stmt.Exec(divisionId, unit.TypeNum, unit.Amount)
 		maybePanic(err)
 	}

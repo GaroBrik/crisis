@@ -64,6 +64,12 @@ func (handler *AjaxHandler) HandleRequest(res http.ResponseWriter, req *http.Req
 
 		handler.db.UpdateDivision(jsonSent.Id, jsonSent.Units, jsonSent.Name)
 
+		div := handler.db.GetDivision(jsonSent.Id)
+
+		json, err := json.Marshal(div)
+
+		res.Write(json)
+
 	case createDivisionPath:
 		type CreateDivisionJson struct {
 			Coords    Coords

@@ -253,6 +253,7 @@ crisis.DivisionDetails.prototype.commitEdit = function() {
         /** @param {crisisJson.Division} divData */
         success: function(divData) {
             dets.division.update(divData);
+            console.log('testeditupdate');
             dets.disableEdit();
         }
     });

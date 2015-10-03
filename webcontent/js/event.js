@@ -1,5 +1,11 @@
 crisis.event = {};
-/** @type {string} */
+/**
+ * @const
+ * @type {string}
+ */
 crisis.event.baseNameSpace = '.crisis';
-/** @type {string} */
+/**
+ * @const
+ * @type {string}
+ */
 crisis.event.getClickNameSpace = crisis.event.baseNameSpace + '.getClick';
