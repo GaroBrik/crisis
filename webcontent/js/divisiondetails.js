@@ -28,7 +28,7 @@ crisis.DivisionDetails = function(div) {
     /** @type {boolean} */
     this.isOpen = false;
     /** @type {boolean} */
-    this.unRendered = false;
+    this.unRendered = true;
     /** @type {crisis.DivisionDetails.State} */
     this.state = crisis.DivisionDetails.State.VIEWING;
     /** @type {Array<crisis.Unit>} */
@@ -129,7 +129,7 @@ crisis.DivisionDetails.prototype.enableEdit = function() {
     dets.$addUnitButton.show();
 
     _.each(dets.division.units, function(unit) {
-        unit.editOn();
+        unit.enableEdit();
     });
 
     dets.state = crisis.DivisionDetails.State.EDITING;
@@ -153,7 +153,7 @@ crisis.DivisionDetails.prototype.enableCreate = function() {
     dets.$addUnitButton.show();
 
     _.each(dets.division.units, function(unit) {
-        unit.editOn();
+        unit.enableEdit();
     });
 
     dets.state = crisis.DivisionDetails.State.CREATING;
@@ -172,7 +172,7 @@ crisis.DivisionDetails.prototype.disableEdit = function() {
 
     dets.$paneInvalidAlert.hide();
     _.each(dets.division.units, function(unit) {
-        unit.editOff();
+        unit.disableEdit();
     });
     _.each(dets.removedUnits, function(unit) {
         unit.$listItem.show();
@@ -202,7 +202,7 @@ crisis.DivisionDetails.prototype.addUnit = function() {
             TypeName: 'temp',
             Amount: 0
         }, dets.division);
-        newUnit.editOn();
+        newUnit.enableEdit();
         dets.newUnits.push(newUnit);
         dets.$unitList.append(newUnit.$listItem);
     });

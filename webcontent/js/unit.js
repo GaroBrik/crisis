@@ -51,13 +51,13 @@ crisis.Unit.prototype.destroy = function() {
     this.$listItem.remove();
 };
 
-crisis.Unit.prototype.editOn = function() {
+crisis.Unit.prototype.enableEdit = function() {
     this.$editField.val(this.amount).show();
     this.$removeUnitButton.show();
     this.$value.hide();
 };
 
-crisis.Unit.prototype.editOff = function() {
+crisis.Unit.prototype.disableEdit = function() {
     this.$editField.hide();
     this.$removeUnitButton.hide();
     this.$value.show();
