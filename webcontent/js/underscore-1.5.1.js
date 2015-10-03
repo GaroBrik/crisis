@@ -538,9 +538,10 @@ _.prototype.flatten = function(opt_shallow) {};
 
 /**
  * Object-style notation
- * @param {Array|Arguments} array
- * @param {...*} var_args
- * @return {!Array|_}
+ * @template T
+ * @param {Array<T>|Arguments} array
+ * @param {...T} var_args
+ * @return {!Array<T>}
  */
 _.without = function(array, var_args) {};
 
@@ -715,6 +716,7 @@ _.prototype.bindAll = function(methodNames) {};
  * @param {Function} func
  * @param {*} context
  * @param {...*} args
+ * @suppress {checkTypes}
  */
 _.bind = function(func, context, args) {};
 
