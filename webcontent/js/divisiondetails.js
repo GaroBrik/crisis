@@ -233,7 +233,6 @@ crisis.DivisionDetails.prototype.commitEdit = function() {
     _.each(dets.division.units.concat(dets.newUnits), function(unit) {
         if (_.contains(dets.removedUnits, unit)) return;
 
-        console.log(unit.$editField.val());
         /** @type {number} */
         var newVal = parseInt(unit.$editField.val(), 10);
         if (isNaN(newVal)) {
@@ -241,8 +240,6 @@ crisis.DivisionDetails.prototype.commitEdit = function() {
             dets.$paneInvalidAlert.show();
             validSubmit = false;
         } else {
-            console.log(newVal);
-            console.log(unit.typeNum);
             newUnits.push({TypeNum: unit.typeNum, Amount: newVal});
         }
     });
@@ -252,7 +249,13 @@ crisis.DivisionDetails.prototype.commitEdit = function() {
     if (name === dets.division.name) name = null;
 
     if (!validSubmit) return;
-    crisis.ajax.postDivisionUpdate(dets.division.id, newUnits, name);
+    crisis.ajax.postDivisionUpdate(dets.division.id, newUnits, name, {
+        /** @param {crisisJson.Division} divData */
+        success: function(divData) {
+            dets.division.update(divData);
+            dets.editOff();
+        }
+    });
 };
 
 crisis.DivisionDetails.prototype.commitCreate = function() {
