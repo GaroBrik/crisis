@@ -26,7 +26,6 @@ func (db *Database) CreateDivision(coords Coords, units []Unit, name string, fac
 	maybePanic(err)
 
 	for _, unit := range units {
-		log.Print(divisionId, unit)
 		_, err = stmt.Exec(divisionId, unit.TypeNum, unit.Amount)
 		maybePanic(err)
 	}
@@ -58,6 +57,7 @@ func (db *Database) UpdateDivision(divisionId int, units []Unit, name *string) {
 	stmt, err := tx.Prepare(pq.CopyIn("unit", "division", "unit_type", "amount"))
 
 	for _, unit := range units {
+		log.Print(divisionId, unit)
 		_, err = stmt.Exec(divisionId, unit.TypeNum, unit.Amount)
 		maybePanic(err)
 	}
