@@ -15,7 +15,7 @@ crisis.Division = function(divJson) {
     /** @type {crisis.Coords} */
     this.abscoords;
     /** @type {Array<crisis.Unit>} */
-    this.units;
+    this.units = [];
     /** @type {string} */
     this.name;
     /** @type {number} */
