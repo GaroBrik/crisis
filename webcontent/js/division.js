@@ -36,7 +36,7 @@ crisis.Division.prototype.update = function(divJson) {
     div.absCoords = crisis.Coords.fromJson(divJson.Coords);
     div.name = divJson.Name;
     crisis.updateElements(div.units, divJson.Units,
-        function(data) { return new crisis.Unit(data, div) });
+        function(data) { return new crisis.Unit(data, div); });
     
     if (div.details.isOpen) {
         div.details.reRender();

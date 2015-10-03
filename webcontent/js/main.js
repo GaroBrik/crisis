@@ -45,7 +45,7 @@ crisis.Updateable.prototype.updateDataMatch = function(data) {};
 crisis.updateElements = function(elements, data, elementCreator) {
     var removedElements = [];
     _.each(elements, function(element) {
-        var updateData = _.findWhere(data,
+        var updateData = _.find(data,
             function(datum) { return element.updateDataMatch(datum); });
         if (updateData === undefined) {
             element.destroy();
