@@ -45,7 +45,7 @@ crisisJson.DivisionCreate;
  *   DivisionId: number
  * }}
  */
-crisisJson.DivisionCreate;
+crisisJson.DivisionDelete;
 
 /**
  * @typedef {{
