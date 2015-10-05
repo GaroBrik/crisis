@@ -102,7 +102,7 @@ func (handler *AjaxHandler) HandleRequest(res http.ResponseWriter, req *http.Req
 		err := json.NewDecoder(req.Body).Decode(&jsonSent)
 		maybePanic(err)
 
-		id := handler.db.DeleteDivision(jsonSent.DivisionId)
+		handler.db.DeleteDivision(jsonSent.DivisionId)
 
 	default:
 		http.Error(res, "Invalid request path", http.StatusBadRequest)
