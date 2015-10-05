@@ -1,12 +1,29 @@
 crisis.ajax = {};
-/** @type {string} */
+/**
+ * @const
+ * @type {string}
+ */
 crisis.ajax.path = 'ajax/';
-/** @type {string} */
+/**
+ * @const
+ * @type {string}
+ */
 crisis.ajax.mapPath = crisis.ajax.path + 'map/';
-/** @type {string} */
+/**
+ * @const
+ *  @type {string}
+  */
 crisis.ajax.updateDivisionPath = crisis.ajax.path + 'updateDivision/';
-/** @type {string} */
+/**
+ * @const
+ *  @type {string}
+  */
 crisis.ajax.createDivisionPath = crisis.ajax.path + 'createDivision/';
+/**
+ * @const
+ *  @type {string}
+  */
+crisis.ajax.deleteDivisionPath = crisis.ajax.path + 'deleteDivision/';
 
 /**
  * @param {string} path
@@ -46,7 +63,9 @@ crisis.ajax.postDivisionUpdate = function(divisionId, units, name, options) {
  * @param {number} factionId
  * @param {jQueryAjaxSettings=} options
  */
-crisis.ajax.postDivisionCreation = function(coords, units, name, factionId, options) {
+crisis.ajax.postDivisionCreation = function(
+    coords, units, name, factionId, options)
+{
     /** @type {crisisJson.DivisionCreate} */
     var data = {
         Units: units,
@@ -55,6 +74,18 @@ crisis.ajax.postDivisionCreation = function(coords, units, name, factionId, opti
         FactionId: factionId
     };
     crisis.ajax.postData(crisis.ajax.createDivisionPath, data, options);
+};
+
+/**
+ * @param {number} divisionId
+ * @param {jQueryAjaxSettings=} options
+ **/
+crisis.ajax.postDivisionDeletion = function(divisionId, options) {
+    /** @type {crisisJson.DivisionDelete} */
+    var data = {
+        DivisionId: divisionId
+    };
+    crisis.ajax.postData(crisis.ajax.deleteDivisionPath, data, options);
 };
 
 /**

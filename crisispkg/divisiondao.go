@@ -71,6 +71,10 @@ func (db *Database) UpdateDivision(divisionId int, units []Unit, name *string) {
 	maybePanic(err)
 }
 
+func (db *Database) DeleteDivision(divisionId int) Division {
+	db.Exec("DELETE FROM division WHERE id = $1", divisionId)
+}
+
 func (db *Database) GetDivision(divisionId int) Division {
 	row := db.db.QueryRow("SELECT "+divisionInfoSelector+
 		"FROM division WHERE division.id = $1", divisionId)

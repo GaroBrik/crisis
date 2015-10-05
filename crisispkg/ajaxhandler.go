@@ -14,6 +14,7 @@ const (
 	mapPath            = ajaxPath + "map/"
 	updateDivisionPath = ajaxPath + "updateDivision/"
 	createDivisionPath = ajaxPath + "createDivision/"
+	deleteDivisionPath = ajaxPath + "deleteDivision/"
 )
 
 var m_ajaxHandler *AjaxHandler
@@ -60,7 +61,8 @@ func (handler *AjaxHandler) HandleRequest(res http.ResponseWriter, req *http.Req
 			Name  *string
 		}
 		var jsonSent UpdateDivisionJson
-		json.NewDecoder(req.Body).Decode(&jsonSent)
+		err := json.NewDecoder(req.Body).Decode(&jsonSent)
+		maybePanic(err)
 
 		handler.db.UpdateDivision(jsonSent.Id, jsonSent.Units, jsonSent.Name)
 
@@ -79,7 +81,8 @@ func (handler *AjaxHandler) HandleRequest(res http.ResponseWriter, req *http.Req
 			FactionId int
 		}
 		var jsonSent CreateDivisionJson
-		json.NewDecoder(req.Body).Decode(&jsonSent)
+		err := json.NewDecoder(req.Body).Decode(&jsonSent)
+		maybePanic(err)
 
 		id := handler.db.CreateDivision(
 			jsonSent.Coords, jsonSent.Units, jsonSent.Name, jsonSent.FactionId)
@@ -90,6 +93,16 @@ func (handler *AjaxHandler) HandleRequest(res http.ResponseWriter, req *http.Req
 		maybePanic(err)
 
 		res.Write(json)
+
+	case deleteDivisionPath:
+		type DeleteDivisionJson struct {
+			DivisionId int
+		}
+		var jsonSent DeleteDivisionJson
+		err := json.NewDecoder(req.Body).Decode(&jsonSent)
+		maybePanic(err)
+
+		id := handler.db.DeleteDivision(jsonSent.DivisionId)
 
 	default:
 		http.Error(res, "Invalid request path", http.StatusBadRequest)

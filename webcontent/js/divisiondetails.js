@@ -23,6 +23,8 @@ crisis.DivisionDetails = function(div) {
     this.$closeButton = null;
     /** @type {jQuery} */
     this.$createButton = null;
+    /** @type {jQuery} */
+    this.$deleteButton = null;
     /** @type {crisis.Division} */
     this.division = div;
     /** @type {boolean} */
@@ -95,6 +97,10 @@ crisis.DivisionDetails.prototype.reRender = function() {
             dets.commitCreate();
         });
 
+        dets.$deleteButton = dets.$pane.find('.deleteButton');
+        dets.$deleteButton.on('click' + crisis.event.baseNameSpace, function() {
+            dets.commitDelete();
+        });
 
         dets.$closeButton = dets.$pane.find('.closeButton');
         dets.$closeButton.on('click' + crisis.event.baseNameSpace, function() {
@@ -122,13 +128,15 @@ crisis.DivisionDetails.prototype.enableEdit = function() {
         dets.disableEdit();
     });
 
-    dets.$nameSpan.hide();
     dets.$editNameField.val(dets.division.name);
-    dets.$editNameField.show();
 
+    dets.$nameSpan.hide();
     dets.$editButton.hide();
+
+    dets.$editNameField.show();
     dets.$cancelButton.show();
     dets.$commitButton.show();
+    dets.$deleteButton.show();
     dets.$addUnitButton.show();
 
     _.each(dets.division.units, function(unit) {
@@ -166,12 +174,13 @@ crisis.DivisionDetails.prototype.disableEdit = function() {
     var dets = this;
 
     dets.$editNameField.hide();
-    dets.$nameSpan.show();
-
-    dets.$editButton.show();
     dets.$cancelButton.hide();
     dets.$commitButton.hide();
+    dets.$deleteButton.hide();
     dets.$addUnitButton.hide();
+
+    dets.$editButton.show();
+    dets.$nameSpan.show();
 
     dets.$paneInvalidAlert.hide();
     _.each(dets.division.units, function(unit) {
@@ -219,7 +228,6 @@ crisis.DivisionDetails.prototype.removeUnit = function(unit) {
         dets.newUnits = _.without(dets.newUnits, unit);
         unit.destroy();
     } else {
-        console.log('test2');
         dets.removedUnits.push(unit);
         unit.$listItem.hide();
     }
@@ -256,7 +264,6 @@ crisis.DivisionDetails.prototype.commitEdit = function() {
         /** @param {crisisJson.Division} divData */
         success: function(divData) {
             dets.division.update(divData);
-            console.log('testeditupdate');
             dets.disableEdit();
         }
     });
@@ -298,6 +305,16 @@ crisis.DivisionDetails.prototype.commitCreate = function() {
                 crisis.map.addDivision(divJson);
             }
         });
+};
+
+crisis.DivisionDetails.prototype.commitDelete = function() {
+    var dets = this;
+
+    crisis.ajax.postDivisionDeletion(dets.division.id, {
+        success: function() {
+            dets.division.destroy();
+        }
+    });
 };
 
 /** @enum {string} */
