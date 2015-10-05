@@ -42,6 +42,13 @@ crisisJson.DivisionCreate;
 
 /**
  * @typedef {{
+ *   DivisionId: number
+ * }}
+ */
+crisisJson.DivisionCreate;
+
+/**
+ * @typedef {{
  *   TypeName: string,
  *   TypeNum: number,
  *   Amount: number
