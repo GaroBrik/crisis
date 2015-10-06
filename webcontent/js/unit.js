@@ -69,5 +69,5 @@ crisis.Unit.prototype.disableEdit = function() {
 */
 crisis.Unit.typeHtml = function(typeId) {
     return crisis.cloneProto(
-        crisis.$protoUnitTypes.find(crisis.unitTypeSelector(typeId)));
+        crisis.$protoUnitTypes.find(crisis.dataSelector(typeId, 'type')));
 }

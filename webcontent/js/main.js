@@ -9,7 +9,9 @@ var crisis = {
     /** @type {jQuery} */
     $protoUnitTypes: null,
     /** @type {jQuery} */
-    $protoUnitTypeFinder: null
+    $protoUnitTypeFinder: null,
+    /** @type {jQuery} */
+    $protoFactions: null
 };
 
 /** @export */
@@ -20,7 +22,7 @@ crisis.init = function() {
     crisis.$protoUnitListItem = $prototypes.find('#protoUnitListItem');
     crisis.$protoUnitTypes = $prototypes.find('#protoUnitTypes');
     crisis.$protoUnitTypeFinder = $prototypes.find('#protoUnitTypeFinder');
-    crisis.$protoFactionFinder = $prototypes.find('#protoFactionFinder');
+    crisis.$protoFactions = $prototypes.find('#protoFactions');
 };
 
 /**
@@ -105,7 +107,7 @@ crisis.stringToInt = function(str) {
  * @return {?number}
  */
 crisis.getNumericData = function($elem, dataName) {
-    return crisis.stringToInt($elem.data(dataName));
+    return crisis.stringToInt(/** @type {string} */ ($elem.data(dataName)));
 };
 
 /**
@@ -114,7 +116,7 @@ crisis.getNumericData = function($elem, dataName) {
  * @return {number}
  */
 crisis.getCssPx = function($elem, style) {
-    return crisis.stringToInt($elem.css(style));
+    return crisis.stringToInt(/** @type {string} */ ($elem.css(style)));
 };
 
 /**
@@ -157,5 +159,5 @@ crisis.positionDropdown = function($dropdown, $source, $container) {
  */
 crisis.factionHtml = function(id) {
     return crisis.cloneProto(
-        crisis.$protoFactions.find(crisis.factionSelector(id)));
+        crisis.$protoFactions.find(crisis.dataSelector(id, 'faction')));
 };

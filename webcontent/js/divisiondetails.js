@@ -43,6 +43,14 @@ crisis.DivisionDetails = function(div) {
     this.removedUnits = [];
 };
 
+crisis.DivisionDetails.prototype.toggle = function() {
+    if (this.isOpen) {
+        this.close();
+    } else {
+        this.open();
+    }
+};
+
 crisis.DivisionDetails.prototype.open = function() {
     var dets = this;
 
@@ -134,7 +142,7 @@ crisis.DivisionDetails.prototype.enableEdit = function() {
     });
 
     dets.$editNameField.val(dets.division.name);
-    dets.$factionSelector.val(dets.division.factionId);
+    dets.$factionSelector.val(dets.division.factionId.toString());
 
     dets.$factionNameSpan.hide();
     dets.$nameSpan.hide();
@@ -272,8 +280,8 @@ crisis.DivisionDetails.prototype.commitEdit = function() {
     var name = /** @type {string?} */(dets.$editNameField.val());
     if (name === dets.division.name) name = null;
 
-    var factionId = /** @type {number?} */
-        (crisis.stringToInt(dets.$factionSelector.val()));
+    var factionId = /** @type {number?} */ (crisis.stringToInt(
+        /** @type {string} */ (dets.$factionSelector.val())));
     if (factionId === dets.division.factionId) factionId = null;
 
     if (!validSubmit) return;
@@ -315,9 +323,8 @@ crisis.DivisionDetails.prototype.commitCreate = function() {
         validSubmit = false;
     }
 
-    var factionId = /** @type {number?} */
-        (crisis.stringToInt(dets.$factionSelector.val()));
-    if (factionId === dets.division.factionId) factionId = null;
+    var factionId = /** @type {number} */ (crisis.stringToInt(
+        /** @type {string} */ (dets.$factionSelector.val())));
 
     if (!validSubmit) return;
     crisis.ajax.postDivisionCreation(
