@@ -40,18 +40,33 @@ func (db *Database) Close() {
 func (db *Database) GetCrisisUnitTypes(crisisId int) []*UnitType {
 	rows, err := db.db.Query("SELECT unit_name, id FROM unit_type "+
 		"WHERE crisis = $1", crisisId)
-	if err != nil {
-		panic(err)
-	}
+	maybePanic(err)
 	defer rows.Close()
 
 	types := make([]*UnitType, 0)
 	for rows.Next() {
 		utype := UnitType{}
-		rows.Scan(&utype.Name, &utype.Id)
+		err = rows.Scan(&utype.Name, &utype.Id)
+		maybePanic(err)
 		types = append(types, &utype)
 	}
 	return types
+}
+
+func (db *Database) GetCrisisFactions(crisisId int) []*Faction {
+	rows, err := db.db.Query("SELECT id, faction_name FROM faction WHERE crisis = $1", crisisId)
+	maybePanic(err)
+
+	defer rows.Close()
+
+	factions := make([]*Faction, 0)
+	for rows.Next() {
+		faction := Faction{}
+		err = rows.Scan(&faction.Id, &faction.Name)
+		maybePanic(err)
+		factions = append(factions, &faction)
+	}
+	return factions
 }
 
 // func (db *Database) getAllCrises() {

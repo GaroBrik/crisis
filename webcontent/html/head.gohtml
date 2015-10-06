@@ -56,6 +56,13 @@
         </li>
       {{end}}
     </ul>
+    <div id="protoFactions">
+      {{range .Factions}}
+        <span data-type="{{.Id}}">
+	        {{.Name}}
+        </span>
+      {{end}}
+    </div>
   </div>
   <div id="header">
     <input type="button" id="newDivisionButton" value="Create New Division" >

@@ -49,9 +49,10 @@ func wrapAndListen(path string, handler servlet) {
 	http.HandleFunc(path, func(res http.ResponseWriter, req *http.Request) {
 		authInfo := AuthInfoOf(req)
 		headerTmpl.Execute(res, headInfo{
-			JSUrl:  "static/compiled.js",
-			CSSUrl: "static/main.css",
-			Types:  GetDatabaseInstance().GetCrisisUnitTypes(authInfo.CrisisId),
+			JSUrl:    "static/compiled.js",
+			CSSUrl:   "static/main.css",
+			Types:    GetDatabaseInstance().GetCrisisUnitTypes(authInfo.CrisisId),
+			Factions: GetDatabaseInstance().GetCrisisFactions(authInfo.CrisisId),
 		})
 		handler(res, req)
 		footerTmpl.Execute(res, nil)

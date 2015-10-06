@@ -10,8 +10,6 @@ var crisis = {
     $protoUnitTypes: null,
     /** @type {jQuery} */
     $protoUnitTypeFinder: null
-    /** @type {jQuery} */
-    $protoFacionFinder: null
 };
 
 /** @export */
@@ -151,4 +149,13 @@ crisis.positionDropdown = function($dropdown, $source, $container) {
         'left': (idealX * 100 / $container.width()) + '%',
         'top': (idealY * 100 / $container.height()) + '%'
     });
+};
+
+/**
+ * @param {number} id
+ * @return {jQuery}
+ */
+crisis.factionHtml = function(id) {
+    return crisis.cloneProto(
+        crisis.$protoFactions.find(crisis.factionSelector(id)));
 };
