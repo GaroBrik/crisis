@@ -82,10 +82,18 @@ ul {
 }
 
 .divisionDetails {
-    background-color: white;
+    background-color: rgba(44,44,44,0.5);
     width: 200px;
     min-height: 10px;
     box-shadow: 3px 4px 5px #444444;
+
+    * {
+        color: white;
+    }
+
+    input[type=text] {
+        background-color: #444444;
+    }
     
     .closeButton {
         float: right;
