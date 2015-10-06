@@ -16,7 +16,7 @@
       <input type="button" class="closeButton" value="x">
       <span class="paneInvalidAlert" style="display: none">Invalid Input<br></span>
       <span class="factionNameSpan"></span>
-      <select class="factionSelector">
+      <select class="factionSelector" style="display: none">
         {{range .Factions}}
           <option value="{{.Id}}">{{.Name}}</option>
         {{end}}
@@ -58,7 +58,7 @@
     </ul>
     <div id="protoFactions">
       {{range .Factions}}
-        <span data-type="{{.Id}}">
+        <span data-faction="{{.Id}}">
 	        {{.Name}}
         </span>
       {{end}}
