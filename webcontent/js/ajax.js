@@ -44,14 +44,18 @@ crisis.ajax.postData = function(path, data, options) {
  * @param {number} divisionId
  * @param {Array<crisisJson.Unit>} units
  * @param {string?} name
+ * @param {number?} factionId
  * @param {jQueryAjaxSettings=} options
  */
-crisis.ajax.postDivisionUpdate = function(divisionId, units, name, options) {
+crisis.ajax.postDivisionUpdate = function(
+    divisionId, units, name, factionId, options)
+{
     /** @type {crisisJson.DivisionUpdate} */
     var data = {
         Id: divisionId,
         Units: units,
-        Name: name
+        Name: name,
+        FactionId: factionId
     };
     crisis.ajax.postData(crisis.ajax.updateDivisionPath, data, options);
 };

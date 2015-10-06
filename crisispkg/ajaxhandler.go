@@ -56,15 +56,17 @@ func (handler *AjaxHandler) HandleRequest(res http.ResponseWriter, req *http.Req
 
 	case updateDivisionPath:
 		type UpdateDivisionJson struct {
-			Id    int
-			Units []Unit
-			Name  *string
+			Id        int
+			Units     []Unit
+			Name      *string
+			FactionId *int
 		}
 		var jsonSent UpdateDivisionJson
 		err := json.NewDecoder(req.Body).Decode(&jsonSent)
 		maybePanic(err)
 
-		handler.db.UpdateDivision(jsonSent.Id, jsonSent.Units, jsonSent.Name)
+		handler.db.UpdateDivision(jsonSent.Id, jsonSent.Units,
+			jsonSent.Name, jsonSent.FactionId)
 
 		div := handler.db.GetDivision(jsonSent.Id)
 

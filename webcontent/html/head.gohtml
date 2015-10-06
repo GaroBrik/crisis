@@ -13,10 +13,18 @@
   <div style="display: none" id="htmlObjectPrototypes">
     <div id="protoDivisionMarker" class="divisionMarker"></div>
     <div id="protoDivisionDetails" class="dropdown divisionDetails" style="display: none">
-      <span class="paneInvalidAlert" style="display: none">Invalid Input</span>
+      <input type="button" class="closeButton" value="x">
+      <span class="paneInvalidAlert" style="display: none">Invalid Input<br></span>
+      <span class="factionNameSpan"></span>
+      <select class="factionSelector">
+        {{range .Factions}}
+          <option value="{{.Id}}">{{.Name}}</option>
+        {{end}}
+      </select>
+      <br>
       <span class="divisionNameSpan"></span>
       <input type="text" class="editNameField" style="display: none">
-      <input type="button" class="closeButton" value="x">
+      <br>
       <ul class="unitList"></ul>
       <input type="button" class="editButton" value="Edit">
       <input type="button" class="cancelButton" style="display: none" value="Cancel">

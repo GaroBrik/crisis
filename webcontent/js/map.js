@@ -111,35 +111,9 @@ crisis.map.addDivision = function(divJson) {
 /**
  * @param {jQuery} $dropdown
  * @param {jQuery} $source
- * @param {jQuery} $container
  */
-crisis.map.positionDropdown = function($dropdown, $source, $container) {
-    var containerTop = $container.position().top;
-    var containerLeft = $container.position().left;
-    var containerBottom = containerTop + $container.height();
-    var containerRight = containerLeft + $container.width();
-    var idealY = $source.position().top + $source.height();
-    if (idealY + $dropdown.length > containerBottom) {
-        idealY += containerBottom - (idealY + $dropdown.length);
-    }
-
-    if (idealY < containerTop) {
-        idealY += containerTop - idealY;
-    }
-
-    var idealX = $source.position().left + $source.width();
-    if (idealX + $dropdown.width() > containerRight) {
-        idealX += containerRight - (idealX + $dropdown.width());
-    }
-
-    if (idealX < containerLeft) {
-        idealX += containerLeft - idealX;
-    }
-
-    $dropdown.css({
-        'left': (idealX * 100 / $container.width()) + '%',
-        'top': (idealY * 100 / $container.height()) + '%'
-    });
+crisis.map.positionDropdown = function($dropdown, $source) {
+    crisis.positionDropdown($dropdown, $source, crisis.map.$holder);
 };
 
 /**
@@ -241,15 +215,16 @@ crisis.map.zoom = function(factor, fixPoint) {
 
 /**
  * @param {Array<number>} notInclude
- * @param {jQuery} $positionIn
+ * @param {jQuery} $anchor
  * @param {function(?number)} callback
  * @return {function()} a function which cancels this process
  */
-crisis.map.showUnitTypeFinder = function(notInclude, $positionIn, callback) {
+crisis.map.showUnitTypeFinder = function(notInclude, $anchor, callback) {
+    /** @type {jQuery} */
     var $thisFinder = crisis.cloneProto(crisis.$protoUnitTypeFinder);
 
     _.each(notInclude, function(num) {
-        $thisFinder.children(crisis.unitTypeSelector(num)).remove();
+        $thisFinder.children(crisis.dataSelector(num, 'type')).remove();
     });
 
     /** @type {function()} */
@@ -260,15 +235,42 @@ crisis.map.showUnitTypeFinder = function(notInclude, $positionIn, callback) {
         cancel();
     });
 
-    var $children = $positionIn.children();
+    cancel = function() {
+        $thisFinder.remove();
+    };
+
+    crisis.map.positionDropdown($thisFinder, $anchor);
+
+    return cancel;
+};
+
+/**
+ * @param {Array<number>} notInclude
+ * @param {jQuery} $anchor
+ * @param {function(?number)} callback
+ * @return {function()} a function which cancels this process
+ */
+crisis.map.showFactionTypeFinder = function(notInclude, $anchor, callback) {
+    /** @type {jQuery} */
+    var $thisFinder = crisis.cloneProto(crisis.$protoFactionFinder);
+
+    _.each(notInclude, function(num) {
+        $thisFinder.children(crisis.dataSelector(num, 'faction')).remove();
+    });
+
+    /** @type {function()} */
+    var cancel;
+
+    $thisFinder.children().on('click' + crisis.event.baseNameSpace, function() {
+        callback(crisis.getNumericData($(this), 'faction'));
+        cancel();
+    });
 
     cancel = function() {
         $thisFinder.remove();
-        $positionIn.append($children);
     };
 
-    $children.detach();
-    $positionIn.append($thisFinder);
+    crisis.map.positionDropdown($thisFinder, $anchor);
 
     return cancel;
 };
@@ -280,8 +282,10 @@ crisis.map.getClick = function(callback) {
     crisis.map.$holder.on('click' + crisis.event.getClickNameSpace,
         function(clickEvent) {
             var absCoordsOfClick = crisis.map.absCoordsOfRelative(
-                new crisis.Coords(clickEvent.offsetX * 100 / crisis.map.$holder.width(),
-                                  clickEvent.offsetY * 100 / crisis.map.$holder.height())
+                new crisis.Coords(
+                    clickEvent.offsetX * 100 / crisis.map.$holder.width(),
+                    clickEvent.offsetY * 100 / crisis.map.$holder.height()
+                )
             );
 
             crisis.map.stopGettingClick();

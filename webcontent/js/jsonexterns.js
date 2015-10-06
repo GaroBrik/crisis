@@ -25,7 +25,9 @@ crisisJson.Division;
 /**
  * @typedef {{
  *   Id: number,
- *   Units: Array<crisisJson.Unit>
+ *   Units: Array<crisisJson.Unit>,
+ *   Name: string?,
+ *   FactionId: number?
  * }}
  */
 crisisJson.DivisionUpdate;

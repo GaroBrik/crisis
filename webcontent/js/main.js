@@ -10,6 +10,8 @@ var crisis = {
     $protoUnitTypes: null,
     /** @type {jQuery} */
     $protoUnitTypeFinder: null
+    /** @type {jQuery} */
+    $protoFacionFinder: null
 };
 
 /** @export */
@@ -20,6 +22,7 @@ crisis.init = function() {
     crisis.$protoUnitListItem = $prototypes.find('#protoUnitListItem');
     crisis.$protoUnitTypes = $prototypes.find('#protoUnitTypes');
     crisis.$protoUnitTypeFinder = $prototypes.find('#protoUnitTypeFinder');
+    crisis.$protoFactionFinder = $prototypes.find('#protoFactionFinder');
 };
 
 /**
@@ -77,11 +80,25 @@ crisis.cloneProto = function($proto) {
 };
 
 /**
- * @param {number} typeNum
+ * @param {number|string} data
+ * @param {string} dataName
  * @return {string}
  */
-crisis.unitTypeSelector = function(typeNum) {
-    return '[data-type=' + typeNum + ']';
+crisis.dataSelector = function(data, dataName) {
+    return '[data-' + dataName + '=' + data + ']';
+};
+
+/**
+ * @param {string} str
+ * @return {number}
+ */
+crisis.stringToInt = function(str) {
+    /** @type {number} */
+    var num = parseInt(str, 10);
+    if (num === null || isNaN(num)) {
+        console.log('failed to convert string ' + str + ' to a number');
+    }
+    return num;
 };
 
 /**
@@ -90,7 +107,7 @@ crisis.unitTypeSelector = function(typeNum) {
  * @return {?number}
  */
 crisis.getNumericData = function($elem, dataName) {
-    return parseInt($elem.data(dataName), 10);
+    return crisis.stringToInt($elem.data(dataName));
 };
 
 /**
@@ -99,9 +116,39 @@ crisis.getNumericData = function($elem, dataName) {
  * @return {number}
  */
 crisis.getCssPx = function($elem, style) {
-    var num = parseInt($elem.css(style), 10);
-    if (num === null || isNaN(num)) {
-        console.log(['failed to get css style', $elem, style]);
+    return crisis.stringToInt($elem.css(style));
+};
+
+/**
+ * @param {jQuery} $dropdown
+ * @param {jQuery} $source
+ * @param {jQuery} $container
+ */
+crisis.positionDropdown = function($dropdown, $source, $container) {
+    var containerTop = $container.position().top;
+    var containerLeft = $container.position().left;
+    var containerBottom = containerTop + $container.height();
+    var containerRight = containerLeft + $container.width();
+    var idealY = $source.position().top + $source.height();
+    if (idealY + $dropdown.length > containerBottom) {
+        idealY += containerBottom - (idealY + $dropdown.length);
     }
-    return num;
-}
+
+    if (idealY < containerTop) {
+        idealY += containerTop - idealY;
+    }
+
+    var idealX = $source.position().left + $source.width();
+    if (idealX + $dropdown.width() > containerRight) {
+        idealX += containerRight - (idealX + $dropdown.width());
+    }
+
+    if (idealX < containerLeft) {
+        idealX += containerLeft - idealX;
+    }
+
+    $dropdown.css({
+        'left': (idealX * 100 / $container.width()) + '%',
+        'top': (idealY * 100 / $container.height()) + '%'
+    });
+};

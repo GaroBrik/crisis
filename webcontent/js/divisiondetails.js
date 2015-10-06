@@ -6,6 +6,10 @@ crisis.DivisionDetails = function(div) {
     /** @type {jQuery} */
     this.$pane = null;
     /** @type {jQuery} */
+    this.$factionSpan = null;
+    /** @type {jQuery} */
+    this.$factionSelector = null;
+    /** @type {jQuery} */
     this.$nameSpan = null;
     /** @type {jQuery} */
     this.$editNameField = null;
@@ -39,14 +43,6 @@ crisis.DivisionDetails = function(div) {
     this.removedUnits = [];
 };
 
-crisis.DivisionDetails.prototype.toggle = function() {
-    if (this.isOpen) {
-        this.close();
-    } else {
-        this.open();
-    }
-};
-
 crisis.DivisionDetails.prototype.open = function() {
     var dets = this;
 
@@ -54,8 +50,8 @@ crisis.DivisionDetails.prototype.open = function() {
         dets.reRender();
         dets.unRendered = false;
     }
-    crisis.map.positionDropdown(dets.$pane, dets.division.$marker,
-                                crisis.map.$holder);
+    crisis.map.positionDropdown(dets.$pane, dets.division.$marker);
+
     dets.$pane.show();
     dets.isOpen = true;
 };
@@ -70,10 +66,16 @@ crisis.DivisionDetails.prototype.reRender = function() {
 
     if (dets.$pane === null) {
         dets.$pane = crisis.cloneProto(crisis.$protoDivisionDetails);
+
+        dets.$paneInvalidAlert = dets.$pane.find('.paneInvalidAlert');
+
+        dets.$factionNameSpan = dets.$pane.find('.factionNameSpan');
+        dets.$factionSelector = dets.$pane.find('.factionSelector');
+
         dets.$nameSpan = dets.$pane.find('.divisionNameSpan');
         dets.$editNameField = dets.$pane.find('.editNameField');
+
         dets.$unitList = dets.$pane.find('ul');
-        dets.$paneInvalidAlert = dets.$pane.find('.paneInvalidAlert');
 
         dets.$editButton = dets.$pane.find('.editButton');
         dets.$editButton.on('click' + crisis.event.baseNameSpace, function() {
@@ -81,9 +83,10 @@ crisis.DivisionDetails.prototype.reRender = function() {
         });
 
         dets.$addUnitButton = dets.$pane.find('.addUnitButton');
-        dets.$addUnitButton.on('click' + crisis.event.baseNameSpace, function() {
-            dets.addUnit();
-        });
+        dets.$addUnitButton.on('click' + crisis.event.baseNameSpace,
+            function() {
+                dets.addUnit();
+            });
 
         dets.$cancelButton = dets.$pane.find('.cancelButton');
 
@@ -107,9 +110,11 @@ crisis.DivisionDetails.prototype.reRender = function() {
             dets.close();
         });
 
-        dets.$nameSpan.text(dets.division.name);
         crisis.map.$holder.append(dets.$pane);
     }
+
+    dets.$nameSpan.text(dets.division.name);
+    dets.$factionNameSpan.html(crisis.factionHtml(dets.division.factionId));
 
     _.each(dets.division.units, function(unit) {
         unit.$listItem.detach();
@@ -129,10 +134,13 @@ crisis.DivisionDetails.prototype.enableEdit = function() {
     });
 
     dets.$editNameField.val(dets.division.name);
+    dets.$factionSelector.val(dets.division.factionId);
 
+    dets.$factionNameSpan.hide();
     dets.$nameSpan.hide();
     dets.$editButton.hide();
 
+    dets.$factionSelector.show();
     dets.$editNameField.show();
     dets.$cancelButton.show();
     dets.$commitButton.show();
@@ -154,11 +162,14 @@ crisis.DivisionDetails.prototype.enableCreate = function() {
         dets.disableCreate();
     });
 
+    dets.$editNameField.val(dets.division.name);
+
+    dets.$factionNameSpan.hide();
     dets.$nameSpan.hide();
     dets.$editButton.hide();
-    dets.$editNameField.val(dets.division.name);
-    dets.$editNameField.show();
 
+    dets.$factionSelector.show();
+    dets.$editNameField.show();
     dets.$cancelButton.show();
     dets.$createButton.show();
     dets.$addUnitButton.show();
@@ -173,14 +184,16 @@ crisis.DivisionDetails.prototype.enableCreate = function() {
 crisis.DivisionDetails.prototype.disableEdit = function() {
     var dets = this;
 
+    dets.$factionSelector.hide();
     dets.$editNameField.hide();
     dets.$cancelButton.hide();
     dets.$commitButton.hide();
     dets.$deleteButton.hide();
     dets.$addUnitButton.hide();
 
-    dets.$editButton.show();
+    dets.$factionNameSpan.show();
     dets.$nameSpan.show();
+    dets.$editButton.show();
 
     dets.$paneInvalidAlert.hide();
     _.each(dets.division.units, function(unit) {
@@ -259,8 +272,12 @@ crisis.DivisionDetails.prototype.commitEdit = function() {
     var name = /** @type {string?} */(dets.$editNameField.val());
     if (name === dets.division.name) name = null;
 
+    var faction = /** @type {number?} */
+        (crisis.stringToInt(dets.$factionSelector.val()));
+    if (faction === dets.division.factionId) factionId = null;
+
     if (!validSubmit) return;
-    crisis.ajax.postDivisionUpdate(dets.division.id, newUnits, name, {
+    crisis.ajax.postDivisionUpdate(dets.division.id, newUnits, name, faction, {
         /** @param {crisisJson.Division} divData */
         success: function(divData) {
             dets.division.update(divData);
@@ -297,9 +314,13 @@ crisis.DivisionDetails.prototype.commitCreate = function() {
         validSubmit = false;
     }
 
+    var faction = /** @type {number?} */
+        (crisis.stringToInt(dets.$factionSelector.val()));
+    if (faction === dets.division.factionId) factionId = null;
+
     if (!validSubmit) return;
     crisis.ajax.postDivisionCreation(
-        dets.division.absCoords, newUnits, name, 1, {
+        dets.division.absCoords, newUnits, name, faction, {
             success: function(divJson) {
                 dets.division.destroy();
                 crisis.map.addDivision(divJson);

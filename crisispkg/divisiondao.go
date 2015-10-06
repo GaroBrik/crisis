@@ -41,12 +41,16 @@ func (db *Database) CreateDivision(coords Coords, units []Unit, name string, fac
 	return divisionId
 }
 
-func (db *Database) UpdateDivision(divisionId int, units []Unit, name *string) {
+func (db *Database) UpdateDivision(divisionId int, units []Unit, name *string, factionId *int) {
 	tx, err := db.db.Begin()
 	maybePanic(err)
 
 	if name != nil {
 		_, err = tx.Exec("UPDATE division SET division_name = $1 WHERE id = $2", name, divisionId)
+		maybePanic(err)
+	}
+	if factionId != nil {
+		_, err = tx.Exec("UPDATE division SET faction = $1 WHERE id = $2", factionId, divisionId)
 		maybePanic(err)
 	}
 
