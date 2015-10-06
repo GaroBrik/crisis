@@ -244,37 +244,6 @@ crisis.map.showUnitTypeFinder = function(notInclude, $anchor, callback) {
     return cancel;
 };
 
-/**
- * @param {Array<number>} notInclude
- * @param {jQuery} $anchor
- * @param {function(?number)} callback
- * @return {function()} a function which cancels this process
- */
-crisis.map.showFactionTypeFinder = function(notInclude, $anchor, callback) {
-    /** @type {jQuery} */
-    var $thisFinder = crisis.cloneProto(crisis.$protoFactionFinder);
-
-    _.each(notInclude, function(num) {
-        $thisFinder.children(crisis.dataSelector(num, 'faction')).remove();
-    });
-
-    /** @type {function()} */
-    var cancel;
-
-    $thisFinder.children().on('click' + crisis.event.baseNameSpace, function() {
-        callback(crisis.getNumericData($(this), 'faction'));
-        cancel();
-    });
-
-    cancel = function() {
-        $thisFinder.remove();
-    };
-
-    crisis.map.positionDropdown($thisFinder, $anchor);
-
-    return cancel;
-};
-
 /** @param {function(crisis.Coords)} callback */
 crisis.map.getClick = function(callback) {
     crisis.map.state = crisis.MapState.GETTING_CLICK;
