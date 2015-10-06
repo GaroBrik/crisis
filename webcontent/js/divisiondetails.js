@@ -272,12 +272,13 @@ crisis.DivisionDetails.prototype.commitEdit = function() {
     var name = /** @type {string?} */(dets.$editNameField.val());
     if (name === dets.division.name) name = null;
 
-    var faction = /** @type {number?} */
+    var factionId = /** @type {number?} */
         (crisis.stringToInt(dets.$factionSelector.val()));
-    if (faction === dets.division.factionId) factionId = null;
+    if (factionId === dets.division.factionId) factionId = null;
 
     if (!validSubmit) return;
-    crisis.ajax.postDivisionUpdate(dets.division.id, newUnits, name, faction, {
+    crisis.ajax.postDivisionUpdate(dets.division.id, newUnits, name, factionId,
+        {
         /** @param {crisisJson.Division} divData */
         success: function(divData) {
             dets.division.update(divData);
@@ -314,13 +315,13 @@ crisis.DivisionDetails.prototype.commitCreate = function() {
         validSubmit = false;
     }
 
-    var faction = /** @type {number?} */
+    var factionId = /** @type {number?} */
         (crisis.stringToInt(dets.$factionSelector.val()));
-    if (faction === dets.division.factionId) factionId = null;
+    if (factionId === dets.division.factionId) factionId = null;
 
     if (!validSubmit) return;
     crisis.ajax.postDivisionCreation(
-        dets.division.absCoords, newUnits, name, faction, {
+        dets.division.absCoords, newUnits, name, factionId, {
             success: function(divJson) {
                 dets.division.destroy();
                 crisis.map.addDivision(divJson);
