@@ -181,18 +181,18 @@ crisis.map.zoom = function(factor, fixPoint) {
     );
 
     if (holderLeft + holderWidth * newFactor + absMapFixDelta.x < outerWidth) {
-        absMapFixDelta.x +=
-            outerWidth - (holderLeft + holderWidth + absMapFixDelta.x);
+        absMapFixDelta.x += outerWidth -
+            (holderLeft + holderWidth * newFactor + absMapFixDelta.x);
     }
     if (holderLeft + absMapFixDelta.x > 0) {
-        absMapFixDelta.x += (holderLeft - absMapFixDelta.x);
+        absMapFixDelta.x -= (holderLeft + absMapFixDelta.x);
     }
     if (holderTop + holderHeight * newFactor + absMapFixDelta.y < outerHeight) {
-        absMapFixDelta.y +=
-            outerHeight - (holderTop + holderHeight + absMapFixDelta.y);
+        absMapFixDelta.y += outerHeight -
+            (holderTop + holderHeight + absMapFixDelta.y);
     }
     if (holderTop + absMapFixDelta.y > 0) {
-        absMapFixDelta.y += (holderTop - absMapFixDelta.y);
+        absMapFixDelta.y -= (holderTop + absMapFixDelta.y);
     }
 
     console.log(absMapFixDelta);
