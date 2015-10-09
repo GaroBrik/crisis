@@ -3,6 +3,10 @@ $headerZ: 10000;
 $mapHolderZ: $headerZ / 2;
 $mapBoundsZ: -1;
 
+div {
+    position: absolute;
+}
+
 ul {
     list-style-type: none;
     padding: 0;
