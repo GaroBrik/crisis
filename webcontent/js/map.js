@@ -239,8 +239,8 @@ crisis.map.showUnitTypeFinder = function(notInclude, $anchor, callback) {
         $thisFinder.remove();
     };
 
-    crisis.map.positionDropdown($thisFinder, $anchor);
     crisis.map.$holder.append($thisFinder);
+    crisis.map.positionDropdown($thisFinder, $anchor);
 
     return cancel;
 };
