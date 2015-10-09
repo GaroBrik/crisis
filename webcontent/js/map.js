@@ -240,6 +240,7 @@ crisis.map.showUnitTypeFinder = function(notInclude, $anchor, callback) {
     };
 
     crisis.map.positionDropdown($thisFinder, $anchor);
+    crisis.map.$holder.append($thisFinder);
 
     return cancel;
 };
