@@ -49,13 +49,15 @@
         </span>
       {{end}}
     </div>
-    <ul id="protoUnitTypeFinder" class="unitTypeFinder">
-      {{range .Types}}
-        <li data-type="{{.Id}}">
-          <input type="button" value="{{.Name}}">
-        </li>
-      {{end}}
-    </ul>
+    <div id="protoUnitTypeFinder" class="unitTypeFinder">
+      <ul>
+        {{range .Types}}
+          <li data-type="{{.Id}}">
+            <input type="button" value="{{.Name}}">
+          </li>
+        {{end}}
+      </ul>
+    </div>
     <div id="protoFactions">
       {{range .Factions}}
         <span data-faction="{{.Id}}">
