@@ -91,7 +91,7 @@ crisis.DivisionDetails.prototype.reRender = function() {
         });
 
         dets.$addUnitButton = dets.$pane.find('.addUnitButton');
-        dets.$addUnitButton.on('click' + crisis.event.baseNameSpace, dets.
+        dets.$addUnitButton.on('click' + crisis.event.baseNameSpace,
             function() {
                 dets.addUnit();
             });
