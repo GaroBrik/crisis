@@ -3,6 +3,7 @@ package crisis
 import (
 	"database/sql"
 	"github.com/lib/pq"
+	"strings"
 )
 
 const (
@@ -15,7 +16,8 @@ func (db *Database) CreateDivision(coords Coords, units []Unit, name string, fac
 	maybePanic(err)
 
 	row := tx.QueryRow("INSERT INTO division (faction, division_name, route) "+
-		"VALUES($1, $2, ARRAY[($3, $4)]::coords[]) RETURNING id", factionId, name, coords.X, coords.Y)
+		"VALUES($1, $2, ARRAY[$3]::coords[]) RETURNING id",
+		factionId, name, coords.dbString())
 
 	var divisionId int
 	err = row.Scan(&divisionId)
@@ -72,6 +74,18 @@ func (db *Database) UpdateDivision(divisionId int, units []Unit, name *string, f
 	maybePanic(err)
 
 	err = tx.Commit()
+	maybePanic(err)
+}
+
+func (db *Database) UpdateDivisionRoute(divisionId int, route *[]*Coords) {
+	coordStrings := make([]string, len(*route))
+	for i, coords := range *route {
+		coordStrings[i] = coords.dbString()
+	}
+	coordString := strings.Join(coordStrings, ",")
+	_, err := db.db.Exec("UPDATE division SET route = ARRAY[$1]::coords[]"+
+		" WHERE id = $2",
+		coordString, divisionId)
 	maybePanic(err)
 }
 

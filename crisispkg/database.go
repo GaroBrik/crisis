@@ -2,6 +2,7 @@ package crisis
 
 import (
 	"database/sql"
+	"errors"
 	"fmt"
 	_ "github.com/lib/pq"
 	"log"
@@ -35,6 +36,40 @@ func GetDatabaseInstance() *Database {
 
 func (db *Database) Close() {
 	db.db.Close()
+}
+
+func (db *Database) GetCrisisMap(crisisId int) *[][]int {
+	tx, err := db.db.Begin()
+	maybePanic(err)
+
+	var height int
+	var width int
+	row := tx.QueryRow("SELECT array_length(map_costs, 1), "+
+		"array_length(map_costs, 2) FROM crisis WHERE id = $1", crisisId)
+	err = row.Scan(&height, &width)
+	maybePanic(err)
+
+	rows, err := tx.Query(
+		"SELECT UNNEST(map_costs) FROM crisis WHERE id = $1", crisisId)
+	maybePanic(err)
+
+	result := make([][]int, height)
+	for i := 0; i < height; i++ {
+		result[i] = make([]int, width)
+		for j := 0; j < width; j++ {
+			if !rows.Next() {
+				panic(errors.New("number of elements in map cost did " +
+					"not match bounds"))
+			}
+			err = rows.Scan(&(result[i][j]))
+			maybePanic(err)
+		}
+	}
+
+	err = tx.Commit()
+	maybePanic(err)
+
+	return &result
 }
 
 func (db *Database) GetCrisisUnitTypes(crisisId int) []*UnitType {

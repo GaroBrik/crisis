@@ -15,6 +15,7 @@ const (
 	updateDivisionPath = ajaxPath + "updateDivision/"
 	createDivisionPath = ajaxPath + "createDivision/"
 	deleteDivisionPath = ajaxPath + "deleteDivision/"
+	divisionRoutePath  = ajaxPath + "divisionRoute/"
 )
 
 var m_ajaxHandler *AjaxHandler
@@ -105,6 +106,37 @@ func (handler *AjaxHandler) HandleRequest(res http.ResponseWriter, req *http.Req
 		maybePanic(err)
 
 		handler.db.DeleteDivision(jsonSent.DivisionId)
+
+	case divisionRoutePath:
+		type DivisionRouteJson struct {
+			Route      []Coords
+			DivisionId int
+		}
+		var jsonSent DivisionRouteJson
+		err := json.NewDecoder(req.Body).Decode(&jsonSent)
+		maybePanic(err)
+
+		div := handler.db.GetDivision(jsonSent.DivisionId)
+		costs := handler.db.GetCrisisMap(authInfo.CrisisId)
+
+		route := make([]*Coords, 0, len(jsonSent.Route))
+		route = append(route, &div.Coords)
+		for _, coords := range jsonSent.Route {
+			route = append(route, &coords)
+		}
+
+		computedRoute, valid := computeFullPath(&route, costs)
+
+		if valid {
+			handler.db.UpdateDivisionRoute(div.Id, &computedRoute)
+		}
+
+		resp := struct{ Success bool }{valid}
+
+		json, err := json.Marshal(resp)
+		maybePanic(err)
+
+		res.Write(json)
 
 	default:
 		http.Error(res, "Invalid request path", http.StatusBadRequest)

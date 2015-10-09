@@ -1,69 +1,123 @@
 package crisis
 
+import (
+	"github.com/Workiva/go-datastructures/queue"
+)
+
 type searchTrack struct {
-	prevCoords Coords
-	used       bool
-	minCost    int
+	prevCoords *Coords
+	minCost    float64
 }
 
 const (
 	sqrt2 = 1.41
 )
 
-// func computeFullPath(route *[]Coords, costs *[][]int) []Coords {
-// 	fullPath := make([]Coords)
-// 	fullPath = append(fullPath, route[0])
-// 	for i := 1; i < len(route); i++ {
-// 		fullPath = append(fullPath, m.computePath(route[i-1], route[i]))
-// 	}
-// 	return fullPath
-// }
+func computeFullPath(route *[]*Coords, costs *[][]int) ([]*Coords, bool) {
+	fullPath := make([]*Coords, 0)
+	fullPath = append(fullPath, (*route)[0])
+	for i := 1; i < len(*route); i++ {
+		nextPath, hasPath := computePath((*route)[i-1], (*route)[i], costs)
+		if !hasPath {
+			return nil, false
+		}
+		fullPath = append(fullPath,
+			nextPath...)
+	}
+	return fullPath, true
+}
 
-// func computePath(start Coords, finish Coords, costs *[][]int) []Coords {
-// 	next := start
-// 	stat := make([][]searchTrack, m.Bounds.Height)
-// 	minqueue := createMinQueue()
-// 	for i := 0; i < m.Bounds.Height; i++ {
-// 		stat[i] = make([]searchTrack, m.Bounds.Width)
-// 		for j := 0; j < m.Bounds.Width; j++ {
-// 			stat[i][j] = searchTrack{nil, false, -1}
-// 		}
-// 	}
+func computePath(start *Coords, finish *Coords, costs *[][]int) ([]*Coords, bool) {
+	next := start
+	prev := make([][]*Coords, len(*costs))
+	queue := queue.NewPriorityQueue(int(start.distanceTo(finish)), true)
+	queue.Put(trackedNode{start, nil, 0, start.distanceTo(finish)})
 
-// 	for next != finish {
-// 		next = findNext(&minqueue, &stat, costs, next)
-// 	}
+	for i := 0; i < len(*costs); i++ {
+		prev[i] = make([]*Coords, len((*costs)[i]))
+		for j := 0; j < len(prev[i]); j++ {
+			prev[i][j] = nil
+		}
+	}
 
-// 	result := make([]Coords)
-// 	for next != start {
-// 		result = append(result, next)
-// 		next = stat[next.Y][next.X].prevCoords
-// 	}
+	for *next != *finish && !queue.Empty() {
+		next = computeNext(queue, &prev, costs, finish)
+	}
 
-// 	return reverse(result)
-// }
+	if *next != *finish {
+		return nil, false
+	}
 
-// func findNext(minqueue *minqueue, stat *[][]searchTrack, costs *[][]int, cur Coords) Coords {
-// 	curCost := stat[next.Y][next.X].minCost + m.Costs[next.Y][next.X]
-// 	curCostDiag := stat[next.Y][next.X].minCost + sqrt2*m.Costs[next.Y][next.X]
-// 	for i := -1; i <= 1; i++ {
-// 		for j := -1; j <= 1; j++ {
-// 			if (i != 0 || j != 0) && valid(i, j, m.Bounds) {
-// 				testing := &stat[next.Y+i][next.X+j]
-// 				if !testing.used {
-// 					costTo = curCost
-// 					if i != 0&j != 0 {
-// 						costto = curCostDiag
-// 					}
-// 					if costTo < testing.minCost {
-// 						testing.minCost = costTo
-// 						testing.prevCoords = next
-// 						minqueue.add(testing)
-// 					}
-// 				}
-// 			}
-// 		}
-// 	}
+	result := make([]*Coords, 0)
+	for next != start {
+		result = append(result, next)
+		next = prev[next.Y][next.X]
+	}
 
-// 	return minqueue.popMin()
-// }
+	for i, j := 0, len(result)-1; i < j; i, j = i+1, j-1 {
+		result[i], result[j] = result[j], result[i]
+	}
+	return result, true
+}
+
+func computeNext(queue *queue.PriorityQueue, prev *[][]*Coords,
+	costs *[][]int, target *Coords) *Coords {
+	cur := myPop(queue)
+	for (*prev)[cur.coords.Y][cur.coords.X] != nil {
+		cur = myPop(queue)
+	}
+	(*prev)[cur.coords.Y][cur.coords.X] = cur.prev
+	curCost := cur.cost + float64((*costs)[cur.coords.Y][cur.coords.X])
+	curCostDiag := cur.cost +
+		sqrt2*float64((*costs)[cur.coords.Y][cur.coords.X])
+	for i := -1; i <= 1; i++ {
+		for j := -1; j <= 1; j++ {
+			if (i != 0 || j != 0) && valid(cur.coords, i, j, costs) {
+				if (*prev)[i][j] == nil {
+					costTo := curCost
+					if i != 0 && j != 0 {
+						costTo = curCostDiag
+					}
+					queue.Put(&trackedNode{
+						&Coords{i, j},
+						cur.coords,
+						costTo,
+						target.distanceTo(&Coords{i, j}),
+					})
+				}
+			}
+		}
+	}
+
+	return cur.coords
+}
+
+func valid(fixed *Coords, y int, x int, costs *[][]int) bool {
+	xd, yd := fixed.X+x, fixed.Y+y
+	return yd >= 0 && xd >= 0 && yd < len(*costs) && xd < len((*costs)[0])
+}
+
+func myPop(queue *queue.PriorityQueue) *trackedNode {
+	cur, err := queue.Get(1)
+	maybePanic(err)
+	return cur[0].(*trackedNode)
+}
+
+type trackedNode struct {
+	coords *Coords
+	prev   *Coords
+	cost   float64
+	target float64
+}
+
+func (this trackedNode) Compare(otherItem queue.Item) int {
+	other := otherItem.(trackedNode)
+
+	if this.cost+this.target < other.cost+other.target {
+		return -1
+	} else if this.cost+this.target > other.target+other.cost {
+		return 1
+	}
+
+	return 0
+}
