@@ -124,11 +124,11 @@ crisis.DivisionDetails.prototype.reRender = function() {
     dets.$nameSpan.text(dets.division.name);
     dets.$factionNameSpan.html(crisis.factionHtml(dets.division.factionId));
 
-    _.each(dets.division.units, function(unit) {
+    _.each(dets.division.units.concat(dets.newUnits), function(unit) {
         unit.$listItem.detach();
     });
     dets.$unitList.empty();
-    _.each(dets.division.units, function(unit) {
+    _.each(dets.division.units.concat(dets.newUnits), function(unit) {
         dets.$unitList.append(unit.$listItem);
     });
 };
@@ -228,17 +228,18 @@ crisis.DivisionDetails.prototype.addUnit = function() {
             return unit.typeNum;
         }));
 
-    crisis.map.showUnitTypeFinder(currentIds, dets.$pane, function(num) {
-        if (num === null) return;
-        var newUnit = new crisis.Unit({
-            TypeNum: num,
-            TypeName: 'temp',
-            Amount: 0
-        }, dets.division);
-        newUnit.enableEdit();
-        dets.newUnits.push(newUnit);
-        dets.$unitList.append(newUnit.$listItem);
-    });
+    crisis.map.showUnitTypeFinder(currentIds, dets.$addUnitButton,
+        function(num) {
+            if (num === null) return;
+            var newUnit = new crisis.Unit({
+                TypeNum: num,
+                TypeName: 'temp',
+                Amount: 0
+            }, dets.division);
+            newUnit.enableEdit();
+            dets.newUnits.push(newUnit);
+            dets.$unitList.append(newUnit.$listItem);
+        });
 };
 
 /** @param {crisis.Unit} unit */
