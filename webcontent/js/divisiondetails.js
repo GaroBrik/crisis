@@ -91,28 +91,32 @@ crisis.DivisionDetails.prototype.reRender = function() {
         });
 
         dets.$addUnitButton = dets.$pane.find('.addUnitButton');
-        dets.$addUnitButton.on(
-            'click' + crisis.event.baseNameSpace, dets.addUnit);
+        dets.$addUnitButton.on('click' + crisis.event.baseNameSpace, dets.
+            function() {
+                dets.addUnit();
+            });
 
         dets.$cancelButton = dets.$pane.find('.cancelButton');
 
         dets.$commitButton = dets.$pane.find('.commitButton');
-        dets.$commitButton.on(
-            'click' + crisis.event.baseNameSpace, dets.commitEdit);
-
+        dets.$commitButton.on('click' + crisis.event.baseNameSpace, function() {
+            dets.commitEdit();
+        });
 
         dets.$createButton = dets.$pane.find('.createButton');
-        dets.$createButton.on(
-            'click' + crisis.event.baseNameSpace, dets.commitCreate);
-
+        dets.$createButton.on('click' + crisis.event.baseNameSpace, function() {
+            dets.commitCreate();
+        });
 
         dets.$deleteButton = dets.$pane.find('.deleteButton');
-        dets.$deleteButton.on(
-            'click' + crisis.event.baseNameSpace, dets.commitDelete);
+        dets.$deleteButton.on('click' + crisis.event.baseNameSpace, function() {
+            dets.commitDelete();
+        });
 
         dets.$closeButton = dets.$pane.find('.closeButton');
-        dets.$closeButton.on(
-            'click' + crisis.event.baseNameSpace, dets.close);
+        dets.$closeButton.on('click' + crisis.event.baseNameSpace, function() {
+            dets.close();
+        });
 
         crisis.map.$holder.append(dets.$pane);
     }
