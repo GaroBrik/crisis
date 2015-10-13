@@ -77,7 +77,7 @@ func (db *Database) UpdateDivision(divisionId int, units []Unit, name *string, f
 }
 
 func (db *Database) UpdateDivisionRoute(divisionId int, route *[]*Coords) {
-	_, err := db.db.Exec("UPDATE division SET route = ARRAY[$1]::coords[]"+
+	_, err := db.db.Exec("UPDATE division SET route = $1"+
 		" WHERE id = $2",
 		makeDbCoordsArray(route), divisionId)
 	maybePanic(err)
