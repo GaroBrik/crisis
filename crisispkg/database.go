@@ -2,11 +2,13 @@ package crisis
 
 import (
 	"database/sql"
+	"database/sql/driver"
 	"errors"
 	"fmt"
 	_ "github.com/lib/pq"
 	"log"
 	"os"
+	"strings"
 )
 
 const (
@@ -17,6 +19,20 @@ const (
 
 type Database struct {
 	db *sql.DB
+}
+
+type DBArrayElement interface {
+	DBString() string
+}
+
+type DBArray []DBArrayElement
+
+func (dbArray DBArray) Value() (driver.Value, error) {
+	elemStrings := make([]string, len(dbArray))
+	for i, arrElem := range dbArray {
+		elemStrings[i] = arrElem.DBString()
+	}
+	return "'{" + strings.Join(elemStrings, ",") + "}'::coords[]", nil
 }
 
 var m_database *Database

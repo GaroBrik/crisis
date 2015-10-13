@@ -16,7 +16,7 @@ func (db *Database) CreateDivision(coords Coords, units []Unit, name string, fac
 
 	row := tx.QueryRow("INSERT INTO division (faction, division_name, route) "+
 		"VALUES($1, $2, $3) RETURNING id",
-		factionId, name, makeDbCoordsArray(&[]*Coords{&coords}))
+		factionId, name, DBArray([]DBArrayElement{coords}))
 
 	var divisionId int
 	err = row.Scan(&divisionId)
@@ -76,10 +76,14 @@ func (db *Database) UpdateDivision(divisionId int, units []Unit, name *string, f
 	maybePanic(err)
 }
 
-func (db *Database) UpdateDivisionRoute(divisionId int, route *[]*Coords) {
+func (db *Database) UpdateDivisionRoute(divisionId int, route *[]Coords) {
+	dbArray := make([]DBArrayElement, len(*route))
+	for i, c := range *route {
+		dbArray[i] = c
+	}
 	_, err := db.db.Exec("UPDATE division SET route = $1"+
 		" WHERE id = $2",
-		makeDbCoordsArray(route), divisionId)
+		DBArray(dbArray), divisionId)
 	maybePanic(err)
 }
 
