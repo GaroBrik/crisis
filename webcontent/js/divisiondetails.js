@@ -427,11 +427,12 @@ crisis.DivisionDetails.prototype.commitRoute = function() {
     if (dets.state !== crisis.DivisionDetails.State.ROUTING) return;
 
     /** @type {Array<crisisJson.Coords>} */
-    var route = _.map(dets.route, function(routePoint) {
-        return routePoint.coords.toJson();
-    });
+    var route = /** @type {Array<crisisJson.Coords>} */
+        (_.map(dets.route, function(routePoint) {
+            return routePoint.coords.toJson();
+        }));
 
-    crisis.ajax.postDivisionRoute(route, {
+    crisis.ajax.postDivisionRoute(dets.divisionId, route, {
         success: function(result) {
             if (result.ValidPath) {
                 dets.disableRoute();

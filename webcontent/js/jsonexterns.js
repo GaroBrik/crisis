@@ -51,6 +51,14 @@ crisisJson.DivisionDelete;
 
 /**
  * @typedef {{
+ *   DivisionId: number,
+ *   Route: Array<crisisJson.Coords>
+ * }}
+ */
+crisisJson.DivisionRoute;
+
+/**
+ * @typedef {{
  *   TypeName: string,
  *   TypeNum: number,
  *   Amount: number

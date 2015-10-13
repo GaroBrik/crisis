@@ -11,19 +11,24 @@ crisis.ajax.path = 'ajax/';
 crisis.ajax.mapPath = crisis.ajax.path + 'map/';
 /**
  * @const
- *  @type {string}
-  */
+ * @type {string}
+ */
 crisis.ajax.updateDivisionPath = crisis.ajax.path + 'updateDivision/';
 /**
  * @const
- *  @type {string}
-  */
+ * @type {string}
+ */
 crisis.ajax.createDivisionPath = crisis.ajax.path + 'createDivision/';
 /**
  * @const
- *  @type {string}
-  */
+ * @type {string}
+ */
 crisis.ajax.deleteDivisionPath = crisis.ajax.path + 'deleteDivision/';
+/**
+ * @const
+ * @type {string}
+ */
+crisis.ajax.divisionRoutePath = crisis.ajax.path + 'divisionRoute/';
 
 /**
  * @param {string} path
@@ -90,6 +95,20 @@ crisis.ajax.postDivisionDeletion = function(divisionId, options) {
         DivisionId: divisionId
     };
     crisis.ajax.postData(crisis.ajax.deleteDivisionPath, data, options);
+};
+
+/**
+ * @param {number} divisionId
+ * @param {Array<crisisJson.Coords>} route
+ * @param {jQueryAjaxSettings=} options
+ */
+crisis.ajax.postDivisionRoute = function(divisionId, route, options) {
+    /** @type {crisisJson.DivisionRoute} */
+    var data = {
+        DivisionId: divisionId,
+        Route: route
+    };
+    crisis.ajax.postData(crisis.ajax.divisionRoutePath, data, options);
 };
 
 /**
