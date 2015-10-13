@@ -26,7 +26,7 @@ crisis.Division = function(divJson) {
     this.update(divJson);
     this.$marker.click(function() { div.details.toggle(); });
 
-    crisis.map.addAt(this.$marker, this.absCoords;
+    crisis.map.addAt(this.$marker, this.absCoords);
 };
 
 /** @inheritDoc */
