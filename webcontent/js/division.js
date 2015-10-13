@@ -13,7 +13,7 @@ crisis.Division = function(divJson) {
     /** @type {number} */
     this.id = divJson.Id;
     /** @type {crisis.Coords} */
-    this.abscoords;
+    this.absCoords;
     /** @type {Array<crisis.Unit>} */
     this.units = [];
     /** @type {string} */
@@ -26,7 +26,7 @@ crisis.Division = function(divJson) {
     this.update(divJson);
     this.$marker.click(function() { div.details.toggle(); });
 
-    crisis.map.$holder.append(this.$marker);
+    crisis.map.addAt(this.$marker, this.absCoords;
 };
 
 /** @inheritDoc */
@@ -44,7 +44,7 @@ crisis.Division.prototype.update = function(divJson) {
     } else {
         div.details.unRendered = true;
     }
-    div.position();
+    crisis.map.position(div.$marker, div.absCoords);
 };
 
 /** @inheritDoc */

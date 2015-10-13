@@ -78,29 +78,6 @@ crisis.map.updateData = function(crisisData) {
 
     crisis.updateElements(crisis.map.divisions, crisisData.Divisions,
         function(divJson) { return new crisis.Division(divJson); });
-
-    // /** @type {Array<crisis.Division>} */
-    // var removedDivisions = [];
-    // _.each(crisis.map.divisions, function(div) {
-    //     var updated = _.findWhere(crisisData.Divisions, {Id: div.id});
-    //     if (updated === undefined) {
-    //         div.destroy();
-    //         removedDivisions.push(div);
-    //     } else {
-    //         div.updateData(updated);
-    //     }
-    //     crisisData.Divisions = /** @type {Array<crisisJson.Division>} */
-    //         (_.without(crisisData.Divisions, updated));
-    // });
-
-    // _.each(removedDivisions, function(removedDivision) {
-    //     crisis.map.divisions = /** @type {Array<crisis.Division>} */
-    //         (_.without(crisis.map.divisions, removedDivision));
-    // });
-
-    // _.each(crisisData.Divisions, function(divJson) {
-    //     crisis.map.divisions.push(new crisis.Division(divJson));
-    // });
 };
 
 /** @param {crisisJson.Division} divJson */
@@ -271,6 +248,27 @@ crisis.map.centerClick = function() {
         crisis.map.$outerMapDiv.height() / 2 -
             crisis.getCssPx(crisis.map.$holder, 'top')
     );
+};
+
+/**
+ * @param {jQuery} $elem
+ * @param {crisis.Coords} absCoords
+ */
+crisis.map.position = function($elem, absCoords) {
+    var rel = crisis.map.relativeCoordsOfAbs(absCoords);
+    $elem.css({
+        'left': rel.x + '%',
+        'top': rel.y + '%'
+    });
+};
+
+/**
+ * @param {jQuery} $elem
+ * @param {crisis.Coords} absCoords
+ */
+crisis.map.addAt = function($elem, absCoords) {
+    crisis.map.position($elem, absCoords);
+    crisis.map.$holder.append($elem);
 };
 
 crisis.map.stopGettingClick = function() {
