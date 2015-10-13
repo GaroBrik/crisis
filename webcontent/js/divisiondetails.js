@@ -60,6 +60,8 @@ crisis.DivisionDetails = function(div) {
 };
 
 crisis.DivisionDetails.prototype.init = function() {
+    var dets = this;
+
     dets.$pane = crisis.cloneProto(crisis.$protoDivisionPane);
     dets.$closeButton = dets.$details.find('.closeButton');
 
@@ -234,7 +236,7 @@ crisis.DivisionDetails.prototype.enableRoute = function() {
 
     dets.route = [];
 
-    /** @param {coords} crisis.Coords */
+    /** @param {crisis.Coords} coords */
     var clickCallback = function(coords) {
         dets.route.push(new crisis.RoutePoint(coords));
         crisis.map.getClick(clickCallback);

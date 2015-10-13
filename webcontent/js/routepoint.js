@@ -8,7 +8,7 @@ crisis.RoutePoint = function(coords) {
     /** @type {jQuery} */
     this.$routePoint = crisis.cloneProto(crisis.$routePoint);
 
-    map.addAt(this.$routePoint, this.coords);
+    crisis.map.addAt(this.$routePoint, this.coords);
 };
 
 crisis.RoutePoint.prototype.destroy = function() {
