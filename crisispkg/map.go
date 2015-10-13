@@ -72,17 +72,18 @@ func computeNext(queue *queue.PriorityQueue, prev *[][]*Coords,
 		sqrt2*float64((*costs)[cur.coords.Y][cur.coords.X])
 	for i := -1; i <= 1; i++ {
 		for j := -1; j <= 1; j++ {
-			if (i != 0 || j != 0) && valid(cur.coords, i, j, costs) {
-				if (*prev)[i][j] == nil {
+			itCoords := Coords{cur.coords.Y + i, cur.coords.X + j}
+			if (i != 0 || j != 0) && valid(&itCoords, costs) {
+				if (*prev)[itCoords.Y][itCoords.X] == nil {
 					costTo := curCost
 					if i != 0 && j != 0 {
 						costTo = curCostDiag
 					}
 					queue.Put(&trackedNode{
-						&Coords{i, j},
+						&itCoords,
 						cur.coords,
 						costTo,
-						target.distanceTo(&Coords{i, j}),
+						target.distanceTo(&itCoords),
 					})
 				}
 			}
@@ -92,9 +93,11 @@ func computeNext(queue *queue.PriorityQueue, prev *[][]*Coords,
 	return cur.coords
 }
 
-func valid(fixed *Coords, y int, x int, costs *[][]int) bool {
-	xd, yd := fixed.X+x, fixed.Y+y
-	return yd >= 0 && xd >= 0 && yd < len(*costs) && xd < len((*costs)[0])
+func valid(coords *Coords, costs *[][]int) bool {
+	return coords.Y >= 0 &&
+		coords.X >= 0 &&
+		coords.Y < len(*costs) &&
+		coords.X < len((*costs)[0])
 }
 
 func myPop(queue *queue.PriorityQueue) *trackedNode {
