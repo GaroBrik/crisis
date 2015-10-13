@@ -119,10 +119,10 @@ func (handler *AjaxHandler) HandleRequest(res http.ResponseWriter, req *http.Req
 		div := handler.db.GetDivision(jsonSent.DivisionId)
 		costs := handler.db.GetCrisisMap(authInfo.CrisisId)
 
-		route := make([]*Coords, 0, len(jsonSent.Route))
-		route = append(route, &div.Coords)
+		route := make([]Coords, 0, len(jsonSent.Route))
+		route = append(route, div.Coords)
 		for _, coords := range jsonSent.Route {
-			route = append(route, &coords)
+			route = append(route, coords)
 		}
 
 		computedRoute, valid := computeFullPath(&route, costs)

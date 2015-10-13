@@ -13,11 +13,11 @@ const (
 	sqrt2 = 1.41
 )
 
-func computeFullPath(route *[]*Coords, costs *[][]int) ([]*Coords, bool) {
-	fullPath := make([]*Coords, 0)
+func computeFullPath(route *[]Coords, costs *[][]int) ([]Coords, bool) {
+	fullPath := make([]Coords, 0)
 	fullPath = append(fullPath, (*route)[0])
 	for i := 1; i < len(*route); i++ {
-		nextPath, hasPath := computePath((*route)[i-1], (*route)[i], costs)
+		nextPath, hasPath := computePath(&(*route)[i-1], &(*route)[i], costs)
 		if !hasPath {
 			return nil, false
 		}
@@ -27,7 +27,7 @@ func computeFullPath(route *[]*Coords, costs *[][]int) ([]*Coords, bool) {
 	return fullPath, true
 }
 
-func computePath(start *Coords, finish *Coords, costs *[][]int) ([]*Coords, bool) {
+func computePath(start *Coords, finish *Coords, costs *[][]int) ([]Coords, bool) {
 	next := start
 	prev := make([][]*Coords, len(*costs))
 	queue := queue.NewPriorityQueue(int(start.distanceTo(finish)), true)
@@ -48,9 +48,9 @@ func computePath(start *Coords, finish *Coords, costs *[][]int) ([]*Coords, bool
 		return nil, false
 	}
 
-	result := make([]*Coords, 0)
+	result := make([]Coords, 0)
 	for next != start {
-		result = append(result, next)
+		result = append(result, *next)
 		next = prev[next.Y][next.X]
 	}
 
