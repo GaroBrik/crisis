@@ -85,7 +85,7 @@ ul {
     background-color: purple;
 }
 
-.divisionDetails {
+.divisionPane {
     background-color: rgba(44,44,44,0.5);
     width: 200px;
     min-height: 10px;
@@ -95,7 +95,7 @@ ul {
         color: white;
     }
 
-    input[type=text], input[type=button] {
+    input[type=text], input[type=button], input[type=select] {
         background-color: #444444;
     }
     
@@ -103,13 +103,21 @@ ul {
         float: right;
     }
 
-    .unitList {
-        width: 100%;
-
-        .unitListItem {
-            .editField {
-                width: 50px;
+    .details {
+        .unitList {
+            width: 100%;
+            
+            .unitListItem {
+                .editField {
+                    width: 50px;
+                }
             }
         }
     }
+}
+
+.routePoint {
+    height: 15px;
+    width: 15px;
+    background-color: red;
 }

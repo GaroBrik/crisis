@@ -3,7 +3,7 @@ var crisis = {
     /** @type {jQuery} */
     $protoDivisionMarker: null,
     /** @type {jQuery} */
-    $protoDivisionDetails: null,
+    $protoDivisionPane: null,
     /** @type {jQuery} */
     $protoUnitListItem: null,
     /** @type {jQuery} */
@@ -11,18 +11,21 @@ var crisis = {
     /** @type {jQuery} */
     $protoUnitTypeFinder: null,
     /** @type {jQuery} */
-    $protoFactions: null
+    $protoFactions: null,
+    /** @type {jQuery} */
+    $routePoint: null
 };
 
 /** @export */
 crisis.init = function() {
     var $prototypes = $('#htmlObjectPrototypes');
     crisis.$protoDivisionMarker = $prototypes.find('#protoDivisionMarker');
-    crisis.$protoDivisionDetails = $prototypes.find('#protoDivisionDetails');
+    crisis.$protoDivisionPane = $prototypes.find('#protoDivisionPane');
     crisis.$protoUnitListItem = $prototypes.find('#protoUnitListItem');
     crisis.$protoUnitTypes = $prototypes.find('#protoUnitTypes');
     crisis.$protoUnitTypeFinder = $prototypes.find('#protoUnitTypeFinder');
     crisis.$protoFactions = $prototypes.find('#protoFactions');
+    crisis.$routePoint = $prototypes.find('#protoRoutePoint');
 };
 
 /**

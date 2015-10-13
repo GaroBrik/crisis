@@ -12,26 +12,34 @@
 <body>
   <div style="display: none" id="htmlObjectPrototypes">
     <div id="protoDivisionMarker" class="divisionMarker"></div>
-    <div id="protoDivisionDetails" class="dropdown divisionDetails" style="display: none">
-      <input type="button" class="closeButton" value="x">
-      <span class="paneInvalidAlert" style="display: none">Invalid Input<br></span>
-      <span class="factionNameSpan"></span>
-      <select class="factionSelector" style="display: none">
-        {{range .Factions}}
-          <option value="{{.Id}}">{{.Name}}</option>
-        {{end}}
-      </select>
-      <br>
-      <span class="divisionNameSpan"></span>
-      <input type="text" class="editNameField" style="display: none">
-      <br>
-      <ul class="unitList"></ul>
-      <input type="button" class="editButton" value="Edit">
-      <input type="button" class="cancelButton" style="display: none" value="Cancel">
-      <input type="button" class="commitButton" style="display: none" value="Commit">
-      <input type="button" class="deleteButton" style="display: none" value="Delete">
-      <input type="button" class="addUnitButton" style="display: none" value="+">
-      <input type="button" class="createButton" style="display: none" value="Create">
+    <div id="protoDivisionPane" class="dropdown divisionPane" style="display: none">
+      <div class="details">
+        <input type="button" class="closeButton" value="x">
+        <span class="paneInvalidAlert" style="display: none">Invalid Input<br></span>
+        <span class="factionNameSpan"></span>
+        <select class="factionSelector" style="display: none">
+          {{range .Factions}}
+            <option value="{{.Id}}">{{.Name}}</option>
+          {{end}}
+        </select>
+        <br>
+        <span class="divisionNameSpan"></span>
+        <input type="text" class="editNameField" style="display: none">
+        <br>
+        <ul class="unitList"></ul>
+        <input type="button" class="editButton" value="Edit">
+        <input type="button" class="routeButton" value="Route">
+        <input type="button" class="cancelButton" style="display: none" value="Cancel">
+        <input type="button" class="commitButton" style="display: none" value="Commit">
+        <input type="button" class="deleteButton" style="display: none" value="Delete">
+        <input type="button" class="addUnitButton" style="display: none" value="+">
+        <input type="button" class="createButton" style="display: none" value="Create">
+      </div>
+      <div class="routePlotter" style="display: none">
+        <input type="button" class="commitRouteButton" value="Commit">
+        <input type="button"  class="undoRouteButton" value="Undo">
+        <input type="button" class="cancelRouteButton" value="Cancel">
+      </div>
     </div>
     <ul>
       <li id="protoUnitListItem" class="unitListItem">
@@ -65,6 +73,7 @@
         </span>
       {{end}}
     </div>
+    <div id="protoRoutePoint" class="routePoint"></div>
   </div>
   <div id="header">
     <input type="button" id="newDivisionButton" value="Create New Division" >

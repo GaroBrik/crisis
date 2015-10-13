@@ -6,6 +6,8 @@ crisis.DivisionDetails = function(div) {
     /** @type {jQuery} */
     this.$pane = null;
     /** @type {jQuery} */
+    this.$details = null;
+    /** @type {jQuery} */
     this.$factionSpan = null;
     /** @type {jQuery} */
     this.$factionSelector = null;
@@ -29,18 +31,95 @@ crisis.DivisionDetails = function(div) {
     this.$createButton = null;
     /** @type {jQuery} */
     this.$deleteButton = null;
+    /** @type {jQuery} */
+    this.$routePlotter = null;
+    /** @type {jQuery} */
+    this.$routeInvalidAlert = null;
+    /** @type {jQuery} */
+    this.$undoRouteButton = null;
+    /** @type {jQuery} */
+    this.$cancelRouteButton = null;
+    /** @type {jQuery} */
+    this.$commitRouteButton = null;
     /** @type {crisis.Division} */
     this.division = div;
     /** @type {boolean} */
     this.isOpen = false;
     /** @type {boolean} */
     this.unRendered = true;
+    /** @type {boolean} */
+    this.uninitialized = true;
     /** @type {crisis.DivisionDetails.State} */
     this.state = crisis.DivisionDetails.State.VIEWING;
     /** @type {Array<crisis.Unit>} */
     this.newUnits = [];
     /** @type {Array<crisis.Unit>} */
     this.removedUnits = [];
+    /** @type {Array<crisis.RoutePoint>} */
+    this.route = [];
+};
+
+crisis.DivisionDetails.prototype.init = function() {
+    dets.$pane = crisis.cloneProto(crisis.$protoDivisionPane);
+    dets.$closeButton = dets.$details.find('.closeButton');
+
+    dets.$details = dets.$pane.find('.details');
+    dets.$detailsInvalidAlert = dets.$details.find('.detailsInvalidAlert');
+    dets.$factionNameSpan = dets.$details.find('.factionNameSpan');
+    dets.$factionSelector = dets.$details.find('.factionSelector');
+    dets.$nameSpan = dets.$details.find('.divisionNameSpan');
+    dets.$editNameField = dets.$details.find('.editNameField');
+    dets.$unitList = dets.$details.find('ul');
+    dets.$editButton = dets.$details.find('.editButton');
+    dets.$routeButton = dets.$details.find('.routeButton');
+    dets.$addUnitButton = dets.$details.find('.addUnitButton');
+    dets.$cancelButton = dets.$details.find('.cancelButton');
+    dets.$commitButton = dets.$details.find('.commitButton');
+    dets.$createButton = dets.$details.find('.createButton');
+    dets.$deleteButton = dets.$details.find('.deleteButton');
+
+    dets.$editButton.on('click' + crisis.event.baseNameSpace, function() {
+        dets.enableEdit();
+    });
+    dets.$routeButton.on('click' + crisis.event.baseNameSpace, function() {
+        dets.enableRoute();
+    });
+    dets.$addUnitButton.on('click' + crisis.event.baseNameSpace,
+                           function() {
+                               dets.addUnit();
+                           });
+    dets.$commitButton.on('click' + crisis.event.baseNameSpace, function() {
+        dets.commitEdit();
+    });
+    dets.$createButton.on('click' + crisis.event.baseNameSpace, function() {
+        dets.commitCreate();
+    });
+    dets.$deleteButton.on('click' + crisis.event.baseNameSpace, function() {
+        dets.commitDelete();
+    });
+    dets.$closeButton.on('click' + crisis.event.baseNameSpace, function() {
+        dets.close();
+    });
+
+    dets.$routePlotter = dets.$pane.find('.routePlotter');
+    dets.$routeInvalidAlert = dets.$routePlotter.find('.routeInvalidAlert');
+    dets.$undoRouteButton = dets.$routePlotter.find('.undoRouteButton');
+    dets.$cancelRouteButton = dets.$routePlotter.find('.cancelRouteButton');
+    dets.$commitRouteButton = dets.$routePlotter.find('.commitRouteButton');
+
+    dets.$undoRouteButton.on('click' + crisis.event.baseNameSpace, function() {
+        dets.undoRoute();
+    });
+    dets.$cancelRouteButton.on('click' + crisis.event.baseNameSpace,
+                               function() {
+                                   dets.disableRoute();
+                               });
+    dets.$commitRouteButton.on('click' + crisis.event.baseNameSpace,
+                               function() {
+                                   dets.commitRoute();
+                               });
+
+    crisis.map.$holder.append(dets.$pane);
 };
 
 crisis.DivisionDetails.prototype.toggle = function() {
@@ -53,6 +132,11 @@ crisis.DivisionDetails.prototype.toggle = function() {
 
 crisis.DivisionDetails.prototype.open = function() {
     var dets = this;
+
+    if (dets.uninitialized) {
+        dets.init();
+        dets.uninitialized = false;
+    }
 
     if (dets.unRendered) {
         dets.reRender();
@@ -71,55 +155,6 @@ crisis.DivisionDetails.prototype.close = function() {
 
 crisis.DivisionDetails.prototype.reRender = function() {
     var dets = this;
-
-    if (dets.$pane === null) {
-        dets.$pane = crisis.cloneProto(crisis.$protoDivisionDetails);
-
-        dets.$paneInvalidAlert = dets.$pane.find('.paneInvalidAlert');
-
-        dets.$factionNameSpan = dets.$pane.find('.factionNameSpan');
-        dets.$factionSelector = dets.$pane.find('.factionSelector');
-
-        dets.$nameSpan = dets.$pane.find('.divisionNameSpan');
-        dets.$editNameField = dets.$pane.find('.editNameField');
-
-        dets.$unitList = dets.$pane.find('ul');
-
-        dets.$editButton = dets.$pane.find('.editButton');
-        dets.$editButton.on('click' + crisis.event.baseNameSpace, function() {
-            dets.enableEdit();
-        });
-
-        dets.$addUnitButton = dets.$pane.find('.addUnitButton');
-        dets.$addUnitButton.on('click' + crisis.event.baseNameSpace,
-            function() {
-                dets.addUnit();
-            });
-
-        dets.$cancelButton = dets.$pane.find('.cancelButton');
-
-        dets.$commitButton = dets.$pane.find('.commitButton');
-        dets.$commitButton.on('click' + crisis.event.baseNameSpace, function() {
-            dets.commitEdit();
-        });
-
-        dets.$createButton = dets.$pane.find('.createButton');
-        dets.$createButton.on('click' + crisis.event.baseNameSpace, function() {
-            dets.commitCreate();
-        });
-
-        dets.$deleteButton = dets.$pane.find('.deleteButton');
-        dets.$deleteButton.on('click' + crisis.event.baseNameSpace, function() {
-            dets.commitDelete();
-        });
-
-        dets.$closeButton = dets.$pane.find('.closeButton');
-        dets.$closeButton.on('click' + crisis.event.baseNameSpace, function() {
-            dets.close();
-        });
-
-        crisis.map.$holder.append(dets.$pane);
-    }
 
     dets.$nameSpan.text(dets.division.name);
     dets.$factionNameSpan.html(crisis.factionHtml(dets.division.factionId));
@@ -147,6 +182,7 @@ crisis.DivisionDetails.prototype.enableEdit = function() {
     dets.$factionNameSpan.hide();
     dets.$nameSpan.hide();
     dets.$editButton.hide();
+    dets.$routeButton.hide();
 
     dets.$factionSelector.show();
     dets.$editNameField.show();
@@ -175,6 +211,7 @@ crisis.DivisionDetails.prototype.enableCreate = function() {
     dets.$factionNameSpan.hide();
     dets.$nameSpan.hide();
     dets.$editButton.hide();
+    dets.$routeButton.hide();
 
     dets.$factionSelector.show();
     dets.$editNameField.show();
@@ -187,6 +224,25 @@ crisis.DivisionDetails.prototype.enableCreate = function() {
     });
 
     dets.state = crisis.DivisionDetails.State.CREATING;
+};
+
+crisis.DivisionDetails.prototype.enableRoute = function() {
+    var dets = this;
+
+    dets.$details.hide();
+    dets.$routePlotter.show();
+
+    dets.route = [];
+
+    /** @param {coords} crisis.Coords */
+    var clickCallback = function(coords) {
+        dets.route.push(new crisis.RoutePoint(coords));
+        crisis.map.getClick(clickCallback);
+    };
+
+    crisis.map.getClick(clickCallback);
+
+    dets.state = crisis.DivisionDetails.State.ROUTING;
 };
 
 crisis.DivisionDetails.prototype.disableEdit = function() {
@@ -202,8 +258,9 @@ crisis.DivisionDetails.prototype.disableEdit = function() {
     dets.$factionNameSpan.show();
     dets.$nameSpan.show();
     dets.$editButton.show();
+    dets.$routeButton.show();
 
-    dets.$paneInvalidAlert.hide();
+    dets.$detailsInvalidAlert.hide();
     _.each(dets.division.units, function(unit) {
         unit.disableEdit();
     });
@@ -218,17 +275,42 @@ crisis.DivisionDetails.prototype.disableCreate = function() {
     this.division.destroy();
 };
 
+crisis.DivisionDetails.prototype.disableRoute = function() {
+    var dets = this;
+
+    dets.$routePlotter.hide();
+    dets.$details.show();
+
+    crisis.map.stopGettingClick();
+    _.each(dets.route, function(routePoint) { routePoint.destroy(); });
+
+    dets.state = crisis.DivisionDetails.State.VIEWING;
+};
+
+crisis.DivisionDetails.prototype.undoRoute = function() {
+    var dets = this;
+
+    if (dets.route.length > 0) {
+        dets.route[dets.route.length - 1].destroy();
+        dets.route = dets.route.slice(0, dets.route.length - 1);
+    }
+};
+
 crisis.DivisionDetails.prototype.addUnit = function() {
     var dets = this;
 
-    if (dets.state === crisis.DivisionDetails.State.VIEWING) return;
+    if (dets.state !== crisis.DivisionDetails.State.EDITING ||
+        dets.state !== crisis.DivisionDetails.State.CREATING)
+    {
+        return;
+    }
 
     var currentIds = /** @type {Array<number>} */
         (_.map(dets.division.units.concat(dets.newUnits), function(unit) {
             return unit.typeNum;
         }));
 
-    crisis.map.showUnitTypeFinder(currentIds, dets.$addUnitButton,
+    crisis.map.showUnitTypeFinder(currentIds, dets.$pane,
         function(num) {
             if (num === null) return;
             var newUnit = new crisis.Unit({
@@ -270,7 +352,7 @@ crisis.DivisionDetails.prototype.commitEdit = function() {
         var newVal = parseInt(unit.$editField.val(), 10);
         if (isNaN(newVal)) {
             unit.$invalidAlert.show();
-            dets.$paneInvalidAlert.show();
+            dets.$detailsInvalidAlert.show();
             validSubmit = false;
         } else {
             newUnits.push({TypeNum: unit.typeNum, Amount: newVal});
@@ -311,7 +393,7 @@ crisis.DivisionDetails.prototype.commitCreate = function() {
         var newVal = parseInt(unit.$editField.val(), 10);
         if (isNaN(newVal)) {
             unit.$invalidAlert.show();
-            dets.$paneInvalidAlert.show();
+            dets.$detailsInvalidAlert.show();
             validSubmit = false;
         } else {
             newUnits.push({TypeNum: unit.typeNum, Amount: newVal});
@@ -320,7 +402,7 @@ crisis.DivisionDetails.prototype.commitCreate = function() {
 
     var name = /** @type {string} */(dets.$editNameField.val());
     if (name === '') {
-        dets.$paneInvalidAlert.show();
+        dets.$detailsInvalidAlert.show();
         validSubmit = false;
     }
 
@@ -337,6 +419,28 @@ crisis.DivisionDetails.prototype.commitCreate = function() {
         });
 };
 
+crisis.DivisionDetails.prototype.commitRoute = function() {
+    var dets = this;
+
+    if (dets.state !== crisis.DivisionDetails.State.ROUTING) return;
+
+    /** @type {Array<crisisJson.Coords>} */
+    var route = _.map(dets.route, function(routePoint) {
+        return routePoint.coords.toJson();
+    });
+
+    crisis.ajax.postDivisionRoute(route, {
+        success: function(result) {
+            if (result.ValidPath) {
+                dets.disableRoute();
+            } else {
+                dets.$routeInvalidAlert.show();
+                dets.route = [];
+            }
+        }
+    });
+};
+
 crisis.DivisionDetails.prototype.commitDelete = function() {
     var dets = this;
 
@@ -351,5 +455,6 @@ crisis.DivisionDetails.prototype.commitDelete = function() {
 crisis.DivisionDetails.State = {
     VIEWING: 'VIEWING',
     EDITING: 'EDITING',
-    CREATING: 'CREATING'
+    CREATING: 'CREATING',
+    ROUTING: 'ROUTING'
 }
