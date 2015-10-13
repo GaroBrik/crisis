@@ -432,7 +432,7 @@ crisis.DivisionDetails.prototype.commitRoute = function() {
             return routePoint.coords.toJson();
         }));
 
-    crisis.ajax.postDivisionRoute(dets.divisionId, route, {
+    crisis.ajax.postDivisionRoute(dets.division.id, route, {
         success: function(result) {
             if (result.ValidPath) {
                 dets.disableRoute();
