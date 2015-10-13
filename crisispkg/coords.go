@@ -3,6 +3,7 @@ package crisis
 import (
 	"fmt"
 	"math"
+	"strings"
 )
 
 type Coords struct {
@@ -15,5 +16,13 @@ func (this *Coords) distanceTo(other *Coords) float64 {
 }
 
 func (this *Coords) dbString() string {
-	return fmt.Sprintf("(%d,%d)", this.X, this.Y)
+	return fmt.Sprintf("\"(%d,%d)\"", this.X, this.Y)
+}
+
+func makeDbCoordsArray(coords *[]*Coords) string {
+	coordStrings := make([]string, len(*coords))
+	for i, coord := range *coords {
+		coordStrings[i] = coord.dbString()
+	}
+	return "'{" + strings.Join(coordStrings, ",") + "'}"
 }
