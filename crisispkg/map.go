@@ -79,7 +79,7 @@ func computeNext(queue *queue.PriorityQueue, prev *[][]*Coords,
 					if i != 0 && j != 0 {
 						costTo = curCostDiag
 					}
-					queue.Put(&trackedNode{
+					queue.Put(trackedNode{
 						&itCoords,
 						cur.coords,
 						costTo,
