@@ -39,17 +39,17 @@ func (db *Database) Close() {
 }
 
 func (db *Database) GetCrisisMap(crisisId int) *[][]int {
-	tx, err := db.db.Begin()
-	maybePanic(err)
+	//tx, err := db.db.Begin()
+	//maybePanic(err)
 
 	var height int
 	var width int
-	row := tx.QueryRow("SELECT array_length(map_costs, 1), "+
+	row := db.db.QueryRow("SELECT array_length(map_costs, 1), "+
 		"array_length(map_costs, 2) FROM crisis WHERE id = $1", crisisId)
 	err = row.Scan(&height, &width)
 	maybePanic(err)
 
-	rows, err := tx.Query(
+	rows, err := db.db.Query(
 		"SELECT UNNEST(map_costs) FROM crisis WHERE id = $1", crisisId)
 	maybePanic(err)
 
@@ -66,8 +66,8 @@ func (db *Database) GetCrisisMap(crisisId int) *[][]int {
 		}
 	}
 
-	err = tx.Commit()
-	maybePanic(err)
+	//err = tx.Commit()
+	//maybePanic(err)
 
 	return &result
 }

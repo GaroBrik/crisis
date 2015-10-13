@@ -104,6 +104,8 @@ ul {
     }
 
     .details {
+        position: relative;
+        
         .unitList {
             width: 100%;
             
@@ -113,6 +115,10 @@ ul {
                 }
             }
         }
+    }
+
+    .routePlotter {
+        position: relative;
     }
 }
 
