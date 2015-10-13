@@ -24,5 +24,5 @@ func makeDbCoordsArray(coords *[]*Coords) string {
 	for i, coord := range *coords {
 		coordStrings[i] = coord.dbString()
 	}
-	return "'{" + strings.Join(coordStrings, ",") + "'}::coords[]"
+	return "'{" + strings.Join(coordStrings, ",") + "}'::coords[]"
 }
