@@ -100,7 +100,8 @@ func valid(fixed *Coords, y int, x int, costs *[][]int) bool {
 func myPop(queue *queue.PriorityQueue) *trackedNode {
 	cur, err := queue.Get(1)
 	maybePanic(err)
-	return cur[0].(*trackedNode)
+	cast := cur[0].(trackedNode)
+	return &cast
 }
 
 type trackedNode struct {
