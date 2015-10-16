@@ -76,10 +76,10 @@ func (handler *AjaxHandler) HandleRequest(res http.ResponseWriter, req *http.Req
 
 	case updateDivisionPath:
 		type UpdateDivisionJson struct {
-			Id        int
-			Units     []Unit
-			Name      *string
-			FactionId *int
+			Id           int
+			Units        []Unit
+			DivisionName *string
+			FactionId    *int
 		}
 		var jsonSent UpdateDivisionJson
 		err := json.NewDecoder(req.Body).Decode(&jsonSent)
@@ -88,7 +88,7 @@ func (handler *AjaxHandler) HandleRequest(res http.ResponseWriter, req *http.Req
 		var newDiv Division
 		err = handler.db.db.RunInTransaction(func(tx *pg.Tx) error {
 			err = UpdateDivision(tx, jsonSent.Id, jsonSent.Units,
-				jsonSent.Name, jsonSent.FactionId)
+				jsonSent.DivisionName, jsonSent.FactionId)
 			if err != nil {
 				return err
 			}
@@ -110,10 +110,10 @@ func (handler *AjaxHandler) HandleRequest(res http.ResponseWriter, req *http.Req
 
 	case createDivisionPath:
 		type CreateDivisionJson struct {
-			Coords    Coords
-			Units     []Unit
-			Name      string
-			FactionId int
+			Coords       Coords
+			Units        []Unit
+			DivisionName string
+			FactionId    int
 		}
 		var jsonSent CreateDivisionJson
 		err := json.NewDecoder(req.Body).Decode(&jsonSent)
@@ -122,7 +122,7 @@ func (handler *AjaxHandler) HandleRequest(res http.ResponseWriter, req *http.Req
 		var newDiv Division
 		err = handler.db.db.RunInTransaction(func(tx *pg.Tx) error {
 			id, err := CreateDivision(tx, jsonSent.Coords, jsonSent.Units,
-				jsonSent.Name, jsonSent.FactionId)
+				jsonSent.DivisionName, jsonSent.FactionId)
 			if err != nil {
 				return err
 			}

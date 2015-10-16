@@ -158,7 +158,7 @@ crisis.DivisionDetails.prototype.close = function() {
 crisis.DivisionDetails.prototype.reRender = function() {
     var dets = this;
 
-    dets.$nameSpan.text(dets.division.name);
+    dets.$nameSpan.text(dets.division.divisionName);
     dets.$factionNameSpan.html(crisis.factionHtml(dets.division.factionId));
 
     _.each(dets.division.units.concat(dets.newUnits), function(unit) {
@@ -178,7 +178,7 @@ crisis.DivisionDetails.prototype.enableEdit = function() {
         dets.disableEdit();
     });
 
-    dets.$editNameField.val(dets.division.name);
+    dets.$editNameField.val(dets.division.divisionName);
     dets.$factionSelector.val(dets.division.factionId.toString());
 
     dets.$factionNameSpan.hide();
@@ -208,7 +208,7 @@ crisis.DivisionDetails.prototype.enableCreate = function() {
         dets.disableCreate();
     });
 
-    dets.$editNameField.val(dets.division.name);
+    dets.$editNameField.val(dets.division.divisionName);
 
     dets.$factionNameSpan.hide();
     dets.$nameSpan.hide();
@@ -362,7 +362,7 @@ crisis.DivisionDetails.prototype.commitEdit = function() {
 
 
     var name = /** @type {string?} */(dets.$editNameField.val());
-    if (name === dets.division.name) name = null;
+    if (name === dets.division.divisionName) name = null;
 
     var factionId = /** @type {number?} */ (crisis.stringToInt(
         /** @type {string} */ (dets.$factionSelector.val())));

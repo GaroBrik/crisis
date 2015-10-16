@@ -17,7 +17,7 @@ crisis.Division = function(divJson) {
     /** @type {Array<crisis.Unit>} */
     this.units = [];
     /** @type {string} */
-    this.name;
+    this.divisionName;
     /** @type {number} */
     this.factionId;
     /** @type {jQuery} */
@@ -34,7 +34,7 @@ crisis.Division.prototype.update = function(divJson) {
     var div = this;
 
     div.absCoords = crisis.Coords.fromJson(divJson.Coords);
-    div.name = divJson.Name;
+    div.divisionName = divJson.DivisionName;
     div.factionId = divJson.FactionId;
     crisis.updateElements(div.units, divJson.Units,
         function(data) { return new crisis.Unit(data, div); });
