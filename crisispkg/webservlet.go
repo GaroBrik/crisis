@@ -59,18 +59,19 @@ func wrapAndListen(path string, handler servlet) {
 			if err != nil {
 				return err
 			}
-			headerTmpl.Execute(res, headInfo{
+			return headerTmpl.Execute(res, headInfo{
 				JSUrl:    "static/compiled.js",
 				CSSUrl:   "static/main.css",
 				Types:    types,
 				Factions: facs,
 			})
-			return nil
+
 		})
 		maybePanic(err)
 
 		handler(res, req)
-		footerTmpl.Execute(res, nil)
+		err = footerTmpl.Execute(res, nil)
+		maybePanic(err)
 	})
 }
 
@@ -82,8 +83,7 @@ func staffPage(res http.ResponseWriter, req *http.Request) {
 			return err
 		}
 
-		staffPageTmpl.Execute(res, divisions)
-		return nil
+		return staffPageTmpl.Execute(res, divisions)
 	})
 	maybePanic(err)
 }
