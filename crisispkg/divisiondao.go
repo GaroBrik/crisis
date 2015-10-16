@@ -3,6 +3,7 @@ package crisis
 import (
 	"github.com/lib/pq"
 	"gopkg.in/pg.v3"
+	"log"
 )
 
 const (
@@ -119,6 +120,7 @@ func GetCrisisDivisions(tx *pg.Tx, crisisId int) (map[int][]Division, error) {
             FROM division INNER JOIN faction ON (faction.id = division.faction)
 		    WHERE faction.crisis = ?
         `, crisisId)
+	log.Print(divs)
 	if err != nil {
 		return nil, err
 	}
@@ -126,6 +128,7 @@ func GetCrisisDivisions(tx *pg.Tx, crisisId int) (map[int][]Division, error) {
 	mp := make(map[int][]Division)
 	for _, div := range divs {
 		units, err := GetUnits(tx, div.Id)
+		log.Print(units)
 		if err != nil {
 			return nil, err
 		}
