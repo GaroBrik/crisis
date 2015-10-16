@@ -9,5 +9,5 @@ type UnitTypes []UnitType
 
 func (unitTypes *UnitTypes) NewRecord() interface{} {
 	*unitTypes = append(*unitTypes, UnitType{})
-	return (*unitTypes)[len(*unitTypes)-1]
+	return &(*unitTypes)[len(*unitTypes)-1]
 }
