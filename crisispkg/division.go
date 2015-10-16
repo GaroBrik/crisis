@@ -15,8 +15,8 @@ type Division struct {
 
 func (div Division) GetColumnLoader() pg.ColumnLoader {
 	div.Coords = Coords{}
-	return pg.LoadInto(&div.Id, &div.Name, &div.FactionId,
-		&div.Coords.X, &div.Coords.Y)
+	return pg.LoadInto(&(div.Id), &(div.Name), &(div.FactionId),
+		&(div.Coords.X), &(div.Coords.Y))
 }
 
 type Divisions []Division
