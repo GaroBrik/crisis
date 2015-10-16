@@ -51,7 +51,6 @@ func GetCrisisMap(tx *pg.Tx, crisisId int) ([][]int, error) {
             SELECT array_length(map_costs, 1), array_length(map_costs, 2) 
             FROM crisis WHERE id = ?
          `, crisisId)
-	log.Println(height, width)
 	if err != nil {
 		return nil, err
 	}
