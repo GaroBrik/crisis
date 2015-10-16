@@ -72,7 +72,7 @@ func computeNext(queue *queue.PriorityQueue, prev [][]*Coords,
 		sqrt2*float64(costs[cur.coords.Y][cur.coords.X])
 	for i := -1; i <= 1; i++ {
 		for j := -1; j <= 1; j++ {
-			itCoords := Coords{cur.coords.Y + i, cur.coords.X + j}
+			itCoords := Coords{X: cur.coords.X + j, Y: cur.coords.Y + i}
 			if (i != 0 || j != 0) && valid(&itCoords, costs) {
 				if prev[itCoords.Y][itCoords.X] == nil {
 					costTo := curCost
@@ -97,7 +97,8 @@ func valid(coords *Coords, costs [][]int) bool {
 	return coords.Y >= 0 &&
 		coords.X >= 0 &&
 		coords.Y < len(costs) &&
-		coords.X < len(costs[0])
+		coords.X < len(costs[0]) &&
+		costs[coords.Y][coords.X] >= 0
 }
 
 func myPop(queue *queue.PriorityQueue) *trackedNode {
