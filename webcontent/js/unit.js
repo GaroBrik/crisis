@@ -11,10 +11,8 @@ crisis.Unit = function(unitJson, div) {
     unit.division = div;
     /** @type {number} */
     unit.amount = unitJson.Amount;
-    /** @type {string} */
-    unit.typeName = unitJson.TypeName;
     /** @type {number} */
-    unit.typeNum = unitJson.TypeNum;
+    unit.type = unitJson.Type;
     /** @type {jQuery} */
     unit.$listItem = crisis.cloneProto(crisis.$protoUnitListItem);
     /** @type {jQuery} */
@@ -28,7 +26,7 @@ crisis.Unit = function(unitJson, div) {
     /** @type {jQuery} */
     unit.$invalidAlert = unit.$listItem.find('.invalidAlert');
 
-    unit.$type.append(crisis.Unit.typeHtml(unit.typeNum));
+    unit.$type.append(crisis.Unit.typeHtml(unit.type));
     unit.$removeUnitButton.on('click' + crisis.event.baseNameSpace, function() {
         unit.division.details.removeUnit(unit);
     });
@@ -43,7 +41,7 @@ crisis.Unit.prototype.update = function(data) {
 
 /** @inheritDoc */
 crisis.Unit.prototype.updateDataMatch = function(data) {
-    return this.typeNum === data.TypeNum;
+    return this.type === data.Type;
 };
 
 crisis.Unit.prototype.destroy = function() {

@@ -309,15 +309,14 @@ crisis.DivisionDetails.prototype.addUnit = function() {
 
     var currentIds = /** @type {Array<number>} */
         (_.map(dets.division.units.concat(dets.newUnits), function(unit) {
-            return unit.typeNum;
+            return unit.type;
         }));
 
     crisis.map.showUnitTypeFinder(currentIds, dets.$pane,
         function(num) {
             if (num === null) return;
             var newUnit = new crisis.Unit({
-                TypeNum: num,
-                TypeName: 'temp',
+                Type: num,
                 Amount: 0
             }, dets.division);
             newUnit.enableEdit();
@@ -357,7 +356,7 @@ crisis.DivisionDetails.prototype.commitEdit = function() {
             dets.$detailsInvalidAlert.show();
             validSubmit = false;
         } else {
-            newUnits.push({TypeNum: unit.typeNum, Amount: newVal});
+            newUnits.push({Type: unit.type, Amount: newVal});
         }
     });
 
@@ -398,7 +397,7 @@ crisis.DivisionDetails.prototype.commitCreate = function() {
             dets.$detailsInvalidAlert.show();
             validSubmit = false;
         } else {
-            newUnits.push({TypeNum: unit.typeNum, Amount: newVal});
+            newUnits.push({Type: unit.type, Amount: newVal});
         }
     });
 

@@ -59,8 +59,7 @@ crisisJson.DivisionRoute;
 
 /**
  * @typedef {{
- *   TypeName: string,
- *   TypeNum: number,
+ *   Type: number,
  *   Amount: number
  * }}
  */
