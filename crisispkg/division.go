@@ -14,12 +14,6 @@ type Division struct {
 	Speed     int `json:"-"`
 }
 
-func (div Division) GetColumnLoader() pg.ColumnLoader {
-	div.Coords = Coords{}
-	return pg.LoadInto(&div.Id, &div.Name, &div.FactionId,
-		&div.Coords.X, &div.Coords.Y)
-}
-
 func (div *Division) LoadColumn(colIdx int, colName string, b []byte) error {
 	switch colName {
 	case "id":

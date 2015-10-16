@@ -95,7 +95,7 @@ func DeleteDivision(tx *pg.Tx, divisionId int) error {
 
 func GetDivision(tx *pg.Tx, divisionId int) (Division, error) {
 	div := Division{}
-	_, err := tx.QueryOne(div.GetColumnLoader(), `
+	_, err := tx.QueryOne(div, `
             SELECT `+divisionInfoSelector+` 
             FROM division WHERE division.id = ?
         `, divisionId)
