@@ -83,7 +83,7 @@ func UpdateDivisionUnits(tx *pg.Tx, divisionId int, units []Unit) error {
 }
 
 func UpdateDivisionRoute(tx *pg.Tx, divisionId int, route []Coords) error {
-	_, err := tx.Exec(`UPDATE division SET route = {?}::coords[] WHERE id = ?`,
+	_, err := tx.Exec(`UPDATE division SET route = '{?}'::coords[] WHERE id = ?`,
 		Coordses(route), divisionId)
 	return err
 }
