@@ -10,6 +10,8 @@ import (
 const (
 	DB_USER_ENV     = "OPENSHIFT_POSTGRESQL_DB_USERNAME"
 	DB_PASSWORD_ENV = "OPENSHIFT_POSTGRESQL_DB_PASSWORD"
+	DB_HOST_ENV     = "OPENSHIFT_POSTGRESQL_DB_HOST"
+	DB_PORT_ENV     = "OPENSHIFT_POSTGRESQL_DB_PORT"
 	DB_NAME         = "crisis"
 )
 
@@ -24,6 +26,8 @@ func GetDatabaseInstance() *Database {
 		db := pg.Connect(&pg.Options{
 			User:     os.Getenv(DB_USER_ENV),
 			Password: os.Getenv(DB_PASSWORD_ENV),
+			Port:     os.Getenv(DB_PORT_ENV),
+			Host:     os.Getenv(DB_HOST_ENV),
 			Database: DB_NAME,
 		})
 		if err != nil {
