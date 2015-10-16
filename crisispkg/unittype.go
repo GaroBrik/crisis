@@ -1,8 +1,25 @@
 package crisis
 
+import (
+	"fmt"
+	"gopkg.in/pg.v3"
+)
+
 type UnitType struct {
-	UnitName string
-	Id       int
+	Name string
+	Id   int
+}
+
+func (unitType *UnitType) LoadColumn(colIdx int, colName string, b []byte) error {
+	switch colName {
+	case "unit_name":
+		pg.Decode(&unitType.Name, b)
+	case "id":
+		pg.Decode(&unitType.Id, b)
+	default:
+		return fmt.Errorf("tried to load non-existent division column: %s", colName)
+	}
+	return nil
 }
 
 type UnitTypes []UnitType

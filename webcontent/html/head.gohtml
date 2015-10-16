@@ -19,7 +19,7 @@
         <span class="factionNameSpan"></span>
         <select class="factionSelector" style="display: none">
           {{range .Factions}}
-            <option value="{{.Id}}">{{.FactionName}}</option>
+            <option value="{{.Id}}">{{.Name}}</option>
           {{end}}
         </select>
         <br>
@@ -53,7 +53,7 @@
     <div id="protoUnitTypes">
       {{range .Types}}
         <span data-type="{{.Id}}">
-	        {{.UnitName}}:
+	        {{.Name}}:
         </span>
       {{end}}
     </div>
@@ -61,7 +61,7 @@
       <ul>
         {{range .Types}}
           <li data-type="{{.Id}}">
-            <input type="button" value="{{.UnitName}}">
+            <input type="button" value="{{.Name}}">
           </li>
         {{end}}
       </ul>
@@ -69,7 +69,7 @@
     <div id="protoFactions">
       {{range .Factions}}
         <span data-faction="{{.Id}}">
-	        {{.FactionName}}
+	        {{.Name}}
         </span>
       {{end}}
     </div>

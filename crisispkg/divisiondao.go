@@ -15,15 +15,15 @@ const (
 func CreateDivision(tx *pg.Tx, coords Coords, units []Unit, name string,
 	factionId int) (int, error) {
 	div := Division{
-		Units:        units,
-		DivisionName: name,
-		Coords:       coords,
-		FactionId:    factionId,
+		Units:     units,
+		Name:      name,
+		Coords:    coords,
+		FactionId: factionId,
 	}
 	_, err := tx.QueryOne(&div, `
             INSERT INTO division (faction, division_name, route) 
 		    VALUES(?, ?, ARRAY[(?, ?)]::coords[]) RETURNING id
-        `, div.FactionId, div.DivisionName, div.Coords.X, div.Coords.Y)
+        `, div.FactionId, div.Name, div.Coords.X, div.Coords.Y)
 
 	if err != nil {
 		return 0, err

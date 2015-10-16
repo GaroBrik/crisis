@@ -14,7 +14,7 @@ crisisJson.Crisis;
 /**
  * @typedef {{
  *   Id: number,
- *   DivisionName: string,
+ *   Name: string,
  *   Coords: crisisJson.Coords,
  *   FactionId: number,
  *   Units: Array<crisisJson.Unit>
@@ -26,7 +26,7 @@ crisisJson.Division;
  * @typedef {{
  *   Id: number,
  *   Units: Array<crisisJson.Unit>,
- *   DivisionName: string?,
+ *   Name: string?,
  *   FactionId: number?
  * }}
  */
@@ -36,7 +36,7 @@ crisisJson.DivisionUpdate;
  * @typedef {{
  *   Units: Array<crisisJson.Unit>,
  *   Coords: crisisJson.Coords,
- *   DivisionName: string,
+ *   Name: string,
  *   FactionId: number
  * }}
  */

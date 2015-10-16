@@ -59,7 +59,7 @@ crisis.ajax.postDivisionUpdate = function(
     var data = {
         Id: divisionId,
         Units: units,
-        DivisionName: name,
+        Name: name,
         FactionId: factionId
     };
     crisis.ajax.postData(crisis.ajax.updateDivisionPath, data, options);
@@ -79,7 +79,7 @@ crisis.ajax.postDivisionCreation = function(
     var data = {
         Units: units,
         Coords: coords,
-        DivisionName: name,
+        Name: name,
         FactionId: factionId
     };
     crisis.ajax.postData(crisis.ajax.createDivisionPath, data, options);

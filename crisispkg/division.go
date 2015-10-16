@@ -3,31 +3,29 @@ package crisis
 import (
 	"fmt"
 	"gopkg.in/pg.v3"
-	"log"
 )
 
 type Division struct {
-	Id           int
-	Units        []Unit
-	DivisionName string
-	FactionId    int
-	Coords       Coords
-	Speed        int `json:"-"`
+	Id        int
+	Units     []Unit
+	Name      string
+	FactionId int
+	Coords    Coords
+	Speed     int `json:"-"`
 }
 
 func (div Division) GetColumnLoader() pg.ColumnLoader {
 	div.Coords = Coords{}
-	return pg.LoadInto(&div.Id, &div.DivisionName, &div.FactionId,
+	return pg.LoadInto(&div.Id, &div.Name, &div.FactionId,
 		&div.Coords.X, &div.Coords.Y)
 }
 
 func (div *Division) LoadColumn(colIdx int, colName string, b []byte) error {
-	log.Println(colIdx, colName, b)
 	switch colName {
 	case "id":
 		pg.Decode(&div.Id, b)
 	case "division_name":
-		pg.Decode(&div.DivisionName, b)
+		pg.Decode(&div.Name, b)
 	case "faction":
 		pg.Decode(&div.FactionId, b)
 	case "x":
