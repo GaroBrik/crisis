@@ -115,9 +115,13 @@ func GetDivision(tx *pg.Tx, divisionId int) (Division, error) {
 
 func GetDivisionRoute(tx *pg.Tx, divisionId int) ([]Coords, error) {
 	var coordses Coordses
-	err := tx.Query(&coordses, `
-            SELECT UNNEST(route) FROM division WHERE id = ?
+	_, err := tx.Query(&coordses, `
+             SELECT (c).x, (c).y FROM (
+                 SELECT UNNEST(route)::coords
+                 FROM division WHERE id = ?
+             ) sub
          `, divisionId)
+	return coordses, err
 }
 
 func GetCrisisDivisions(tx *pg.Tx, crisisId int) (map[int][]Division, error) {
