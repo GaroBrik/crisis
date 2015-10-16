@@ -24,15 +24,15 @@ func (div Division) GetColumnLoader() pg.ColumnLoader {
 func (div *Division) LoadColumn(colIdx int, colName string, b []byte) error {
 	log.Println(colIdx, colName, b)
 	switch colName {
-	case "Id":
+	case "id":
 		pg.Decode(&div.Id, b)
-	case "DivisionName":
+	case "division_name":
 		pg.Decode(&div.DivisionName, b)
-	case "FactionId":
+	case "faction":
 		pg.Decode(&div.FactionId, b)
-	case "X":
+	case "x":
 		pg.Decode(&div.Coords.X, b)
-	case "Y":
+	case "y":
 		pg.Decode(&div.Coords.Y, b)
 	default:
 		return fmt.Errorf("tried to load non-existent division column: %s", colName)
