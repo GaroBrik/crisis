@@ -1,14 +1,10 @@
 package crisis
 
 import (
-	"database/sql"
-	"database/sql/driver"
 	"errors"
-	"fmt"
-	_ "github.com/lib/pq"
+	"gopkg.in/pg.v3"
 	"log"
 	"os"
-	"strings"
 )
 
 const (
@@ -18,30 +14,18 @@ const (
 )
 
 type Database struct {
-	db *sql.DB
-}
-
-type DBArrayElement interface {
-	DBString() string
-}
-
-type DBArray []DBArrayElement
-
-func (dbArray DBArray) Value() (driver.Value, error) {
-	elemStrings := make([]string, len(dbArray))
-	for i, arrElem := range dbArray {
-		elemStrings[i] = arrElem.DBString()
-	}
-	return "'{" + strings.Join(elemStrings, ",") + "}'::coords[]", nil
+	db *pg.DB
 }
 
 var m_database *Database
 
 func GetDatabaseInstance() *Database {
 	if m_database == nil {
-		dbinfo := fmt.Sprintf("user=%s password=%s dbname=%s sslmode=disable",
-			os.Getenv(DB_USER_ENV), os.Getenv(DB_PASSWORD_ENV), DB_NAME)
-		db, err := sql.Open("postgres", dbinfo)
+		db := pg.Connect(&pg.Options{
+			User:     os.Getenv(DB_USER_ENV),
+			Password: os.Getenv(DB_PASSWORD_ENV),
+			Database: DB_NAME,
+		})
 		if err != nil {
 			log.Fatal(err)
 		}
@@ -54,70 +38,63 @@ func (db *Database) Close() {
 	db.db.Close()
 }
 
-func (db *Database) GetCrisisMap(crisisId int) *[][]int {
-	//tx, err := db.db.Begin()
-	//maybePanic(err)
-
+func GetCrisisMap(tx *pg.Tx, crisisId int) ([][]int, error) {
 	var height int
 	var width int
-	row := db.db.QueryRow("SELECT array_length(map_costs, 1), "+
-		"array_length(map_costs, 2) FROM crisis WHERE id = $1", crisisId)
-	err = row.Scan(&height, &width)
-	maybePanic(err)
+	_, err := tx.QueryOne(pg.LoadInto(&height, &width), `
+            SELECT array_length(map_costs, 1), array_length(map_costs, 2) 
+            FROM crisis WHERE id = ?
+         `, crisisId)
+	if err != nil {
+		return nil, err
+	}
 
-	rows, err := db.db.Query(
-		"SELECT UNNEST(map_costs) FROM crisis WHERE id = $1", crisisId)
-	maybePanic(err)
+	var costs pg.Ints
+	_, err = tx.Query(&costs, `
+            SELECT UNNEST(map_costs) FROM crisis WHERE id = ?
+        `, crisisId)
+	if err != nil {
+		return nil, err
+	}
 
 	result := make([][]int, height)
 	for i := 0; i < height; i++ {
 		result[i] = make([]int, width)
 		for j := 0; j < width; j++ {
-			if !rows.Next() {
-				panic(errors.New("number of elements in map cost did " +
-					"not match bounds"))
+			idx := i*width + j
+			if idx > len(costs) {
+				return nil, errors.New(
+					`number of elements in map cost did not match bounds`)
 			}
-			err = rows.Scan(&(result[i][j]))
-			maybePanic(err)
+			result[i][j] = int(costs[idx])
 		}
 	}
 
-	//err = tx.Commit()
-	//maybePanic(err)
-
-	return &result
+	return result, nil
 }
 
-func (db *Database) GetCrisisUnitTypes(crisisId int) []*UnitType {
-	rows, err := db.db.Query("SELECT unit_name, id FROM unit_type "+
-		"WHERE crisis = $1", crisisId)
-	maybePanic(err)
-	defer rows.Close()
-
-	types := make([]*UnitType, 0)
-	for rows.Next() {
-		utype := UnitType{}
-		err = rows.Scan(&utype.Name, &utype.Id)
-		maybePanic(err)
-		types = append(types, &utype)
+func GetCrisisUnitTypes(tx *pg.Tx, crisisId int) ([]UnitType, error) {
+	var unitTypes UnitTypes
+	_, err := tx.Query(&unitTypes, `
+            SELECT unit_name, id FROM unit_type WHERE crisis = ?
+        `, crisisId)
+	if err != nil {
+		return nil, err
 	}
-	return types
+
+	return unitTypes, nil
 }
 
-func (db *Database) GetCrisisFactions(crisisId int) []*Faction {
-	rows, err := db.db.Query("SELECT id, faction_name FROM faction WHERE crisis = $1", crisisId)
-	maybePanic(err)
-
-	defer rows.Close()
-
-	factions := make([]*Faction, 0)
-	for rows.Next() {
-		faction := Faction{}
-		err = rows.Scan(&faction.Id, &faction.Name)
-		maybePanic(err)
-		factions = append(factions, &faction)
+func GetCrisisFactions(tx *pg.Tx, crisisId int) ([]Faction, error) {
+	var factions Factions
+	_, err := tx.Query(&factions, `
+            SELECT id, faction_name FROM faction WHERE crisis = ?
+        `, crisisId)
+	if err != nil {
+		return nil, err
 	}
-	return factions
+
+	return factions, nil
 }
 
 // func (db *Database) getAllCrises() {

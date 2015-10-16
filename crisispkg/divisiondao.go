@@ -1,185 +1,167 @@
 package crisis
 
 import (
-	"database/sql"
 	"github.com/lib/pq"
+	"gopkg.in/pg.v3"
 )
 
 const (
-	divisionInfoSelector = " division.id, division.route[1].x, division.route[1].y, " +
-		"division.division_name, division.faction "
+	divisionInfoSelector = ` 
+        division.id, division.division_name, division.faction, 
+		division.route[1].x, division.route[1].y`
 )
 
-func (db *Database) CreateDivision(coords Coords, units []Unit, name string, factionId int) int {
-	tx, err := db.db.Begin()
-	maybePanic(err)
+func CreateDivision(tx *pg.Tx, coords Coords, units []Unit, name string,
+	factionId int) (int, error) {
+	div := Division{
+		Units:     units,
+		Name:      name,
+		Coords:    coords,
+		FactionId: factionId,
+	}
+	_, err := tx.QueryOne(&div, `
+            INSERT INTO division (faction, division_name, route) 
+		    VALUES(?, ?, ARRAY[(?, ?)]::coords[]) RETURNING id
+        `, div.FactionId, div.Name, div.Coords.X, div.Coords.Y)
 
-	row := tx.QueryRow("INSERT INTO division (faction, division_name, route) "+
-		"VALUES($1, $2, $3) RETURNING id",
-		factionId, name, DBArray([]DBArrayElement{coords}))
-
-	var divisionId int
-	err = row.Scan(&divisionId)
-	maybePanic(err)
-
-	stmt, err := tx.Prepare(pq.CopyIn("unit", "division", "unit_type", "amount"))
-	maybePanic(err)
-
-	for _, unit := range units {
-		_, err = stmt.Exec(divisionId, unit.TypeNum, unit.Amount)
-		maybePanic(err)
+	if err != nil {
+		return 0, err
 	}
 
-	_, err = stmt.Exec()
-	maybePanic(err)
-
-	err = stmt.Close()
-	maybePanic(err)
-
-	err = tx.Commit()
-	maybePanic(err)
-
-	return divisionId
+	err = UpdateDivisionUnits(tx, div.Id, div.Units)
+	return div.Id, err
 }
 
-func (db *Database) UpdateDivision(divisionId int, units []Unit, name *string, factionId *int) {
-	tx, err := db.db.Begin()
-	maybePanic(err)
+func UpdateDivision(tx *pg.Tx, divisionId int, units []Unit,
+	name *string, factionId *int) error {
 
 	if name != nil {
-		_, err = tx.Exec("UPDATE division SET division_name = $1 WHERE id = $2", name, divisionId)
-		maybePanic(err)
+		_, err = tx.Exec(`
+                UPDATE division SET division_name = ? WHERE id = ?
+            `, name, divisionId)
+		if err != nil {
+			return err
+		}
 	}
 	if factionId != nil {
-		_, err = tx.Exec("UPDATE division SET faction = $1 WHERE id = $2", factionId, divisionId)
-		maybePanic(err)
+		_, err = tx.Exec(`
+                 UPDATE division SET faction = ? WHERE id = ?
+           `, factionId, divisionId)
+		if err != nil {
+			return err
+		}
 	}
 
-	_, err = tx.Exec("DELETE FROM unit WHERE unit.division = $1", divisionId)
-	maybePanic(err)
+	err := UpdateDivisionUnits(tx, divisionId, units)
+	return err
+}
 
-	stmt, err := tx.Prepare(pq.CopyIn("unit", "division", "unit_type", "amount"))
-	maybePanic(err)
+func UpdateDivisionUnits(tx *pg.Tx, divisionId int, units []Unit) error {
+	_, err = tx.Exec(`
+            DELETE FROM unit WHERE unit.division = ?
+        `, divisionId)
+	if err != nil {
+		return err
+	}
+
+	stmt, err := tx.Prepare(pq.CopyIn(
+		`unit`, `division`, `unit_type`, `amount`))
+	if err != nil {
+		return err
+	}
 
 	for _, unit := range units {
-		_, err = stmt.Exec(divisionId, unit.TypeNum, unit.Amount)
-		maybePanic(err)
+		_, err = stmt.Exec(divisionId, unit.Type, unit.Amount)
+		if err != nil {
+			return err
+		}
 	}
-
-	_, err = stmt.Exec()
-	maybePanic(err)
 
 	err = stmt.Close()
-	maybePanic(err)
-
-	err = tx.Commit()
-	maybePanic(err)
+	return err
 }
 
-func (db *Database) UpdateDivisionRoute(divisionId int, route *[]Coords) {
-	dbArray := make([]DBArrayElement, len(*route))
-	for i, c := range *route {
-		dbArray[i] = c
-	}
-	_, err := db.db.Exec("UPDATE division SET route = $1"+
-		" WHERE id = $2",
-		DBArray(dbArray), divisionId)
-	maybePanic(err)
+func UpdateDivisionRoute(tx *pg.Tx, divisionId int, route []Coords) error {
+	_, err := tx.Exec(`UPDATE division SET route = {?}::coords[] WHERE id = ?`,
+		Coordses(route), divisionId)
+	return err
 }
 
-func (db *Database) DeleteDivision(divisionId int) {
-	_, err := db.db.Exec("DELETE FROM division WHERE id = $1", divisionId)
-	maybePanic(err)
+func DeleteDivision(tx *pg.Tx, divisionId int) error {
+	_, err := tx.Exec(`DELETE FROM division WHERE id = ?`, divisionId)
+	return err
 }
 
-func (db *Database) GetDivision(divisionId int) Division {
-	row := db.db.QueryRow("SELECT "+divisionInfoSelector+
-		"FROM division WHERE division.id = $1", divisionId)
+func GetDivision(tx *pg.Tx, divisionId int) (Division, error) {
 	div := Division{}
-	coords := Coords{}
-
-	err = row.Scan(&div.Id, &coords.X, &coords.Y, &div.Name, &div.FactionId)
-	maybePanic(err)
-
-	div.Coords = coords
-	db.loadUnitsFor(&div)
-
-	return div
-}
-
-func (db *Database) GetCrisisDivisions(crisisId int) map[int][]*Division {
-	rows, err := db.db.Query("SELECT "+divisionInfoSelector+
-		"FROM division INNER JOIN faction ON (faction.id = division.faction) "+
-		"WHERE faction.crisis = $1", crisisId)
-	maybePanic(err)
-
-	return db.getCrisisDivisionsFromRows(rows)
-}
-
-func (db *Database) GetFactionDivisions(factionId int) []*Division {
-	rows, err := db.db.Query("SELECT "+divisionInfoSelector+
-		"FROM division INNER JOIN faction ON (faction.id = division.faction) "+
-		"INNER JOIN division_view ON (division_view.division_id = division.id) "+
-		"WHERE division_view.faction_id = $1 ", factionId)
-	maybePanic(err)
-	defer rows.Close()
-
-	return db.getDivisionsFromRows(rows)
-}
-
-func (db *Database) getCrisisDivisionsFromRows(rows *sql.Rows) map[int][]*Division {
-	m := make(map[int][]*Division)
-	for rows.Next() {
-		div := Division{}
-		coords := Coords{}
-		err := rows.Scan(&div.Id, &coords.X, &coords.Y, &div.Name, &div.FactionId)
-		if err != nil {
-			panic(err)
-		}
-		div.Coords = coords
-		db.loadUnitsFor(&div)
-		m[div.FactionId] = append(m[div.FactionId], &div)
+	_, err := tx.QueryOne(div.GetColumnLoader(), `
+            SELECT `+divisionInfoSelector+` 
+            FROM division WHERE division.id = ?
+        `, divisionId)
+	if err != nil {
+		return div, err
 	}
-	return m
+
+	units, err := GetUnits(tx, divisionId)
+	if err != nil {
+		return div, err
+	}
+
+	div.Units = units
+
+	return div, nil
 }
 
-func (db *Database) getDivisionsFromRows(rows *sql.Rows) []*Division {
-	var fs []*Division
-	for rows.Next() {
-		div := Division{}
-		coords := Coords{}
-		err := rows.Scan(&div.Id, &coords.X, &coords.Y, &div.Name, &div.FactionId)
-		if err != nil {
-			panic(err)
-		}
-		div.Coords = coords
-		db.loadUnitsFor(&div)
-		fs = append(fs, &div)
+func GetCrisisDivisions(tx *pg.Tx, crisisId int) (map[int][]Division, error) {
+	var divs Divisions
+	_, err := tx.Query(&divs, `
+            SELECT `+divisionInfoSelector+` 
+            FROM division INNER JOIN faction ON (faction.id = division.faction)
+		    WHERE faction.crisis = ?
+        `, crisisId)
+	if err != nil {
+		return nil, err
 	}
-	return fs
+
+	mp := make(map[int][]Division)
+	for _, div := range divs {
+		units, err := GetUnits(tx, div.Id)
+		if err != nil {
+			return nil, err
+		}
+		div.Units = units
+		mp[div.FactionId] = append(mp[div.FactionId], div)
+	}
+
+	return mp, nil
 }
 
-func (db *Database) loadUnitsFor(div *Division) {
-	rows, err := db.db.Query("SELECT unit_type.unit_name, unit_type.id, unit.amount, unit_type.unit_speed "+
-		"FROM unit INNER JOIN unit_type ON (unit.unit_type = unit_type.id) "+
-		"WHERE unit.division = $1", div.Id)
-	maybePanic(err)
-	defer rows.Close()
-
-	var speed int
-
-	minSpeed := 1<<16 - 1
-	div.Units = make([]Unit, 0)
-	for rows.Next() {
-		unit := Unit{}
-		err = rows.Scan(&unit.TypeName, &unit.TypeNum, &unit.Amount, &speed)
-		if err != nil {
-			panic(err)
-		}
-		div.Units = append(div.Units, unit)
-		if speed < minSpeed {
-			minSpeed = speed
-		}
+func GetFactionDivisions(tx *pg.Tx, factionId int) ([]Division, error) {
+	var divs Divisions
+	_, err := tx.Query(&divs, `
+            SELECT `+divisionInfoSelector+` 
+            FROM division WHERE faction = ?`, factionId)
+	if err != nil {
+		return nil, err
 	}
-	div.Speed = minSpeed
+
+	for _, div := range divs {
+		units, err := GetUnits(tx, div.Id)
+		if err != nil {
+			return nil, err
+		}
+		div.Units = units
+	}
+
+	return divs, nil
+}
+
+func GetUnits(tx *pg.Tx, divisionId int) ([]Unit, error) {
+	var units Units
+	_, err := tx.Query(&units, `
+            SELECT unit.unit_type, unit.amount
+		    FROM unit INNER JOIN unit_type ON (unit.unit_type = unit_type.id)
+		    WHERE unit.division = ?
+        `, divisionId)
+	return units, err
 }

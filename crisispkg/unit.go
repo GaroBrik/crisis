@@ -1,7 +1,13 @@
 package crisis
 
 type Unit struct {
-	TypeName string
-	TypeNum  int
-	Amount   int
+	Type   int
+	Amount int
+}
+
+type Units []Unit
+
+func (units *Units) NewRecord() interface{} {
+	*units = append(*units, Unit{})
+	return (*units)[len(*units)-1]
 }

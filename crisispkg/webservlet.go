@@ -1,6 +1,7 @@
 package crisis
 
 import (
+	"gopkg.in/pg.v3"
 	"html/template"
 	"net/http"
 )
@@ -15,8 +16,8 @@ const (
 type headInfo struct {
 	JSUrl    string
 	CSSUrl   string
-	Types    []*UnitType
-	Factions []*Faction
+	Types    []UnitType
+	Factions []Faction
 }
 
 var headerTmpl *template.Template
@@ -49,12 +50,25 @@ func StartListening() {
 func wrapAndListen(path string, handler servlet) {
 	http.HandleFunc(path, func(res http.ResponseWriter, req *http.Request) {
 		authInfo := AuthInfoOf(req)
-		headerTmpl.Execute(res, headInfo{
-			JSUrl:    "static/compiled.js",
-			CSSUrl:   "static/main.css",
-			Types:    GetDatabaseInstance().GetCrisisUnitTypes(authInfo.CrisisId),
-			Factions: GetDatabaseInstance().GetCrisisFactions(authInfo.CrisisId),
+		err := GetDatabaseInstance().db.RunInTransaction(func(tx *pg.Tx) error {
+			types, err := GetCrisisUnitTypes(tx, authInfo.CrisisId)
+			if err != nil {
+				return err
+			}
+			facs, err := GetCrisisFactions(tx, authInfo.CrisisId)
+			if err != nil {
+				return err
+			}
+			headerTmpl.Execute(res, headInfo{
+				JSUrl:    "static/compiled.js",
+				CSSUrl:   "static/main.css",
+				Types:    types,
+				Factions: facs,
+			})
+			return nil
 		})
+		maybePanic(err)
+
 		handler(res, req)
 		footerTmpl.Execute(res, nil)
 	})
@@ -62,6 +76,14 @@ func wrapAndListen(path string, handler servlet) {
 
 func staffPage(res http.ResponseWriter, req *http.Request) {
 	authInfo := AuthInfoOf(req)
-	divisions := GetDatabaseInstance().GetCrisisDivisions(authInfo.CrisisId)
-	staffPageTmpl.Execute(res, divisions)
+	err = GetDatabaseInstance().db.RunInTransaction(func(tx *pg.Tx) error {
+		divisions, err := GetCrisisDivisions(tx, authInfo.CrisisId)
+		if err != nil {
+			return err
+		}
+
+		staffPageTmpl.Execute(res, divisions)
+		return nil
+	})
+	maybePanic(err)
 }

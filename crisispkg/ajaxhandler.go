@@ -2,6 +2,7 @@ package crisis
 
 import (
 	"encoding/json"
+	"gopkg.in/pg.v3"
 	"net/http"
 )
 
@@ -36,15 +37,33 @@ func (handler *AjaxHandler) HandleRequest(res http.ResponseWriter, req *http.Req
 
 	switch req.URL.Path[1:] {
 	case mapPath:
-		var divisions []*Division
+		var divisions []Division
 		if canEdit {
-			for _, divs := range handler.db.GetCrisisDivisions(authInfo.CrisisId) {
-				for _, div := range divs {
-					divisions = append(divisions, div)
+			err := handler.db.db.RunInTransaction(func(tx *pg.Tx) error {
+				divMap, err := GetCrisisDivisions(tx, authInfo.CrisisId)
+				if err != nil {
+					return err
 				}
-			}
+
+				for _, divs := range divMap {
+					for _, div := range divs {
+						divisions = append(divisions, div)
+					}
+				}
+				return nil
+			})
+			maybePanic(err)
 		} else {
-			divisions = handler.db.GetFactionDivisions(factionId)
+			err := handler.db.db.RunInTransaction(func(tx *pg.Tx) error {
+				divs, err := GetFactionDivisions(tx, factionId)
+				if err != nil {
+					return err
+				}
+
+				divisions = divs
+				return nil
+			})
+			maybePanic(err)
 		}
 
 		json, err := json.Marshal(Crisis{Bounds{100, 100}, make([][]int, 0), divisions})
@@ -66,12 +85,25 @@ func (handler *AjaxHandler) HandleRequest(res http.ResponseWriter, req *http.Req
 		err := json.NewDecoder(req.Body).Decode(&jsonSent)
 		maybePanic(err)
 
-		handler.db.UpdateDivision(jsonSent.Id, jsonSent.Units,
-			jsonSent.Name, jsonSent.FactionId)
+		var newDiv Division
+		err = handler.db.db.RunInTransaction(func(tx *pg.Tx) error {
+			err = UpdateDivision(tx, jsonSent.Id, jsonSent.Units,
+				jsonSent.Name, jsonSent.FactionId)
+			if err != nil {
+				return err
+			}
 
-		div := handler.db.GetDivision(jsonSent.Id)
+			div, err := GetDivision(tx, jsonSent.Id)
+			if err != nil {
+				return err
+			}
 
-		json, err := json.Marshal(div)
+			newDiv = div
+			return nil
+		})
+		maybePanic(err)
+
+		json, err := json.Marshal(newDiv)
 		maybePanic(err)
 
 		res.Write(json)
@@ -87,12 +119,25 @@ func (handler *AjaxHandler) HandleRequest(res http.ResponseWriter, req *http.Req
 		err := json.NewDecoder(req.Body).Decode(&jsonSent)
 		maybePanic(err)
 
-		id := handler.db.CreateDivision(
-			jsonSent.Coords, jsonSent.Units, jsonSent.Name, jsonSent.FactionId)
+		var newDiv Division
+		err = handler.db.db.RunInTransaction(func(tx *pg.Tx) error {
+			id, err := CreateDivision(tx, jsonSent.Coords, jsonSent.Units,
+				jsonSent.Name, jsonSent.FactionId)
+			if err != nil {
+				return err
+			}
 
-		div := handler.db.GetDivision(id)
+			div, err := GetDivision(tx, id)
+			if err != nil {
+				return err
+			}
 
-		json, err := json.Marshal(div)
+			newDiv = div
+			return nil
+		})
+		maybePanic(err)
+
+		json, err := json.Marshal(newDiv)
 		maybePanic(err)
 
 		res.Write(json)
@@ -105,7 +150,10 @@ func (handler *AjaxHandler) HandleRequest(res http.ResponseWriter, req *http.Req
 		err := json.NewDecoder(req.Body).Decode(&jsonSent)
 		maybePanic(err)
 
-		handler.db.DeleteDivision(jsonSent.DivisionId)
+		err = handler.db.db.RunInTransaction(func(tx *pg.Tx) error {
+			return DeleteDivision(tx, jsonSent.DivisionId)
+		})
+		maybePanic(err)
 
 	case divisionRoutePath:
 		type DivisionRouteJson struct {
@@ -116,22 +164,34 @@ func (handler *AjaxHandler) HandleRequest(res http.ResponseWriter, req *http.Req
 		err := json.NewDecoder(req.Body).Decode(&jsonSent)
 		maybePanic(err)
 
-		div := handler.db.GetDivision(jsonSent.DivisionId)
-		costs := handler.db.GetCrisisMap(authInfo.CrisisId)
+		var success bool
 
-		route := make([]Coords, 0, len(jsonSent.Route))
-		route = append(route, div.Coords)
-		for _, coords := range jsonSent.Route {
-			route = append(route, coords)
-		}
+		err = handler.db.db.RunInTransaction(func(tx *pg.Tx) error {
 
-		computedRoute, valid := computeFullPath(&route, costs)
+			div, err := GetDivision(tx, jsonSent.DivisionId)
+			if err != nil {
+				return err
+			}
+			costs, err := GetCrisisMap(tx, authInfo.CrisisId)
+			if err != nil {
+				return err
+			}
 
-		if valid {
-			handler.db.UpdateDivisionRoute(div.Id, &computedRoute)
-		}
+			route := make([]Coords, 0, len(jsonSent.Route))
+			route = append(route, div.Coords)
+			route = append(route, jsonSent.Route...)
 
-		resp := struct{ Success bool }{valid}
+			computedRoute, valid := computeFullPath(route, costs)
+
+			if valid {
+				UpdateDivisionRoute(tx, div.Id, computedRoute)
+				success = true
+			}
+			return nil
+		})
+		maybePanic(err)
+
+		resp := struct{ Success bool }{success}
 
 		json, err := json.Marshal(resp)
 		maybePanic(err)
