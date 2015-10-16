@@ -13,6 +13,7 @@ const (
 	DB_HOST_ENV     = "OPENSHIFT_POSTGRESQL_DB_HOST"
 	DB_PORT_ENV     = "OPENSHIFT_POSTGRESQL_DB_PORT"
 	DB_NAME         = "crisis"
+	USE_SSL         = false
 )
 
 type Database struct {
@@ -29,6 +30,7 @@ func GetDatabaseInstance() *Database {
 			Port:     os.Getenv(DB_PORT_ENV),
 			Host:     os.Getenv(DB_HOST_ENV),
 			Database: DB_NAME,
+			SSL:      USE_SSL,
 		})
 		if err != nil {
 			log.Fatal(err)
