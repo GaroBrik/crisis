@@ -18,11 +18,13 @@ type Coordses []Coords
 
 func (coordses Coordses) AppendQuery(dst []byte) []byte {
 	for i, v := range coordses {
+		dst = append(dst, '"')
 		dst = append(dst, '(')
 		dst = strconv.AppendInt(dst, int64(v.X), 10)
 		dst = append(dst, ',')
 		dst = strconv.AppendInt(dst, int64(v.Y), 10)
 		dst = append(dst, ')')
+		dst = append(dst, '"')
 		if i != len(coordses)-1 {
 			dst = append(dst, ',')
 		}
