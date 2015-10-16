@@ -113,6 +113,13 @@ func GetDivision(tx *pg.Tx, divisionId int) (Division, error) {
 	return div, nil
 }
 
+func GetDivisionRoute(tx *pg.Tx, divisionId int) ([]Coords, error) {
+	var coordses Coordses
+	err := tx.Query(&coordses, `
+            SELECT UNNEST(route) FROM division WHERE id = ?
+         `, divisionId)
+}
+
 func GetCrisisDivisions(tx *pg.Tx, crisisId int) (map[int][]Division, error) {
 	var divs Divisions
 	_, err := tx.Query(&divs, `

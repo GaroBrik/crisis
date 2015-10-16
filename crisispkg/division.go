@@ -17,15 +17,30 @@ type Division struct {
 func (div *Division) LoadColumn(colIdx int, colName string, b []byte) error {
 	switch colName {
 	case "id":
-		pg.Decode(&div.Id, b)
+		err := pg.Decode(&div.Id, b)
+		if err != nil {
+			return err
+		}
 	case "division_name":
-		pg.Decode(&div.Name, b)
+		err := pg.Decode(&div.Name, b)
+		if err != nil {
+			return err
+		}
 	case "faction":
-		pg.Decode(&div.FactionId, b)
+		err := pg.Decode(&div.FactionId, b)
+		if err != nil {
+			return err
+		}
 	case "x":
-		pg.Decode(&div.Coords.X, b)
+		err := pg.Decode(&div.Coords.X, b)
+		if err != nil {
+			return err
+		}
 	case "y":
-		pg.Decode(&div.Coords.Y, b)
+		err := pg.Decode(&div.Coords.Y, b)
+		if err != nil {
+			return err
+		}
 	default:
 		return fmt.Errorf("tried to load non-existent division column: %s", colName)
 	}

@@ -13,9 +13,15 @@ type Faction struct {
 func (fac *Faction) LoadColumn(colIdx int, colName string, b []byte) error {
 	switch colName {
 	case "id":
-		pg.Decode(&fac.Id, b)
+		err := pg.Decode(&fac.Id, b)
+		if err != nil {
+			return err
+		}
 	case "faction_name":
-		pg.Decode(&fac.Name, b)
+		err := pg.Decode(&fac.Name, b)
+		if err != nil {
+			return err
+		}
 	default:
 		return fmt.Errorf("tried to load non-existent division column: %s", colName)
 	}

@@ -13,9 +13,15 @@ type Unit struct {
 func (unit *Unit) LoadColumn(colIdx int, colName string, b []byte) error {
 	switch colName {
 	case "unit_type":
-		pg.Decode(&unit.Type, b)
+		err := pg.Decode(&unit.Type, b)
+		if err != nil {
+			return err
+		}
 	case "amount":
-		pg.Decode(&unit.Amount, b)
+		err := pg.Decode(&unit.Amount, b)
+		if err != nil {
+			return err
+		}
 	default:
 		return fmt.Errorf("tried to load non-existent division column: %s", colName)
 	}
