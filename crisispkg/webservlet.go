@@ -3,7 +3,9 @@ package crisis
 import (
 	"gopkg.in/pg.v3"
 	"html/template"
+	"log"
 	"net/http"
+	"time"
 )
 
 type servlet func(http.ResponseWriter, *http.Request)
@@ -45,6 +47,20 @@ func StartListening() {
 	}
 
 	wrapAndListen("/staff", staffPage)
+
+	go MoveDivisions()
+}
+
+func MoveDivisions() {
+	for {
+		time.Sleep(10 * time.Second)
+		err := GetDatabaseInstance().db.RunInTransaction(func(tx *pg.Tx) error {
+			return DoUnitMovement(tx)
+		})
+		if err != nil {
+			log.Println(err)
+		}
+	}
 }
 
 func wrapAndListen(path string, handler servlet) {
