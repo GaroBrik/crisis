@@ -432,14 +432,16 @@ crisis.DivisionDetails.prototype.commitRoute = function() {
 
     crisis.ajax.postDivisionRoute(dets.division.id, route, {
         success: function(result) {
+            console.log(result);
             if (result.ValidPath) {
                 dets.disableRoute();
             } else {
                 dets.$routeInvalidAlert.show();
+                _.each(dets.route, function(point) { point.destroy(); });
                 dets.route = [];
             }
         }
-    });
+    })
 };
 
 crisis.DivisionDetails.prototype.commitDelete = function() {
