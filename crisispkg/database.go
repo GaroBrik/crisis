@@ -73,6 +73,7 @@ func DoUnitMovement(tx *pg.Tx) error {
 	if err != nil {
 		return err
 	}
+	log.Println("test")
 
 	stmt, err := tx.Prepare(`
             UPDATE division SET (route, time_spent) = 
