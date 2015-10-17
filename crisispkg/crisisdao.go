@@ -7,7 +7,7 @@ import (
 
 func GetAllActiveCrises(tx *pg.Tx) ([]Crisis, error) {
 	var crises Crises
-	_, err := tx.Query(&crises, "SELECT id, active FROM crisis WHERE active")
+	_, err := tx.Query(&crises, `SELECT id, active FROM crisis WHERE active`)
 	if err != nil {
 		return nil, err
 	}

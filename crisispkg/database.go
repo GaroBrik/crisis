@@ -73,7 +73,6 @@ func DoUnitMovement(tx *pg.Tx) error {
 	if err != nil {
 		return err
 	}
-	log.Println("test")
 
 	stmt, err := tx.Prepare(`
             UPDATE division SET (route, time_spent) = 
@@ -85,7 +84,9 @@ func DoUnitMovement(tx *pg.Tx) error {
 	}
 
 	for _, crisis := range crises {
+		log.Println(crisis)
 		for _, div := range crisis.Divisions {
+			log.Println(div)
 			moveLeft := moveAmount
 			coordIdx := 0
 			for moveLeft > 0 && coordIdx < len(div.Route)-1 {

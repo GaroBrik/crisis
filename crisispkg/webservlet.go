@@ -52,9 +52,7 @@ func StartListening() {
 }
 
 func MoveDivisions() {
-	log.Println("test2")
 	for {
-		log.Println("test3")
 		time.Sleep(10 * time.Second)
 		err := GetDatabaseInstance().db.RunInTransaction(func(tx *pg.Tx) error {
 			return DoUnitMovement(tx)
