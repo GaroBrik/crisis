@@ -22,15 +22,16 @@ func GetAllActiveCrises(tx *pg.Tx) ([]Crisis, error) {
 		return nil, err
 	}
 
-	for _, crisis := range crises {
+	var crisesSlice []Crisis = crises
+	for _, crisis := range crisesSlice {
 		_, err = LoadCrisis(tx, &crisis)
 		if err != nil {
 			return nil, err
 		}
 	}
 
-	log.Println(crises)
-	return crises, nil
+	log.Println(crisesSlice)
+	return crisesSlice, nil
 }
 
 func LoadCrisis(tx *pg.Tx, crisis *Crisis) (Crisis, error) {
