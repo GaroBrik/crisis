@@ -143,8 +143,8 @@ func LoadDivision(tx *pg.Tx, division *Division) (Division, error) {
 }
 
 func LoadDivisions(tx *pg.Tx, divisions []Division) ([]Division, error) {
-	for _, div := range divisions {
-		_, err := LoadDivision(tx, &div)
+	for i := range divisions {
+		_, err := LoadDivision(tx, &divisions[i])
 		if err != nil {
 			return nil, err
 		}
