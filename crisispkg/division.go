@@ -11,7 +11,9 @@ type Division struct {
 	Name      string
 	FactionId int
 	Coords    Coords
-	Speed     int `json:"-"`
+	TimeSpent int      `json:"-"`
+	Speed     int      `json:"-"`
+	Route     []Coords `json:"-"`
 }
 
 func (div *Division) LoadColumn(colIdx int, colName string, b []byte) error {
@@ -38,6 +40,11 @@ func (div *Division) LoadColumn(colIdx int, colName string, b []byte) error {
 		}
 	case "y":
 		err := pg.Decode(&div.Coords.Y, b)
+		if err != nil {
+			return err
+		}
+	case "time_spent":
+		err := pg.Decode(&div.TimeSpent, b)
 		if err != nil {
 			return err
 		}

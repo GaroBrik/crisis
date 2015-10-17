@@ -30,6 +30,7 @@ CREATE TABLE division (
        faction INTEGER REFERENCES faction (id) ON DELETE CASCADE,
        division_name VARCHAR(40) NOT NULL,
        route coords[] NOT NULL,
+       time_spent INTEGER DEFAULT 0,
        UNIQUE (faction, division_name)
 );
 ALTER SEQUENCE division_id_seq OWNED BY division.id;

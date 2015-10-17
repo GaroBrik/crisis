@@ -51,11 +51,11 @@ func wrapAndListen(path string, handler servlet) {
 	http.HandleFunc(path, func(res http.ResponseWriter, req *http.Request) {
 		authInfo := AuthInfoOf(req)
 		err := GetDatabaseInstance().db.RunInTransaction(func(tx *pg.Tx) error {
-			types, err := GetCrisisUnitTypes(tx, authInfo.CrisisId)
+			types, err := GetUnitTypesByCrisisId(tx, authInfo.CrisisId)
 			if err != nil {
 				return err
 			}
-			facs, err := GetCrisisFactions(tx, authInfo.CrisisId)
+			facs, err := GetFactionsByCrisisId(tx, authInfo.CrisisId)
 			if err != nil {
 				return err
 			}
@@ -78,7 +78,7 @@ func wrapAndListen(path string, handler servlet) {
 func staffPage(res http.ResponseWriter, req *http.Request) {
 	authInfo := AuthInfoOf(req)
 	err = GetDatabaseInstance().db.RunInTransaction(func(tx *pg.Tx) error {
-		divisions, err := GetCrisisDivisions(tx, authInfo.CrisisId)
+		divisions, err := GetDivisionsByCrisisId(tx, authInfo.CrisisId)
 		if err != nil {
 			return err
 		}

@@ -1,7 +1,6 @@
 package crisis
 
 import (
-	"errors"
 	"gopkg.in/pg.v3"
 	"log"
 	"os"
@@ -44,42 +43,7 @@ func (db *Database) Close() {
 	db.db.Close()
 }
 
-func GetCrisisMap(tx *pg.Tx, crisisId int) ([][]int, error) {
-	var height int
-	var width int
-	_, err := tx.QueryOne(pg.LoadInto(&height, &width), `
-            SELECT array_length(map_costs, 1), array_length(map_costs, 2) 
-            FROM crisis WHERE id = ?
-         `, crisisId)
-	if err != nil {
-		return nil, err
-	}
-
-	var costs pg.Ints
-	_, err = tx.Query(&costs, `
-            SELECT UNNEST(map_costs) FROM crisis WHERE id = ?
-        `, crisisId)
-	if err != nil {
-		return nil, err
-	}
-
-	result := make([][]int, height)
-	for i := 0; i < height; i++ {
-		result[i] = make([]int, width)
-		for j := 0; j < width; j++ {
-			idx := i*width + j
-			if idx > len(costs) {
-				return nil, errors.New(
-					`number of elements in map cost did not match bounds`)
-			}
-			result[i][j] = int(costs[idx])
-		}
-	}
-
-	return result, nil
-}
-
-func GetCrisisUnitTypes(tx *pg.Tx, crisisId int) ([]UnitType, error) {
+func GetUnitTypesByCrisisId(tx *pg.Tx, crisisId int) ([]UnitType, error) {
 	var unitTypes UnitTypes
 	_, err := tx.Query(&unitTypes, `
             SELECT unit_name, id FROM unit_type WHERE crisis = ?
@@ -91,7 +55,7 @@ func GetCrisisUnitTypes(tx *pg.Tx, crisisId int) ([]UnitType, error) {
 	return unitTypes, nil
 }
 
-func GetCrisisFactions(tx *pg.Tx, crisisId int) ([]Faction, error) {
+func GetFactionsByCrisisId(tx *pg.Tx, crisisId int) ([]Faction, error) {
 	var factions Factions
 	_, err := tx.Query(&factions, `
             SELECT id, faction_name FROM faction WHERE crisis = ?
@@ -103,18 +67,42 @@ func GetCrisisFactions(tx *pg.Tx, crisisId int) ([]Faction, error) {
 	return factions, nil
 }
 
-// func (db *Database) getAllCrises() {
-// 	rows, err := db.db.Query("SELECT * FROM crisis")
-// 	if err != nil {
-// 		panic(err)
-// 	}
-// 	var costs
-// 	for rows.Next() {
+func DoUnitMovement(tx *pg.Tx) error {
+	moveAmount := 10
+	crises, err := GetAllActiveCrises(tx)
+	if err != nil {
+		return err
+	}
 
-// 	}
-// }
+	stmt, err := tx.Prepare(`
+            UPDATE division SET (route, time_spent) = route[$2:], $3 
+            WHERE id = $1
+        `)
+	if err != nil {
+		return err
+	}
 
-// func (db *Database) doUnitMovement() {
-// 	for crisis := range db.getAllCrises() {
-// 	}
-// }
+	for _, crisis := range crises {
+		for _, div := range crisis.Divisions {
+			moveLeft := moveAmount
+			coordIdx := 0
+			for moveLeft > 0 && coordIdx < len(div.Route)-1 {
+				curCoords := div.Route[coordIdx]
+				curDist := div.Route[coordIdx].distanceTo(&div.Route[coordIdx+1])
+				coeff := crisis.MapCosts[curCoords.Y][curCoords.X]
+				distToMove := int(float64(coeff)*curDist+0.5) - div.TimeSpent
+				if distToMove < moveLeft {
+					moveLeft -= distToMove
+					coordIdx++
+					div.TimeSpent = 0
+				} else {
+					moveLeft = 0
+					div.TimeSpent = distToMove - moveLeft
+				}
+			}
+			stmt.Exec(div.Id, coordIdx, div.TimeSpent)
+		}
+	}
+
+	return nil
+}

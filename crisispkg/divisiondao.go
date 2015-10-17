@@ -6,8 +6,9 @@ import (
 
 const (
 	divisionInfoSelector = ` 
-        division.id, division.division_name, division.faction, 
-		division.route[1].x, division.route[1].y`
+            division.id, division.division_name, division.faction, 
+	        division.route[1].x, division.route[1].y, division.time_spent
+        `
 )
 
 func CreateDivision(tx *pg.Tx, coords Coords, units []Unit, name string,
@@ -102,28 +103,10 @@ func GetDivision(tx *pg.Tx, divisionId int) (Division, error) {
 		return div, err
 	}
 
-	units, err := GetUnits(tx, divisionId)
-	if err != nil {
-		return div, err
-	}
-
-	div.Units = units
-
-	return div, nil
+	return LoadDivision(tx, &div)
 }
 
-func GetDivisionRoute(tx *pg.Tx, divisionId int) ([]Coords, error) {
-	var coordses Coordses
-	_, err := tx.Query(&coordses, `
-             SELECT (c).x, (c).y FROM (
-                 SELECT UNNEST(route)::coords
-                 FROM division WHERE id = ?
-             ) sub
-         `, divisionId)
-	return coordses, err
-}
-
-func GetCrisisDivisions(tx *pg.Tx, crisisId int) (map[int][]Division, error) {
+func GetDivisionsByCrisisId(tx *pg.Tx, crisisId int) ([]Division, error) {
 	var divs Divisions
 	_, err := tx.Query(&divs, `
             SELECT `+divisionInfoSelector+` 
@@ -134,20 +117,10 @@ func GetCrisisDivisions(tx *pg.Tx, crisisId int) (map[int][]Division, error) {
 		return nil, err
 	}
 
-	mp := make(map[int][]Division)
-	for _, div := range divs {
-		units, err := GetUnits(tx, div.Id)
-		if err != nil {
-			return nil, err
-		}
-		div.Units = units
-		mp[div.FactionId] = append(mp[div.FactionId], div)
-	}
-
-	return mp, nil
+	return LoadDivisions(tx, divs)
 }
 
-func GetFactionDivisions(tx *pg.Tx, factionId int) ([]Division, error) {
+func GetDivisionsByFactionId(tx *pg.Tx, factionId int) ([]Division, error) {
 	var divs Divisions
 	_, err := tx.Query(&divs, `
             SELECT `+divisionInfoSelector+` 
@@ -156,18 +129,41 @@ func GetFactionDivisions(tx *pg.Tx, factionId int) ([]Division, error) {
 		return nil, err
 	}
 
-	for _, div := range divs {
-		units, err := GetUnits(tx, div.Id)
+	return LoadDivisions(tx, divs)
+}
+
+func LoadDivision(tx *pg.Tx, division *Division) (Division, error) {
+	division.Route, err = GetRouteByDivisionId(tx, division.Id)
+	if err != nil {
+		return *division, err
+	}
+
+	division.Units, err = GetUnitsByDivisionId(tx, division.Id)
+	return *division, err
+}
+
+func LoadDivisions(tx *pg.Tx, divisions []Division) ([]Division, error) {
+	for _, div := range divisions {
+		_, err := LoadDivision(tx, &div)
 		if err != nil {
 			return nil, err
 		}
-		div.Units = units
 	}
-
-	return divs, nil
+	return divisions, nil
 }
 
-func GetUnits(tx *pg.Tx, divisionId int) ([]Unit, error) {
+func GetRouteByDivisionId(tx *pg.Tx, divisionId int) ([]Coords, error) {
+	var coordses Coordses
+	_, err := tx.Query(&coordses, `
+             SELECT (c).x, (c).y FROM (
+                 SELECT UNNEST(route)::coords
+                 FROM division WHERE id = ?
+             ) sub
+         `, divisionId)
+	return coordses, err
+}
+
+func GetUnitsByDivisionId(tx *pg.Tx, divisionId int) ([]Unit, error) {
 	var units Units
 	_, err := tx.Query(&units, `
             SELECT unit.unit_type, unit.amount

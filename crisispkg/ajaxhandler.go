@@ -38,35 +38,21 @@ func (handler *AjaxHandler) HandleRequest(res http.ResponseWriter, req *http.Req
 	switch req.URL.Path[1:] {
 	case mapPath:
 		var divisions []Division
-		if canEdit {
-			err := handler.db.db.RunInTransaction(func(tx *pg.Tx) error {
-				divMap, err := GetCrisisDivisions(tx, authInfo.CrisisId)
-				if err != nil {
-					return err
-				}
+		err := handler.db.db.RunInTransaction(func(tx *pg.Tx) error {
+			if canEdit {
+				divisions, err = GetDivisionsByCrisisId(tx, authInfo.CrisisId)
+			} else {
+				divisions, err = GetDivisionsByFactionId(tx, factionId)
+			}
+			return err
+		})
+		maybePanic(err)
 
-				for _, divs := range divMap {
-					for _, div := range divs {
-						divisions = append(divisions, div)
-					}
-				}
-				return nil
-			})
-			maybePanic(err)
-		} else {
-			err := handler.db.db.RunInTransaction(func(tx *pg.Tx) error {
-				divs, err := GetFactionDivisions(tx, factionId)
-				if err != nil {
-					return err
-				}
-
-				divisions = divs
-				return nil
-			})
-			maybePanic(err)
-		}
-
-		json, err := json.Marshal(Crisis{Bounds{100, 100}, make([][]int, 0), divisions})
+		json, err := json.Marshal(Crisis{
+			MapBounds: Bounds{100, 100},
+			MapCosts:  make([][]int, 0),
+			Divisions: divisions,
+		})
 		if err != nil {
 			http.Error(res, err.Error(), http.StatusInternalServerError)
 			return
@@ -172,7 +158,7 @@ func (handler *AjaxHandler) HandleRequest(res http.ResponseWriter, req *http.Req
 			if err != nil {
 				return err
 			}
-			costs, err := GetCrisisMap(tx, authInfo.CrisisId)
+			costs, err := GetMapCostsByCrisisId(tx, authInfo.CrisisId)
 			if err != nil {
 				return err
 			}
