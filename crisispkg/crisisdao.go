@@ -3,11 +3,21 @@ package crisis
 import (
 	"errors"
 	"gopkg.in/pg.v3"
+	"log"
+)
+
+const (
+	crisisSelector = `
+            id, active, array_length(map_costs, 1) AS height, 
+            array_length(map_costs, 2) AS width
+        `
 )
 
 func GetAllActiveCrises(tx *pg.Tx) ([]Crisis, error) {
 	var crises Crises
-	_, err := tx.Query(&crises, `SELECT id, active FROM crisis WHERE active`)
+	_, err := tx.Query(&crises, `
+            SELECT `+crisisSelector+` FROM crisis WHERE active
+        `)
 	if err != nil {
 		return nil, err
 	}
@@ -23,12 +33,14 @@ func GetAllActiveCrises(tx *pg.Tx) ([]Crisis, error) {
 }
 
 func LoadCrisis(tx *pg.Tx, crisis *Crisis) (Crisis, error) {
+	log.Println(crisis, *crisis)
 	crisis.MapCosts, err = GetMapCostsByCrisisId(tx, crisis.Id)
 	if err != nil {
 		return *crisis, err
 	}
 
 	crisis.Divisions, err = GetDivisionsByCrisisId(tx, crisis.Id)
+	log.Println(crisis, *crisis)
 	return *crisis, err
 }
 
