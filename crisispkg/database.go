@@ -101,6 +101,7 @@ func DoUnitMovement(tx *pg.Tx) error {
 					div.TimeSpent = distToMove - moveLeft
 				}
 			}
+			log.Println(coordIdx, div.Coords)
 			stmt.Exec(div.Id, coordIdx+1, div.TimeSpent)
 		}
 	}
