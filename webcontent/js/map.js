@@ -210,7 +210,7 @@ crisis.map.showUnitTypeFinder = function(notInclude, $anchor, callback) {
     /** @type {function()} */
     var cancel;
 
-    $thisFinder.children().on('click' + crisis.event.baseNameSpace, function() {
+    $thisFinder.find('li').on('click' + crisis.event.baseNameSpace, function() {
         console.log(this);
         callback(crisis.getNumericData($(this), 'type'));
         cancel();
