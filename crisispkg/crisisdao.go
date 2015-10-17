@@ -23,7 +23,9 @@ func GetAllActiveCrises(tx *pg.Tx) ([]Crisis, error) {
 	}
 
 	for _, crisis := range crises {
+		log.Println(crisis)
 		_, err = LoadCrisis(tx, &crisis)
+		log.Println(crisis)
 		if err != nil {
 			return nil, err
 		}
@@ -33,14 +35,12 @@ func GetAllActiveCrises(tx *pg.Tx) ([]Crisis, error) {
 }
 
 func LoadCrisis(tx *pg.Tx, crisis *Crisis) (Crisis, error) {
-	log.Println(crisis, *crisis)
 	crisis.MapCosts, err = GetMapCostsByCrisisId(tx, crisis.Id)
 	if err != nil {
 		return *crisis, err
 	}
 
 	crisis.Divisions, err = GetDivisionsByCrisisId(tx, crisis.Id)
-	log.Println(crisis, *crisis)
 	return *crisis, err
 }
 

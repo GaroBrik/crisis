@@ -9,8 +9,8 @@ type Crisis struct {
 	Id        int `json:"-"`
 	Active    bool
 	MapBounds Bounds
-	MapCosts  [][]int
 	Divisions []Division
+	MapCosts  [][]int
 }
 
 func (crisis *Crisis) LoadColumn(colIdx int, colName string, b []byte) error {
