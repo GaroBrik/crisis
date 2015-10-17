@@ -312,6 +312,7 @@ crisis.DivisionDetails.prototype.addUnit = function() {
             return unit.type;
         }));
 
+    console.log('test1')
     crisis.map.showUnitTypeFinder(currentIds, dets.$pane,
         function(num) {
             if (num === null) return;
