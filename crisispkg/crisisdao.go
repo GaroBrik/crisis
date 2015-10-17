@@ -3,7 +3,6 @@ package crisis
 import (
 	"errors"
 	"gopkg.in/pg.v3"
-	"log"
 )
 
 const (
