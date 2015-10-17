@@ -371,6 +371,7 @@ crisis.DivisionDetails.prototype.commitEdit = function() {
             /** @param {crisisJson.Division} divData */
             success: function(divData) {
                 _.each(dets.newUnits, function(unit) { unit.destroy(); });
+                dets.newUnits = [];
                 dets.division.update(divData);
                 dets.disableEdit();
             }
