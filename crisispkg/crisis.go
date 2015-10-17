@@ -25,6 +25,16 @@ func (crisis *Crisis) LoadColumn(colIdx int, colName string, b []byte) error {
 		if err != nil {
 			return err
 		}
+	case "width":
+		err := pg.Decode(&crisis.MapBounds.Width, b)
+		if err != nil {
+			return err
+		}
+	case "height":
+		err := pg.Decode(&crisis.MapBounds.Height, b)
+		if err != nil {
+			return err
+		}
 	default:
 		return fmt.Errorf("tried to load non-existent division column: %s", colName)
 	}
