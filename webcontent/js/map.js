@@ -21,6 +21,8 @@ crisis.map = {
     /** @type {jQuery} */
     $holder: null,
     /** @type {jQuery} */
+    $image: null,
+    /** @type {jQuery} */
     $mapBounds: null,
     /** @type {jQuery} */
     $outerMapDiv: null,
@@ -31,6 +33,7 @@ crisis.map = {
 /** @export */
 crisis.map.init = function() {
     crisis.map.$holder = $('#mapHolder');
+    crisis.map.$image = $('#mapImage');
     crisis.map.$mapBounds = $('#mapBounds');
     crisis.map.$outerMapDiv = $('#mapOuterDiv');
     crisis.map.$newDivisionButton = $('#newDivisionButton');
@@ -216,7 +219,6 @@ crisis.map.showUnitTypeFinder = function(notInclude, $anchor, callback) {
         $thisFinder.remove();
     };
 
-    console.log('test');
     crisis.map.$holder.append($thisFinder);
     crisis.map.positionDropdown($thisFinder, $anchor);
 
@@ -225,9 +227,7 @@ crisis.map.showUnitTypeFinder = function(notInclude, $anchor, callback) {
 
 /** @param {function(crisis.Coords)} callback */
 crisis.map.getClick = function(callback) {
-    crisis.map.state = crisis.MapState.GETTING_CLICK;
-
-    crisis.map.$holder.on('click' + crisis.event.getClickNameSpace,
+    crisis.map.$image.on('click' + crisis.event.getClickNameSpace,
         function(clickEvent) {
             var absCoordsOfClick = crisis.map.absCoordsOfRelative(
                 new crisis.Coords(
@@ -239,6 +239,14 @@ crisis.map.getClick = function(callback) {
             crisis.map.stopGettingClick();
             callback(absCoordsOfClick);
         });
+
+    crisis.map.state = crisis.MapState.GETTING_CLICK;
+};
+
+crisis.map.stopGettingClick = function() {
+    if (crisis.map.state !== crisis.MapState.GETTING_CLICK) return;
+    crisis.map.$image.off('click' + crisis.event.getClickNameSpace);
+    crisis.map.state = crisis.MapState.NORMAL;
 };
 
 /** @return {crisis.Coords} */
@@ -270,10 +278,4 @@ crisis.map.position = function($elem, absCoords) {
 crisis.map.addAt = function($elem, absCoords) {
     crisis.map.position($elem, absCoords);
     crisis.map.$holder.append($elem);
-};
-
-crisis.map.stopGettingClick = function() {
-    if (crisis.map.state !== crisis.MapState.GETTING_CLICK) return;
-    crisis.map.$holder.off('click' + crisis.event.getClickNameSpace);
-    crisis.map.state = crisis.MapState.NORMAL;
 };

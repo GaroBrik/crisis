@@ -301,7 +301,7 @@ crisis.DivisionDetails.prototype.undoRoute = function() {
 crisis.DivisionDetails.prototype.addUnit = function() {
     var dets = this;
 
-    if (dets.state !== crisis.DivisionDetails.State.EDITING ||
+    if (dets.state !== crisis.DivisionDetails.State.EDITING &&
         dets.state !== crisis.DivisionDetails.State.CREATING)
     {
         return;
@@ -312,7 +312,6 @@ crisis.DivisionDetails.prototype.addUnit = function() {
             return unit.type;
         }));
 
-    console.log('test1')
     crisis.map.showUnitTypeFinder(currentIds, dets.$pane,
         function(num) {
             if (num === null) return;
