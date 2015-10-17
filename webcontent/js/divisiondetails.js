@@ -263,12 +263,9 @@ crisis.DivisionDetails.prototype.disableEdit = function() {
     dets.$routeButton.show();
 
     dets.$detailsInvalidAlert.hide();
-    _.each(dets.division.units, function(unit) {
-        unit.disableEdit();
-    });
-    _.each(dets.removedUnits, function(unit) {
-        unit.$listItem.show();
-    });
+    _.each(dets.newUnits, function(unit) { unit.destroy(); };
+    _.each(dets.division.units, function(unit) { unit.disableEdit(); });
+    _.each(dets.removedUnits, function(unit) { unit.$listItem.show(); });
 
     dets.state = crisis.DivisionDetails.State.VIEWING;
 };
@@ -371,12 +368,13 @@ crisis.DivisionDetails.prototype.commitEdit = function() {
     if (!validSubmit) return;
     crisis.ajax.postDivisionUpdate(dets.division.id, newUnits, name, factionId,
         {
-        /** @param {crisisJson.Division} divData */
-        success: function(divData) {
-            dets.division.update(divData);
-            dets.disableEdit();
-        }
-    });
+            /** @param {crisisJson.Division} divData */
+            success: function(divData) {
+                _.each(dets.newUnits, function(unit) { unit.destroy(); });
+                dets.division.update(divData);
+                dets.disableEdit();
+            }
+        });
 };
 
 crisis.DivisionDetails.prototype.commitCreate = function() {
