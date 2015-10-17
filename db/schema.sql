@@ -3,8 +3,9 @@ BEGIN;
 CREATE SEQUENCE crisis_id_seq;
 CREATE TABLE crisis (
        id INTEGER PRIMARY KEY DEFAULT nextval('crisis_id_seq'),
-       map_costs INTEGER[][],
+       map_costs INTEGER[][] NOT NULL,
        crisis_name VARCHAR(40) NOT NULL,
+       active BOOLEAN NOT NULL DEFAULT TRUE,
        password VARCHAR(40) NOT NULL
 );
 ALTER SEQUENCE crisis_id_seq OWNED BY crisis.id;
