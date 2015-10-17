@@ -432,13 +432,10 @@ crisis.DivisionDetails.prototype.commitRoute = function() {
 
     crisis.ajax.postDivisionRoute(dets.division.id, route, {
         success: function(result) {
-            console.log(result);
-            if (result.ValidPath) {
+            if (result.Success) {
                 dets.disableRoute();
             } else {
                 dets.$routeInvalidAlert.show();
-                _.each(dets.route, function(point) { point.destroy(); });
-                dets.route = [];
             }
         }
     })
