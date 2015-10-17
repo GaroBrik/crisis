@@ -23,14 +23,13 @@ func GetAllActiveCrises(tx *pg.Tx) ([]Crisis, error) {
 	}
 
 	for _, crisis := range crises {
-		log.Println(crisis)
 		_, err = LoadCrisis(tx, &crisis)
-		log.Println(crisis)
 		if err != nil {
 			return nil, err
 		}
 	}
 
+	log.Println(crises)
 	return crises, nil
 }
 

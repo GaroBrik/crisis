@@ -70,6 +70,7 @@ func GetFactionsByCrisisId(tx *pg.Tx, crisisId int) ([]Faction, error) {
 func DoUnitMovement(tx *pg.Tx) error {
 	moveAmount := 10
 	crises, err := GetAllActiveCrises(tx)
+	log.Println(crises)
 	if err != nil {
 		return err
 	}
