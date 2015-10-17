@@ -156,7 +156,7 @@ func GetRouteByDivisionId(tx *pg.Tx, divisionId int) ([]Coords, error) {
 	var coordses Coordses
 	_, err := tx.Query(&coordses, `
              SELECT (c).x, (c).y FROM (
-                 SELECT UNNEST(route)::coords
+                 SELECT UNNEST(route)::coords AS c
                  FROM division WHERE id = ?
              ) sub
          `, divisionId)
