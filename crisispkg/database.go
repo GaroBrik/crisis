@@ -75,7 +75,8 @@ func DoUnitMovement(tx *pg.Tx) error {
 	}
 
 	stmt, err := tx.Prepare(`
-            UPDATE division SET (route, time_spent) = route[$2:], $3 
+            UPDATE division SET (route, time_spent) = 
+                                (route[$2:array_length(route,1)], $3)
             WHERE id = $1
         `)
 	if err != nil {
@@ -100,7 +101,7 @@ func DoUnitMovement(tx *pg.Tx) error {
 					div.TimeSpent = distToMove - moveLeft
 				}
 			}
-			stmt.Exec(div.Id, coordIdx, div.TimeSpent)
+			stmt.Exec(div.Id, coordIdx+1, div.TimeSpent)
 		}
 	}
 
