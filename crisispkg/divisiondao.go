@@ -1,7 +1,6 @@
 package crisis
 
 import (
-	"github.com/lib/pq"
 	"gopkg.in/pg.v3"
 )
 
