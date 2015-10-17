@@ -263,7 +263,7 @@ crisis.DivisionDetails.prototype.disableEdit = function() {
     dets.$routeButton.show();
 
     dets.$detailsInvalidAlert.hide();
-    _.each(dets.newUnits, function(unit) { unit.destroy(); };
+    _.each(dets.newUnits, function(unit) { unit.destroy(); });
     _.each(dets.division.units, function(unit) { unit.disableEdit(); });
     _.each(dets.removedUnits, function(unit) { unit.$listItem.show(); });
 

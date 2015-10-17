@@ -204,7 +204,7 @@ crisis.map.showUnitTypeFinder = function(notInclude, $anchor, callback) {
     var $thisFinder = crisis.cloneProto(crisis.$protoUnitTypeFinder);
 
     _.each(notInclude, function(num) {
-        $thisFinder.find('li').(crisis.dataSelector(num, 'type')).remove();
+        $thisFinder.find('li' + crisis.dataSelector(num, 'type')).remove();
     });
 
     /** @type {function()} */
