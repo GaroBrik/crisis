@@ -64,8 +64,9 @@ func UpdateDivisionUnits(tx *pg.Tx, divisionId int, units []Unit) error {
 		return err
 	}
 
-	stmt, err := tx.Prepare(pq.CopyIn(
-		`unit`, `division`, `unit_type`, `amount`))
+	stmt, err := tx.Prepare(`
+             INSERT INTO unit (division, unit_type, amount) VALUES(?, ?, ?)
+         `)
 	if err != nil {
 		return err
 	}
