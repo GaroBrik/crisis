@@ -187,8 +187,6 @@ crisis.map.zoom = function(factor, fixPoint) {
         absMapFixDelta.y -= (holderTop + absMapFixDelta.y);
     }
 
-    console.log(absMapFixDelta);
-
     crisis.map.relBounds = newBounds;
 
     crisis.map.$mapBounds.css({
@@ -248,6 +246,14 @@ crisis.map.showUnitTypeFinder = function(notInclude, $anchor, callback) {
  * @return {crisis.Coords}
  */
 crisis.map.absCoordsOfClick = function(clickEvent) {
+    console.log(
+        new crisis.Coords(
+            (clickEvent.pageX - crisis.map.$holder.offset().left) * 100 /
+                crisis.map.$holder.width(),
+            (clickEvent.pageY - crisis.map.$holder.offset().top) * 100 /
+                crisis.map.$holder.height()
+        )
+    );
     return crisis.map.absCoordsOfRelative(
         new crisis.Coords(
             (clickEvent.pageX - crisis.map.$holder.offset().left) * 100 /
