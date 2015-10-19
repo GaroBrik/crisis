@@ -27,7 +27,11 @@ crisis.map = {
     /** @type {jQuery} */
     $outerMapDiv: null,
     /** @type {jQuery} */
-    $addDivisionButton: null
+    $addDivisionButton: null,
+    /** @type {boolean} */
+    zooming: false,
+    /** @type {function()} */
+    zoomStack: function() {}
 };
 
 /** @export */
@@ -63,6 +67,7 @@ crisis.map.init = function() {
         function(event) {
             /** @type {number} */
             var factor = event.deltaY > 0 ? 2 : 0.5;
+            console.log(crisis.map.absCoordsOfClick(event));
             crisis.map.zoom(factor, crisis.map.absCoordsOfClick(event));
         });
 
