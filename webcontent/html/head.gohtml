@@ -5,7 +5,9 @@
   <script src="http://code.jquery.com/jquery-2.1.4.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.8.3/underscore-min.js"></script>
   <script src="https://code.jquery.com/ui/1.11.3/jquery-ui.min.js"></script>
-  <script src="{{.JSUrl}}"></script>
+  {{range .JSUrls}}
+    <script src="{{.String}}"></script>
+  {{end}}
   <link rel="stylesheet" type="text/css" href="{{.CSSUrl}}">
   <link rel="stylesheet" type="text/css" href="https://code.jquery.com/ui/1.11.3/themes/smoothness/jquery-ui.css">
 </head>

@@ -17,7 +17,7 @@ const (
 
 type headInfo struct {
 	CanEdit  bool
-	JSUrl    string
+	JSUrls   []string
 	CSSUrl   string
 	Types    []UnitType
 	Factions []Faction
@@ -78,7 +78,7 @@ func wrapAndListen(path string, handler servlet) {
 				return err
 			}
 			return headerTmpl.Execute(res, headInfo{
-				JSUrl:    "static/compiled.js",
+				JSUrls:   []string{"static/compiled.js", "static/mousewheel.js"},
 				CSSUrl:   "static/main.css",
 				Types:    types,
 				Factions: facs,

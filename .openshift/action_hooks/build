@@ -18,4 +18,5 @@ pushd "${WEBCONTENT_DIR}/js" > /dev/null
     java -jar compiler.jar --compilation_level SIMPLE_OPTIMIZATIONS \
          --js $INPUT --externs $EXTERNS --js_output_file $OUTPUT --generate_exports \
          --warning_level VERBOSE --jscomp_warning=checkTypes
+    cp -r "${WEBCONTENT_DIR}/js/thirdparty/*" "${STATIC_DIR}/"
 } >> "${OPENSHIFT_GO_LOG_DIR}go.log"

@@ -45,6 +45,7 @@ crisis.map.init = function() {
     crisis.map.$newDivisionButton.on('click' + crisis.event.baseNameSpace,
         function() {
             crisis.map.getClick(function(absCoords) {
+                /** @type {crisis.Division} */
                 var tmpDiv = new crisis.Division({
                     Id: -1,
                     Coords: absCoords.toJson(),
@@ -56,6 +57,13 @@ crisis.map.init = function() {
                 tmpDiv.$marker.hide();
                 tmpDiv.details.enableCreate();
             });
+        });
+
+    crisis.map.$image.on('mousewheel' + crisis.event.baseNameSpace,
+        function(event) {
+            /** @type {number} */
+            var factor = event.deltaY > 0 ? 2 : 0.5;
+            crisis.map.zoom(factor, crisis.map.absCoordsOfClick(event));
         });
 
     crisis.map.$zoomInButton.on('click' + crisis.event.baseNameSpace,
@@ -226,19 +234,25 @@ crisis.map.showUnitTypeFinder = function(notInclude, $anchor, callback) {
     return cancel;
 };
 
+/**
+ * @param {jQuery.Event} clickEvent
+ * @return {crisis.Coords}
+ */
+crisis.map.absCoordsOfClick = function(clickEvent) {
+    return crisis.map.absCoordsOfRelative(
+        new crisis.Coords(
+            clickEvent.offsetX * 100 / crisis.map.$holder.width(),
+            clickEvent.offsetY * 100 / crisis.map.$holder.height()
+        )
+    );
+};
+
 /** @param {function(crisis.Coords)} callback */
 crisis.map.getClick = function(callback) {
     crisis.map.$image.on('click' + crisis.event.getClickNameSpace,
         function(clickEvent) {
-            var absCoordsOfClick = crisis.map.absCoordsOfRelative(
-                new crisis.Coords(
-                    clickEvent.offsetX * 100 / crisis.map.$holder.width(),
-                    clickEvent.offsetY * 100 / crisis.map.$holder.height()
-                )
-            );
-
             crisis.map.stopGettingClick();
-            callback(absCoordsOfClick);
+            callback(crisis.map.absCoordsOfClick(clickEvent));
         });
 
     crisis.map.state = crisis.MapState.GETTING_CLICK;
