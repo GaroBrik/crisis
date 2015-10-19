@@ -70,7 +70,6 @@ func GetFactionsByCrisisId(tx *pg.Tx, crisisId int) ([]Faction, error) {
 func DoUnitMovement(tx *pg.Tx) error {
 	moveAmount := 10
 	crises, err := GetAllActiveCrises(tx)
-	log.Println(crises)
 	if err != nil {
 		return err
 	}
@@ -85,9 +84,7 @@ func DoUnitMovement(tx *pg.Tx) error {
 	}
 
 	for _, crisis := range crises {
-		log.Println(crisis)
 		for _, div := range crisis.Divisions {
-			log.Println(div)
 			moveLeft := moveAmount
 			coordIdx := 0
 			for moveLeft > 0 && coordIdx < len(div.Route)-1 {
@@ -104,7 +101,6 @@ func DoUnitMovement(tx *pg.Tx) error {
 					div.TimeSpent = distToMove - moveLeft
 				}
 			}
-			log.Println(coordIdx, div.Coords)
 			stmt.Exec(div.Id, coordIdx+1, div.TimeSpent)
 		}
 	}
