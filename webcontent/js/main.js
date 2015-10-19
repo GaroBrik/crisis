@@ -134,8 +134,8 @@ crisis.positionDropdown = function($dropdown, $source, $container) {
     var containerRight = containerLeft + $container.width();
     var idealY =
         $source.position().top + $source.height() / 2 - $dropdown.height() / 2;
-    if (idealY + $dropdown.length > containerBottom) {
-        idealY += containerBottom - (idealY + $dropdown.length);
+    if (idealY + $dropdown.height() > containerBottom) {
+        idealY += containerBottom - (idealY + $dropdown.height());
     }
 
     if (idealY < containerTop) {
@@ -143,7 +143,7 @@ crisis.positionDropdown = function($dropdown, $source, $container) {
     }
 
     var idealX =
-        $source.position().left + $source.width() / 2 - $dropdown.width / 2;
+        $source.position().left + $source.width() / 2 - $dropdown.width() / 2;
     if (idealX + $dropdown.width() > containerRight) {
         idealX += containerRight - (idealX + $dropdown.width());
     }
@@ -157,12 +157,10 @@ crisis.positionDropdown = function($dropdown, $source, $container) {
     console.log(((idealY - $source.position().top) * 100 /
                  $container.height()) + '%');
     $dropdown.css({
-        'left': $source.css('left'),
-        'top': $source.css('top'),
-        'margin-left': ((idealX - $source.position().left) * 100 /
-                        $container.width()) + '%',
-        'margin-top': ((idealY - $source.position().top) * 100 /
-                       $container.height()) + '%'
+        'left': $source.position().left * 100 / $container.width() + '%',
+        'top': $source.position().top * 100 / $container.height() + '%',
+        'margin-left': (idealX - $source.position().left) + '%',
+        'margin-top': (idealY - $source.position().top) + '%'
     });
 };
 
