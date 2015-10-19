@@ -1,10 +1,10 @@
 #!/bin/bash
 
-export PATH="${PATH}:${OPENSHIFT_HOMEDIR}.gem/bin"
+export PATH="${PATH}:${CRISIS_SCSS_DIR}"
 
-STATIC_DIR="${OPENSHIFT_REPO_DIR}static"
+STATIC_DIR="${CRISIS_ROOT}/static"
 mkdir $STATIC_DIR
-WEBCONTENT_DIR="${OPENSHIFT_REPO_DIR}webcontent"
+WEBCONTENT_DIR="${CRISIS_ROOT}/webcontent"
 
 echo "-----> compiling scss"
 sass "${WEBCONTENT_DIR}/css/main.scss" "${STATIC_DIR}/main.css"
@@ -15,8 +15,9 @@ pushd "${WEBCONTENT_DIR}/js" > /dev/null
     OUTPUT="${STATIC_DIR}/compiled.js" 
     INPUT="goog.js main.js event.js coords.js bounds.js ajax.js division.js divisiondetails.js unit.js map.js routepoint.js"
     EXTERNS="jquiexterns.js jsonexterns.js jquery-1.9.js underscore-1.5.1.js"
-    java -jar compiler.jar --compilation_level SIMPLE_OPTIMIZATIONS \
-         --js $INPUT --externs $EXTERNS --js_output_file $OUTPUT --generate_exports \
-         --warning_level VERBOSE --jscomp_warning=checkTypes
+    java -jar "${CRISIS_CLOSURE_COMPILER_DIR}/compiler.jar" \
+         --compilation_level SIMPLE_OPTIMIZATIONS \
+         --js $INPUT --externs $EXTERNS --js_output_file $OUTPUT \
+         --generate_exports --warning_level VERBOSE --jscomp_warning=checkTypes
     cp -r "${WEBCONTENT_DIR}/js/thirdparty/." "${STATIC_DIR}/"
-} >> "${OPENSHIFT_GO_LOG_DIR}go.log"
+} >> "${CRISIS_LOG_DIR}/go.log"
