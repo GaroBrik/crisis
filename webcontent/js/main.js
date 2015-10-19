@@ -132,7 +132,8 @@ crisis.positionDropdown = function($dropdown, $source, $container) {
     var containerLeft = $container.position().left;
     var containerBottom = containerTop + $container.height();
     var containerRight = containerLeft + $container.width();
-    var idealY = $source.position().top + $source.height();
+    var idealY =
+        $source.position().top + $source.height() / 2 - container.$height() / 2;
     if (idealY + $dropdown.length > containerBottom) {
         idealY += containerBottom - (idealY + $dropdown.length);
     }
@@ -141,7 +142,8 @@ crisis.positionDropdown = function($dropdown, $source, $container) {
         idealY += containerTop - idealY;
     }
 
-    var idealX = $source.position().left + $source.width();
+    var idealX =
+        $source.position().left + $source.width() / 2 - container.$width / 2;
     if (idealX + $dropdown.width() > containerRight) {
         idealX += containerRight - (idealX + $dropdown.width());
     }
@@ -151,8 +153,12 @@ crisis.positionDropdown = function($dropdown, $source, $container) {
     }
 
     $dropdown.css({
-        'left': (idealX * 100 / $container.width()) + '%',
-        'top': (idealY * 100 / $container.height()) + '%'
+        'left': (containerLeft * 100 / $container.width()) + '%',
+        'top': (containerTop * 100 / $container.height()) + '%',
+        'margin-left': ((idealX - containerLeft) * 100 /
+                        $container.width()) + '%'
+        'margin-top': ((idealY - containerTop) * 100 /
+                       $container.height()) + '%'
     });
 };
 
