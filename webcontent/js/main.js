@@ -152,6 +152,10 @@ crisis.positionDropdown = function($dropdown, $source, $container) {
         idealX += containerLeft - idealX;
     }
 
+    console.log(((idealX - $source.position().left) * 100 /
+                 $container.width()) + '%');
+    console.log(((idealY - $source.position().top) * 100 /
+                 $container.height()) + '%');
     $dropdown.css({
         'left': $source.css('left'),
         'top': $source.css('top'),
