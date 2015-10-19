@@ -146,7 +146,7 @@ crisis.map.zoom = function(factor, fixPoint) {
                           crisis.map.relBounds.width * factor)),
         Math.min(crisis.map.minRelBounds.height * 5,
                  Math.max(crisis.map.minRelBounds.height,
-                          crisis.map.relBounds.height * factor)),
+                          crisis.map.relBounds.height * factor))
     );
 
     var newFactor = newBounds.width / crisis.map.relBounds.width;
