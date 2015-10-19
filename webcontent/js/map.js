@@ -105,14 +105,6 @@ crisis.map.positionDropdown = function($dropdown, $source) {
 };
 
 /**
- * @param {jQuery.Event} clickEvent
- * @return {crisis.Coords}
- */
-crisis.map.absCoordsOfClick = function(clickEvent) {
-    return new crisis.Coords(0, 0);
-};
-
-/**
  * @param {crisis.Coords} absCoords
  * @return {crisis.Coords}
  */
