@@ -153,11 +153,11 @@ crisis.positionDropdown = function($dropdown, $source, $container) {
     }
 
     $dropdown.css({
-        'left': (containerLeft * 100 / $container.width()) + '%',
-        'top': (containerTop * 100 / $container.height()) + '%',
-        'margin-left': ((idealX - containerLeft) * 100 /
+        'left': $source.css('left'),
+        'top': $source.css('top'),
+        'margin-left': ((idealX - $source.position().left) * 100 /
                         $container.width()) + '%',
-        'margin-top': ((idealY - containerTop) * 100 /
+        'margin-top': ((idealY - $source.position().top) * 100 /
                        $container.height()) + '%'
     });
 };
