@@ -63,7 +63,6 @@ crisis.map.init = function() {
         function(event) {
             /** @type {number} */
             var factor = event.deltaY > 0 ? 2 : 0.5;
-            console.log([event.pageX, event.pageY]);
             crisis.map.zoom(factor, crisis.map.absCoordsOfClick(event));
         });
 
@@ -251,8 +250,10 @@ crisis.map.showUnitTypeFinder = function(notInclude, $anchor, callback) {
 crisis.map.absCoordsOfClick = function(clickEvent) {
     return crisis.map.absCoordsOfRelative(
         new crisis.Coords(
-            clickEvent.offsetX * 100 / crisis.map.$holder.width(),
-            clickEvent.offsetY * 100 / crisis.map.$holder.height()
+            (clickEvent.pageX - crisis.map.$holder.offset().left) * 100 /
+                crisis.map.$holder.width(),
+            (clickEvent.pageY - crisis.map.$holder.offset().top) * 100 /
+                crisis.map.$holder.height()
         )
     );
 };
