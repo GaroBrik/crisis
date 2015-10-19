@@ -67,8 +67,11 @@ crisis.map.init = function() {
         function(event) {
             /** @type {number} */
             var factor = event.deltaY > 0 ? 2 : 0.5;
-            console.log(crisis.map.absCoordsOfClick(event));
-            crisis.map.zoom(factor, crisis.map.absCoordsOfClick(event));
+
+            crisis.map.zoom(factor, new crisis.Coords(
+                event.pageX - crisis.map.$outerMapDiv.position().left,
+                event.pageY - crisis.map.$outerMapDiv.position().top
+            ));
         });
 
     crisis.map.$zoomInButton.on('click' + crisis.event.baseNameSpace,
