@@ -78,7 +78,10 @@ func wrapAndListen(path string, handler servlet) {
 				return err
 			}
 			return headerTmpl.Execute(res, headInfo{
-				JSUrls:   []string{"static/compiled.js", "static/mousewheel.js"},
+				JSUrls: []string{
+					"static/compiled.js",
+					"static/jquery.mousewheel.js",
+				},
 				CSSUrl:   "static/main.css",
 				Types:    types,
 				Factions: facs,
