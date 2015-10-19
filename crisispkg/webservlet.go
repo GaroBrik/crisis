@@ -16,6 +16,7 @@ const (
 )
 
 type headInfo struct {
+	CanEdit  bool
 	JSUrl    string
 	CSSUrl   string
 	Types    []UnitType
@@ -47,6 +48,7 @@ func StartListening() {
 	}
 
 	wrapAndListen("/staff", staffPage)
+	wrapAndListen("/view", staffPage)
 
 	go MoveDivisions()
 }
@@ -80,6 +82,7 @@ func wrapAndListen(path string, handler servlet) {
 				CSSUrl:   "static/main.css",
 				Types:    types,
 				Factions: facs,
+				CanEdit:  authInfo.CanEdit,
 			})
 
 		})

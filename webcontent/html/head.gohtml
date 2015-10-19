@@ -15,18 +15,25 @@
     <div id="protoDivisionPane" class="dropdown divisionPane" style="display: none">
       <div class="details">
         <input type="button" class="closeButton" value="x">
-        <span class="paneInvalidAlert" style="display: none">Invalid Input<br></span>
+        {{if .CanEdit}}
+          <span class="paneInvalidAlert" style="display: none">Invalid Input<br></span>
+        {{end}}
         <span class="factionNameSpan"></span>
-        <select class="factionSelector" style="display: none">
-          {{range .Factions}}
-            <option value="{{.Id}}">{{.Name}}</option>
-          {{end}}
-        </select>
+        {{if .CanEdit}}
+          <select class="factionSelector" style="display: none">
+            {{range .Factions}}
+              <option value="{{.Id}}">{{.Name}}</option>
+            {{end}}
+          </select>
+        {{end}}
         <br>
         <span class="divisionNameSpan"></span>
-        <input type="text" class="editNameField" style="display: none">
+        {{if .CanEdit}}
+          <input type="text" class="editNameField" style="display: none">
+        {{end}}
         <br>
         <ul class="unitList"></ul>
+        {{if .CanEdit}}
         <input type="button" class="editButton" value="Edit">
         <input type="button" class="routeButton" value="Route">
         <input type="button" class="cancelButton" style="display: none" value="Cancel">
@@ -34,12 +41,15 @@
         <input type="button" class="deleteButton" style="display: none" value="Delete">
         <input type="button" class="addUnitButton" style="display: none" value="+">
         <input type="button" class="createButton" style="display: none" value="Create">
+        {{end}}
       </div>
+      {{if .CanEdit}}
       <div class="routePlotter" style="display: none">
         <input type="button" class="commitRouteButton" value="Commit">
         <input type="button"  class="undoRouteButton" value="Undo">
         <input type="button" class="cancelRouteButton" value="Cancel">
       </div>
+      {{end}}
     </div>
     <ul>
       <li id="protoUnitListItem" class="unitListItem">
@@ -76,7 +86,9 @@
     <div id="protoRoutePoint" class="routePoint"></div>
   </div>
   <div id="header">
-    <input type="button" id="newDivisionButton" value="Create New Division" >
+    {{if .CanEdit}}
+      <input type="button" id="newDivisionButton" value="Create New Division" >
+    {{end}}
     <input type="button" id="zoomInButton" value="Zoom In" >
     <input type="button" id="zoomOutButton" value="Zoom Out" >
   </div>
