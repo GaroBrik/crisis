@@ -63,6 +63,7 @@ crisis.map.init = function() {
         function(event) {
             /** @type {number} */
             var factor = event.deltaY > 0 ? 2 : 0.5;
+            console.log([event.pageX, event.pageY]);
             crisis.map.zoom(factor, crisis.map.absCoordsOfClick(event));
         });
 
@@ -129,11 +130,23 @@ crisis.map.absCoordsOfRelative = function(relCoords) {
  * @param {crisis.Coords} fixPoint
  */
 crisis.map.zoom = function(factor, fixPoint) {
+    if (crisis.map.zooming) {
+        crisis.map.stackZoom = function() {
+            crisis.map.zooming = false;
+            crisis.map.zoom(factor, fixPoint)
+        };
+        return;
+    }
+
+    crisis.map.stackZoom = function() { crisis.map.zooming = false; };
+
     var newBounds = new crisis.Bounds(
-        Math.max(crisis.map.minRelBounds.width,
-                 crisis.map.relBounds.width * factor),
-        Math.max(crisis.map.minRelBounds.height,
-                 crisis.map.relBounds.height * factor)
+        Math.min(crisis.map.minRelBounds.width * 5,
+                 Math.max(crisis.map.minRelBounds.width,
+                          crisis.map.relBounds.width * factor)),
+        Math.min(crisis.map.minRelBounds.height * 5,
+                 Math.max(crisis.map.minRelBounds.height,
+                          crisis.map.relBounds.height * factor)),
     );
 
     var newFactor = newBounds.width / crisis.map.relBounds.width;
@@ -190,7 +203,12 @@ crisis.map.zoom = function(factor, fixPoint) {
         'width': crisis.map.relBounds.width + '%',
         'top': (holderTop + absMapFixDelta.y) + 'px',
         'left': (holderLeft + absMapFixDelta.x) + 'px'
+    }, {
+        easing: 'linear',
+        done: crisis.map.stackZoom
     });
+
+    crisis.map.zooming = true;
 };
 
 /**
