@@ -69,8 +69,10 @@ crisis.map.init = function() {
             var factor = event.deltaY > 0 ? 2 : 0.5;
 
             crisis.map.zoom(factor, new crisis.Coords(
-                event.pageX - crisis.map.$outerMapDiv.position().left,
-                event.pageY - crisis.map.$outerMapDiv.position().top
+                event.pageX - crisis.map.$outerMapDiv.position().left -
+                    crisis.getCssPx(crisis.map.$holder, 'left'),
+                event.pageY - crisis.map.$outerMapDiv.position().top -
+                    crisis.getCssPx(crisis.map.$holder, 'top')
             ));
         });
 
