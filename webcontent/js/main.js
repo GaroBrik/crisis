@@ -133,7 +133,7 @@ crisis.positionDropdown = function($dropdown, $source, $container) {
     var containerBottom = containerTop + $container.height();
     var containerRight = containerLeft + $container.width();
     var idealY =
-        $source.position().top + $source.height() / 2 - container.$height() / 2;
+        $source.position().top + $source.height() / 2 - $container.height() / 2;
     if (idealY + $dropdown.length > containerBottom) {
         idealY += containerBottom - (idealY + $dropdown.length);
     }
@@ -143,7 +143,7 @@ crisis.positionDropdown = function($dropdown, $source, $container) {
     }
 
     var idealX =
-        $source.position().left + $source.width() / 2 - container.$width / 2;
+        $source.position().left + $source.width() / 2 - $container.width / 2;
     if (idealX + $dropdown.width() > containerRight) {
         idealX += containerRight - (idealX + $dropdown.width());
     }
