@@ -15,18 +15,16 @@ const (
 	htmlPath   = "webcontent/html/"
 )
 
-type headInfo struct {
-	CanEdit  bool
-	JSUrls   []string
-	CSSUrl   string
-	Types    []UnitType
-	Factions []Faction
+type pageInfo struct {
+	CanEdit   bool
+	JSUrls    []string
+	CSSUrl    string
+	Types     []UnitType
+	Factions  []Faction
+	Divisions []Division
 }
 
-var headerTmpl *template.Template
-var footerTmpl *template.Template
-var staffPageTmpl *template.Template
-var err error
+var mainPageTmpl *template.Template
 
 func StartListening() {
 	staticServer := http.FileServer(http.Dir(staticPath))
@@ -37,18 +35,8 @@ func StartListening() {
 		ajaxHandler.HandleRequest(w, r)
 	})
 
-	if headerTmpl, err = template.ParseFiles(htmlPath + "head.gohtml"); err != nil {
-		panic(err)
-	}
-	if staffPageTmpl, err = template.ParseFiles(htmlPath + "staff.gohtml"); err != nil {
-		panic(err)
-	}
-	if footerTmpl, err = template.ParseFiles(htmlPath + "foot.gohtml"); err != nil {
-		panic(err)
-	}
-
-	wrapAndListen("/staff", staffPage)
-	wrapAndListen("/view", staffPage)
+	http.HandleFunc("/staff", mainPage)
+	http.HandleFunc("/view", mainPage)
 
 	go MoveDivisions()
 }
@@ -65,47 +53,35 @@ func MoveDivisions() {
 	}
 }
 
-func wrapAndListen(path string, handler servlet) {
-	http.HandleFunc(path, func(res http.ResponseWriter, req *http.Request) {
-		authInfo := AuthInfoOf(req)
-		err := GetDatabaseInstance().db.RunInTransaction(func(tx *pg.Tx) error {
-			types, err := GetUnitTypesByCrisisId(tx, authInfo.CrisisId)
-			if err != nil {
-				return err
-			}
-			facs, err := GetFactionsByCrisisId(tx, authInfo.CrisisId)
-			if err != nil {
-				return err
-			}
-			return headerTmpl.Execute(res, headInfo{
-				JSUrls: []string{
-					"static/compiled.js",
-					"static/jquery.mousewheel.js",
-				},
-				CSSUrl:   "static/main.css",
-				Types:    types,
-				Factions: facs,
-				CanEdit:  authInfo.CanEdit,
-			})
-
-		})
+func mainPage(res http.ResponseWriter, req *http.Request) {
+	if mainPageTmpl == nil {
+		mainPageTmpl, err = template.ParseFiles(htmlPath + "mainpage.gohtml")
 		maybePanic(err)
+	}
 
-		handler(res, req)
-		err = footerTmpl.Execute(res, nil)
-		maybePanic(err)
-	})
-}
-
-func staffPage(res http.ResponseWriter, req *http.Request) {
 	authInfo := AuthInfoOf(req)
+
 	err = GetDatabaseInstance().db.RunInTransaction(func(tx *pg.Tx) error {
-		divisions, err := GetDivisionsByCrisisId(tx, authInfo.CrisisId)
+		types, err := GetUnitTypesByCrisisId(tx, authInfo.CrisisId)
 		if err != nil {
 			return err
 		}
 
-		return staffPageTmpl.Execute(res, divisions)
+		facs, err := GetFactionsByCrisisId(tx, authInfo.CrisisId)
+		if err != nil {
+			return err
+		}
+
+		return mainPageTmpl.Execute(res, pageInfo{
+			JSUrls: []string{
+				"static/compiled.js",
+				"static/jquery.mousewheel.js",
+			},
+			CSSUrl:   "static/main.css",
+			Types:    types,
+			Factions: facs,
+			CanEdit:  authInfo.CanEdit,
+		})
 	})
 	maybePanic(err)
 }
