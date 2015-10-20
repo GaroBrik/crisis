@@ -45,6 +45,9 @@ crisis.Division.prototype.update = function(divJson) {
         div.details.unRendered = true;
     }
     crisis.map.position(div.$marker, div.absCoords);
+    if (div.details.isOpen) {
+        crisis.map.positionDropdown(div.details.$pane, div.$marker);
+    }
 };
 
 /** @inheritDoc */
