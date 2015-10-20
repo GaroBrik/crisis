@@ -2,7 +2,6 @@ package crisis
 
 import (
 	"gopkg.in/pg.v3"
-	"log"
 	"os"
 )
 
@@ -31,9 +30,6 @@ func GetDatabaseInstance() *Database {
 			Database: DB_NAME,
 			SSL:      USE_SSL,
 		})
-		if err != nil {
-			log.Fatal(err)
-		}
 		m_database = &Database{db}
 	}
 	return m_database

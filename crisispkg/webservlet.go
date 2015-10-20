@@ -54,6 +54,8 @@ func MoveDivisions() {
 }
 
 func mainPage(res http.ResponseWriter, req *http.Request) {
+	var err error
+
 	if mainPageTmpl == nil {
 		mainPageTmpl, err = template.ParseFiles(htmlPath + "mainpage.gohtml")
 		maybePanic(err)

@@ -32,6 +32,7 @@ func GetAllActiveCrises(tx *pg.Tx) ([]Crisis, error) {
 }
 
 func LoadCrisis(tx *pg.Tx, crisis *Crisis) (Crisis, error) {
+	var err error
 	crisis.MapCosts, err = GetMapCostsByCrisisId(tx, crisis.Id)
 	if err != nil {
 		return *crisis, err

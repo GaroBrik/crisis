@@ -39,6 +39,7 @@ func (handler *AjaxHandler) HandleRequest(res http.ResponseWriter, req *http.Req
 	case mapPath:
 		var divisions []Division
 		err := handler.db.db.RunInTransaction(func(tx *pg.Tx) error {
+			var err error
 			if canEdit {
 				divisions, err = GetDivisionsByCrisisId(tx, authInfo.CrisisId)
 			} else {

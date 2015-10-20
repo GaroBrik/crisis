@@ -36,7 +36,7 @@ func UpdateDivision(tx *pg.Tx, divisionId int, units []Unit,
 	name *string, factionId *int) error {
 
 	if name != nil {
-		_, err = tx.Exec(`
+		_, err := tx.Exec(`
                 UPDATE division SET division_name = ? WHERE id = ?
             `, name, divisionId)
 		if err != nil {
@@ -44,7 +44,7 @@ func UpdateDivision(tx *pg.Tx, divisionId int, units []Unit,
 		}
 	}
 	if factionId != nil {
-		_, err = tx.Exec(`
+		_, err := tx.Exec(`
                  UPDATE division SET faction = ? WHERE id = ?
            `, factionId, divisionId)
 		if err != nil {
@@ -57,7 +57,7 @@ func UpdateDivision(tx *pg.Tx, divisionId int, units []Unit,
 }
 
 func UpdateDivisionUnits(tx *pg.Tx, divisionId int, units []Unit) error {
-	_, err = tx.Exec(`
+	_, err := tx.Exec(`
             DELETE FROM unit WHERE unit.division = ?
         `, divisionId)
 	if err != nil {
@@ -133,6 +133,8 @@ func GetDivisionsByFactionId(tx *pg.Tx, factionId int) ([]Division, error) {
 }
 
 func LoadDivision(tx *pg.Tx, division *Division) (Division, error) {
+	var err error
+
 	division.Route, err = GetRouteByDivisionId(tx, division.Id)
 	if err != nil {
 		return *division, err
