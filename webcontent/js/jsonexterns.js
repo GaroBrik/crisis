@@ -6,9 +6,9 @@ var crisisJson = {};
  * @typedef {{
  *   MapBounds: crisisJson.Bounds,
  *   MapCosts: Array<Array<number>>,
- *   Divisions: Array<crisisJson.Division>
- *   Factions: Array<crisisJson.Faction>
- *   UnitTypes: Array<crisisJson.UnitTypes>
+ *   Divisions: Array<crisisJson.Division>,
+ *   Factions: Array<crisisJson.Faction>,
+ *   UnitTypes: Array<crisisJson.UnitType>
  * }}
  */
 crisisJson.Crisis;
@@ -126,3 +126,11 @@ crisisJson.Coords;
  * }}
  */
 crisisJson.Bounds;
+
+/**
+ * @typedef {{
+ *   Success: number,
+ *   Message: string
+ * }}
+ */
+crisisJson.Success;

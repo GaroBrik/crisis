@@ -11,34 +11,35 @@ crisis.FactionLi = function(faction, forCreation) {
 
     /** @type {jQuery} */
     this.$listItem = crisis.cloneProto(
-        crisis.$protoFactionListItems.find(crisis.dataSelector(id, 'faction')));
+        crisis.prototypes.$controlsFactionListItem.find(
+            crisis.dataSelector(this.faction.id, 'faction')));
     /** @type {jQuery} */
-    this.$editButton = $listItem.find('.editButton');
+    this.$editButton = this.$listItem.find('.editButton');
     /** @type {jQuery} */
-    this.$cancelButton = $listItem.find('.cancelButton');
+    this.$cancelButton = this.$listItem.find('.cancelButton');
     /** @type {jQuery} */
-    this.$deleteButton = $listItem.find('.deleteButton');
+    this.$deleteButton = this.$listItem.find('.deleteButton');
     /** @type {jQuery} */
-    this.$commitButton = $listItem.find('.commitButton');
+    this.$commitButton = this.$listItem.find('.commitButton');
     /** @type {jQuery} */
-    this.$editField = $listItem.find('.editField');
+    this.$editField = this.$listItem.find('.editField');
     /** @type {jQuery} */
-    this.$nameSpan = $listItem.find('.name');
+    this.$nameSpan = this.$listItem.find('.name');
 
-    this.$editButton.on('click' + crisis.baseNameSpace, function() {
+    this.$editButton.on('click' + crisis.event.baseNameSpace, function() {
         this.startEditing();
     });
-    this.$cancelButton.on('click' + crisis.baseNameSpace, function() {
+    this.$cancelButton.on('click' + crisis.event.baseNameSpace, function() {
         if (forCreation) {
             this.destroy();
         } else {
             this.stopEditing();
         }
     });
-    this.$deleteButton.on('click' + crisis.baseNameSpace, function() {
-        this.deleteFaction();
+    this.$deleteButton.on('click' + crisis.event.baseNameSpace, function() {
+        this.commitDelete();
     });
-    this.$commitButton.on('click' + crisis.baseNameSpace, function() {
+    this.$commitButton.on('click' + crisis.event.baseNameSpace, function() {
         this.commit();
     });
 
@@ -52,7 +53,7 @@ crisis.FactionLi = function(faction, forCreation) {
 
 crisis.FactionLi.prototype.startEditing = function() {
     if (!this.forCreation) {
-        this.$editField.val(this.name);
+        this.$editField.val(this.faction.name);
     }
 
     this.$nameSpan.hide();
@@ -78,21 +79,21 @@ crisis.FactionLi.prototype.stopEditing = function() {
 
 crisis.FactionLi.prototype.commit = function() {
     /** @type {string} */
-    var name = this.$editField.val();
+    var name = /** @type {string} */ (this.$editField.val());
     if (name === '' || name === null) {
         return;
     }
 
-    if (forCreation) {
+    if (this.forCreation) {
         crisis.ajax.postFactionCreation(name, {
             /** @param {crisisJson.Faction} json */
             success: function(json) {
                 this.destroy();
-                crisis.addFaction(new crisis.Faction(json));
+                crisis.addFaction(new crisis.Faction(json, false));
             }
         });
     } else {
-        crisis.ajax.postFactionUpdate(this.faction.id, name, {
+        crisis.ajax.postFactionUpdate(name, this.faction.id, {
             /** @param {crisisJson.Faction} json */
             success: function(json) {
 
@@ -103,7 +104,7 @@ crisis.FactionLi.prototype.commit = function() {
 
 crisis.FactionLi.prototype.commitDelete = function() {
     crisis.ajax.postFactionDeletion(this.faction.id, {
-        /** @param {crisisJson.Sucess} json */
+        /** @param {crisisJson.Success} json */
         success: function(json) {
             if (json.Success) {
                 this.faction.destroy();

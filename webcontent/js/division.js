@@ -21,7 +21,7 @@ crisis.Division = function(divJson) {
     /** @type {number} */
     this.factionId;
     /** @type {jQuery} */
-    this.$marker = crisis.cloneProto(crisis.prototypes.$protoDivisionMarker);
+    this.$marker = crisis.cloneProto(crisis.prototypes.$divisionMarker);
 
     this.update(divJson);
     this.$marker.click(function() { div.details.toggle(); });

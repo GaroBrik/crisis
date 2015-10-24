@@ -204,6 +204,29 @@ func (handler *AjaxHandler) HandleRequest(res http.ResponseWriter, req *http.Req
 
 		res.Write(json)
 
+	case createFactionPath:
+		type CreateFactionJson struct{ Name string }
+		var jsonSent CreateFactionJson
+		err := json.NewDecoder(req.Body).Decode(&jsonSent)
+		maybePanic(err)
+
+		var finalFaction *Faction
+		err = handler.db.db.RunInTransaction(func(tx *pg.Tx) error {
+			fac, err := CreateFaction(tx, jsonSent.Name, authInfo.CrisisId)
+			if err != nil {
+				return err
+			}
+
+			finalFaction = &fac
+			return nil
+		})
+		maybePanic(err)
+
+		json, err := json.Marshal(finalFaction)
+		maybePanic(err)
+
+		res.Write(json)
+
 	case updateFactionPath:
 		var jsonSent Faction
 		err := json.NewDecoder(req.Body).Decode(&jsonSent)
@@ -218,6 +241,80 @@ func (handler *AjaxHandler) HandleRequest(res http.ResponseWriter, req *http.Req
 
 			finalFaction = &fac
 			return nil
+		})
+		maybePanic(err)
+
+		json, err := json.Marshal(finalFaction)
+		maybePanic(err)
+
+		res.Write(json)
+
+	case deleteFactionPath:
+		type DeleteFactionJson struct{ Id int }
+		var jsonSent DeleteFactionJson
+		err := json.NewDecoder(req.Body).Decode(&jsonSent)
+		maybePanic(err)
+
+		err = handler.db.db.RunInTransaction(func(tx *pg.Tx) error {
+			err := DeleteFaction(tx, jsonSent.Id)
+			return err
+		})
+		maybePanic(err)
+
+	case createUnitTypePath:
+		type CreateUnitTypeJson struct{ Name string }
+		var jsonSent CreateUnitTypeJson
+		err := json.NewDecoder(req.Body).Decode(&jsonSent)
+		maybePanic(err)
+
+		var finalUnitType *UnitType
+		err = handler.db.db.RunInTransaction(func(tx *pg.Tx) error {
+			fac, err := CreateUnitType(tx, jsonSent.Name, authInfo.CrisisId)
+			if err != nil {
+				return err
+			}
+
+			finalUnitType = &fac
+			return nil
+		})
+		maybePanic(err)
+
+		json, err := json.Marshal(finalUnitType)
+		maybePanic(err)
+
+		res.Write(json)
+
+	case updateUnitTypePath:
+		var jsonSent UnitType
+		err := json.NewDecoder(req.Body).Decode(&jsonSent)
+		maybePanic(err)
+
+		var finalUnitType *UnitType
+		err = handler.db.db.RunInTransaction(func(tx *pg.Tx) error {
+			fac, err := UpdateUnitType(tx, jsonSent.Id, jsonSent.Name)
+			if err != nil {
+				return err
+			}
+
+			finalUnitType = &fac
+			return nil
+		})
+		maybePanic(err)
+
+		json, err := json.Marshal(finalUnitType)
+		maybePanic(err)
+
+		res.Write(json)
+
+	case deleteUnitTypePath:
+		type DeleteUnitTypeJson struct{ Id int }
+		var jsonSent DeleteUnitTypeJson
+		err := json.NewDecoder(req.Body).Decode(&jsonSent)
+		maybePanic(err)
+
+		err = handler.db.db.RunInTransaction(func(tx *pg.Tx) error {
+			err := DeleteUnitType(tx, jsonSent.Id)
+			return err
 		})
 		maybePanic(err)
 

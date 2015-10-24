@@ -1,6 +1,11 @@
 crisis.controls = {
-    /** @type {crisis.State} */
-    state: crisis.State.MAP,
+    /** @enum {string} */
+    State: {
+        OPEN: 'OPEN',
+        CLOSED: 'CLOSED'
+    },
+    /** @type {crisis.controls.State} */
+    state: null,
     /** @type {boolean} */
     initialized: false,
     /** @type {boolean} */
@@ -14,13 +19,9 @@ crisis.controls = {
     $factionList: null
 };
 
-/** @enum {string} */
-crisis.controls.State = {
-    OPEN: 'OPEN',
-    CLOSED: 'CLOSED'
-};
-
 crisis.controls.initialize = function() {
+    crisis.controls.state = crisis.controls.State.CLOSED;
+    
     crisis.controls.$controls = $('#controls');
     crisis.controls.$unitTypeList = $('#controlsUnitTypeList');
     crisis.controls.$factionList = $('#controlsFactionList');
@@ -49,7 +50,7 @@ crisis.controls.open = function() {
 
     crisis.controls.$controls.show();
 
-    crisis.controls.State = crisis.controls.State.OPEN;
+    crisis.controls.state = crisis.controls.State.OPEN;
 };
 
 crisis.controls.close = function() {
@@ -57,11 +58,11 @@ crisis.controls.close = function() {
 
     crisis.controls.$controls.hide();
 
-    crisis.controls.State = crisis.controls.State.CLOSED;
+    crisis.controls.state = crisis.controls.State.CLOSED;
 };
 
 crisis.controls.reRender = function() {
-    if (crisis.controls.State === crisis.controls.State.CLOSED) {
+    if (crisis.controls.state === crisis.controls.State.CLOSED) {
         crisis.controls.unRendered = true;
     } else {
         crisis.controls.render();

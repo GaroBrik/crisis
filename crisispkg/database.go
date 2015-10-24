@@ -39,18 +39,6 @@ func (db *Database) Close() {
 	db.db.Close()
 }
 
-func GetUnitTypesByCrisisId(tx *pg.Tx, crisisId int) ([]UnitType, error) {
-	var unitTypes UnitTypes
-	_, err := tx.Query(&unitTypes, `
-            SELECT unit_name, id FROM unit_type WHERE crisis = ?
-        `, crisisId)
-	if err != nil {
-		return nil, err
-	}
-
-	return unitTypes, nil
-}
-
 func DoUnitMovement(tx *pg.Tx) error {
 	moveAmount := 10
 	crises, err := GetAllActiveCrises(tx)

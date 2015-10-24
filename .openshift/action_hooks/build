@@ -13,7 +13,23 @@ echo "-----> compiling js"
 pushd "${WEBCONTENT_DIR}/js" > /dev/null
 {
     OUTPUT="${STATIC_DIR}/compiled.js" 
-    INPUT="goog.js main.js event.js coords.js bounds.js ajax.js division.js divisiondetails.js unit.js map.js routepoint.js"
+    INPUT="goog.js \
+           main.js \
+           prototypes.js \
+           controls.js \
+           event.js \
+           coords.js \
+           bounds.js \
+           ajax.js \
+           division.js \
+           divisiondetails.js \
+           unittype.js \
+           unittype-li.js \
+           faction.js \
+           faction-li.js \
+           unit.js \
+           map.js \
+           routepoint.js"
     EXTERNS="jquiexterns.js jsonexterns.js jquery-1.9.js underscore-1.5.1.js"
     java -jar "${CRISIS_CLOSURE_COMPILER_DIR}/compiler.jar" \
          --compilation_level SIMPLE_OPTIMIZATIONS \

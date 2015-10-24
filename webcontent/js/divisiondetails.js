@@ -62,7 +62,7 @@ crisis.DivisionDetails = function(div) {
 crisis.DivisionDetails.prototype.init = function() {
     var dets = this;
 
-    dets.$pane = crisis.cloneProto(crisis.prototypes.$protoDivisionPane);
+    dets.$pane = crisis.cloneProto(crisis.prototypes.$divisionPane);
     dets.$closeButton = dets.$pane.find('.closeButton');
 
     dets.$details = dets.$pane.find('.details');

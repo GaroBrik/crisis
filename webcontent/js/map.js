@@ -41,6 +41,7 @@ crisis.map.init = function() {
     crisis.map.$mapBounds = $('#mapBounds');
     crisis.map.$outerMapDiv = $('#mapOuterDiv');
     crisis.map.$newDivisionButton = $('#newDivisionButton');
+    crisis.map.$controlsButton = $('#controlsButton');
 
     crisis.map.$holder.draggable({containment: crisis.map.$mapBounds});
 
@@ -74,8 +75,8 @@ crisis.map.init = function() {
             ));
         });
 
-    crisis.map.$controls.on('click' + crisis.event.baseNameSpace,
-                            crisis.controls.toggle);
+    crisis.map.$controlsButton.on('click' + crisis.event.baseNameSpace,
+                                  crisis.controls.toggle);
 };
 
 /** @param {crisisJson.Crisis} crisisData */
@@ -203,7 +204,7 @@ crisis.map.zoom = function(factor, fixPoint) {
  */
 crisis.map.showUnitTypeFinder = function(notInclude, $anchor, callback) {
     /** @type {jQuery} */
-    var $thisFinder = crisis.cloneProto(crisis.prototypes.$protoUnitTypeFinder);
+    var $thisFinder = crisis.cloneProto(crisis.prototypes.$unitTypeFinder);
 
     _.each(notInclude, function(num) {
         $thisFinder.find('li' + crisis.dataSelector(num, 'type')).remove();

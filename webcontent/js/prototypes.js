@@ -1,28 +1,38 @@
-crisis.prototypes {
+crisis.prototypes = {
     /** @type {jQuery} */
-    $protoDivisionMarker: null,
+    $divisionMarker: null,
     /** @type {jQuery} */
-    $protoDivisionPane: null,
+    $divisionPane: null,
     /** @type {jQuery} */
-    $protoUnitListItem: null,
+    $unitListItem: null,
     /** @type {jQuery} */
-    $protoUnitTypes: null,
+    $unitTypes: null,
     /** @type {jQuery} */
-    $protoUnitTypeFinder: null,
+    $unitTypeFinder: null,
     /** @type {jQuery} */
-    $protoFactions: null,
+    $factions: null,
     /** @type {jQuery} */
-    $protoRoutePoint: null
+    $routePoint: null,
+    /** @type {jQuery} */
+    $controlsFactionListItem: null,
+    /** @type {jQuery} */
+    $controlsUnitTypeListItem: null
 };
 
 crisis.prototypes.init = function() {
     /** @type {jQuery} */
     var $prototypes = $('#htmlObjectPrototypes');
-    crisis.$protoDivisionMarker = $prototypes.find('#protoDivisionMarker');
-    crisis.$protoDivisionPane = $prototypes.find('#protoDivisionPane');
-    crisis.$protoUnitListItem = $prototypes.find('#protoUnitListItem');
-    crisis.$protoUnitTypes = $prototypes.find('#protoUnitTypes');
-    crisis.$protoUnitTypeFinder = $prototypes.find('#protoUnitTypeFinder');
-    crisis.$protoFactions = $prototypes.find('#protoFactions');
-    crisis.$protoRoutePoint = $prototypes.find('#protoRoutePoint');
+    crisis.prototypes.$divisionMarker =
+        $prototypes.find('#protoDivisionMarker');
+    crisis.prototypes.$divisionPane = $prototypes.find('#protoDivisionPane');
+    crisis.prototypes.$unitListItem = $prototypes.find('#protoUnitListItem');
+    crisis.prototypes.$unitTypes = $prototypes.find('#protoUnitTypes');
+    crisis.prototypes.$unitTypeFinder =
+        $prototypes.find('#protoUnitTypeFinder');
+    crisis.prototypes.$factions = $prototypes.find('#protoFactions');
+    crisis.prototypes.$routePoint = $prototypes.find('#protoRoutePoint');
+    crisis.prototypes.$controlsFactionListItem =
+        $prototypes.find('#protoFactionListItem');
+    crisis.prototypes.$controlsUnitTypeListItem =
+        $prototypes.find('#protoUnitTypeListItem');
 };

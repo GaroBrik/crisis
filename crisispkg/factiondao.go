@@ -16,6 +16,14 @@ func GetFactionsByCrisisId(tx *pg.Tx, crisisId int) ([]Faction, error) {
 	return factions, nil
 }
 
+func CreateFaction(tx *pg.Tx, name string, crisisId int) (Faction, error) {
+	fac := Faction{Name: name}
+	_, err := tx.QueryOne(&fac, `
+            INSERT INTO faction (name, crisis) VALUES (?, ?) RETURNING id
+        `, fac.Name, crisisId)
+	return fac, err
+}
+
 func UpdateFaction(tx *pg.Tx, factionId int, newName string) (Faction, error) {
 	var faction Faction
 	_, err := tx.Exec(`UPDATE faction SET faction_name = ? WHERE id = ?`,
@@ -31,5 +39,6 @@ func UpdateFaction(tx *pg.Tx, factionId int, newName string) (Faction, error) {
 }
 
 func DeleteFaction(tx *pg.Tx, factionId int) error {
-    _, err := tx.Exec(`UPDATE
+	_, err := tx.Exec(`DELETE FROM faction WHERE id = ?`, factionId)
+	return err
 }

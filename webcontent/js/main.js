@@ -13,8 +13,8 @@ crisis.init = function() {
     crisis.prototypes.init();
     crisis.map.init();
 
-    crisis.ajax.pollNow(crisis.ajax.mapPath, {
-        /** @param {data} crisisJson.Crisis */
+    crisis.ajax.pollNow(crisis.ajax.crisisPath, {
+        /** @param {crisisJson.Crisis} json */
         success: function(json) {
             crisis.updateData(json);
         }
@@ -26,16 +26,15 @@ crisis.updateData = function(json) {
     crisis.map.updateData(json);
 
     crisis.updateElements(
-        crisis.divisions, crisisData.Divisions, crisis.Division.fromJson);
+        crisis.divisions, json.Divisions, crisis.Division.fromJson);
 
     crisis.updateElements(
-        crisis.factions, crisisData.Factions, crisis.Faction.fromJson);
+        crisis.factions, json.Factions, crisis.Faction.fromJson);
 
     crisis.updateElements(
-        crisis.unitTypes, crisisData.UnitTypes, crisis.UnitType.fromJson);
+        crisis.unitTypes, json.UnitTypes, crisis.UnitType.fromJson);
 
     crisis.controls.reRender();
-    crisis.map.reRender();
 };
 
 /**
@@ -46,7 +45,6 @@ crisis.Updateable = function() {};
 /** @param {T} data */
 crisis.Updateable.prototype.update = function(data) {};
 crisis.Updateable.prototype.destroy = function() {};
-
 /**
  * @param {T} data
  * @return {boolean}
@@ -194,6 +192,6 @@ crisis.positionDropdown = function($dropdown, $source, $container) {
  */
 crisis.factionHtml = function(id) {
     return crisis.cloneProto(
-        crisis.prototypes.$protoFactions.find(
+        crisis.prototypes.$factions.find(
             crisis.dataSelector(id, 'faction')));
 };
