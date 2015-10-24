@@ -12,10 +12,16 @@ type AjaxHandler struct {
 
 const (
 	ajaxPath           = "ajax/"
-	mapPath            = ajaxPath + "map/"
+	crisisPath         = ajaxPath + "crisis/"
 	updateDivisionPath = ajaxPath + "updateDivision/"
 	createDivisionPath = ajaxPath + "createDivision/"
 	deleteDivisionPath = ajaxPath + "deleteDivision/"
+	updateFactionPath  = ajaxPath + "updateFaction/"
+	createFactionPath  = ajaxPath + "createFaction/"
+	deleteFactionPath  = ajaxPath + "deleteFaction/"
+	updateUnitTypePath = ajaxPath + "updateUnitType/"
+	createUnitTypePath = ajaxPath + "createUnitType/"
+	deleteUnitTypePath = ajaxPath + "deleteUnitType/"
 	divisionRoutePath  = ajaxPath + "divisionRoute/"
 )
 
@@ -36,8 +42,10 @@ func (handler *AjaxHandler) HandleRequest(res http.ResponseWriter, req *http.Req
 	factionId := getFactionId(req)
 
 	switch req.URL.Path[1:] {
-	case mapPath:
+	case crisisPath:
 		var divisions []Division
+		var unitTypes []UnitType
+		var factions []Faction
 		err := handler.db.db.RunInTransaction(func(tx *pg.Tx) error {
 			var err error
 			if canEdit {
@@ -45,6 +53,16 @@ func (handler *AjaxHandler) HandleRequest(res http.ResponseWriter, req *http.Req
 			} else {
 				divisions, err = GetDivisionsByFactionId(tx, factionId)
 			}
+			if err != nil {
+				return err
+			}
+
+			unitTypes, err = GetUnitTypesByCrisisId(tx, authInfo.CrisisId)
+			if err != nil {
+				return err
+			}
+
+			factions, err = GetFactionsByCrisisId(tx, authInfo.CrisisId)
 			return err
 		})
 		maybePanic(err)
@@ -53,6 +71,8 @@ func (handler *AjaxHandler) HandleRequest(res http.ResponseWriter, req *http.Req
 			MapBounds: Bounds{100, 100},
 			MapCosts:  make([][]int, 0),
 			Divisions: divisions,
+			Factions:  factions,
+			UnitTypes: unitTypes,
 		})
 		if err != nil {
 			http.Error(res, err.Error(), http.StatusInternalServerError)
@@ -154,7 +174,6 @@ func (handler *AjaxHandler) HandleRequest(res http.ResponseWriter, req *http.Req
 		var success bool
 
 		err = handler.db.db.RunInTransaction(func(tx *pg.Tx) error {
-
 			div, err := GetDivision(tx, jsonSent.DivisionId)
 			if err != nil {
 				return err
@@ -184,6 +203,23 @@ func (handler *AjaxHandler) HandleRequest(res http.ResponseWriter, req *http.Req
 		maybePanic(err)
 
 		res.Write(json)
+
+	case updateFactionPath:
+		var jsonSent Faction
+		err := json.NewDecoder(req.Body).Decode(&jsonSent)
+		maybePanic(err)
+
+		var finalFaction *Faction
+		err = handler.db.db.RunInTransaction(func(tx *pg.Tx) error {
+			fac, err := UpdateFaction(tx, jsonSent.Id, jsonSent.Name)
+			if err != nil {
+				return err
+			}
+
+			finalFaction = &fac
+			return nil
+		})
+		maybePanic(err)
 
 	default:
 		http.Error(res, "Invalid request path", http.StatusBadRequest)

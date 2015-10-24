@@ -1,31 +1,41 @@
 /** @export */
 var crisis = {
-    /** @type {jQuery} */
-    $protoDivisionMarker: null,
-    /** @type {jQuery} */
-    $protoDivisionPane: null,
-    /** @type {jQuery} */
-    $protoUnitListItem: null,
-    /** @type {jQuery} */
-    $protoUnitTypes: null,
-    /** @type {jQuery} */
-    $protoUnitTypeFinder: null,
-    /** @type {jQuery} */
-    $protoFactions: null,
-    /** @type {jQuery} */
-    $routePoint: null
+    /** @type {Array<crisis.Division>} */
+    divisions: [],
+    /** @type {Array<crisis.Faction>} */
+    factions: [],
+    /** @type {Array<crisis.UnitType>} */
+    unitTypes: []
 };
 
 /** @export */
 crisis.init = function() {
-    var $prototypes = $('#htmlObjectPrototypes');
-    crisis.$protoDivisionMarker = $prototypes.find('#protoDivisionMarker');
-    crisis.$protoDivisionPane = $prototypes.find('#protoDivisionPane');
-    crisis.$protoUnitListItem = $prototypes.find('#protoUnitListItem');
-    crisis.$protoUnitTypes = $prototypes.find('#protoUnitTypes');
-    crisis.$protoUnitTypeFinder = $prototypes.find('#protoUnitTypeFinder');
-    crisis.$protoFactions = $prototypes.find('#protoFactions');
-    crisis.$routePoint = $prototypes.find('#protoRoutePoint');
+    crisis.prototypes.init();
+    crisis.map.init();
+
+    crisis.ajax.pollNow(crisis.ajax.mapPath, {
+        /** @param {data} crisisJson.Crisis */
+        success: function(json) {
+            crisis.updateData(json);
+        }
+    });
+};
+
+/** @param {crisisJson.Crisis} json */
+crisis.updateData = function(json) {
+    crisis.map.updateData(json);
+
+    crisis.updateElements(
+        crisis.divisions, crisisData.Divisions, crisis.Division.fromJson);
+
+    crisis.updateElements(
+        crisis.factions, crisisData.Factions, crisis.Faction.fromJson);
+
+    crisis.updateElements(
+        crisis.unitTypes, crisisData.UnitTypes, crisis.UnitType.fromJson);
+
+    crisis.controls.reRender();
+    crisis.map.reRender();
 };
 
 /**
@@ -36,6 +46,7 @@ crisis.Updateable = function() {};
 /** @param {T} data */
 crisis.Updateable.prototype.update = function(data) {};
 crisis.Updateable.prototype.destroy = function() {};
+
 /**
  * @param {T} data
  * @return {boolean}
@@ -70,6 +81,23 @@ crisis.updateElements = function(elements, data, elementCreator) {
     _.each(data, function(datum) {
         elements.push(elementCreator(datum));
     });
+
+    _.each(elements, function(elem) { elem.reRender(); });
+};
+
+/** @param {crisis.Division} div */
+crisis.addDivision = function(div) {
+    crisis.divisions.push(div);
+};
+
+/** @param {crisis.Faction} faction */
+crisis.addFaction = function(faction) {
+    crisis.factions.push(faction);
+};
+
+/** @param {crisis.UnitType} unitType */
+crisis.addUnitType = function(unitType) {
+    crisis.unitTypes.push(unitType);
 };
 
 /**
@@ -166,5 +194,6 @@ crisis.positionDropdown = function($dropdown, $source, $container) {
  */
 crisis.factionHtml = function(id) {
     return crisis.cloneProto(
-        crisis.$protoFactions.find(crisis.dataSelector(id, 'faction')));
+        crisis.prototypes.$protoFactions.find(
+            crisis.dataSelector(id, 'faction')));
 };

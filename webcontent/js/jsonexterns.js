@@ -7,9 +7,55 @@ var crisisJson = {};
  *   MapBounds: crisisJson.Bounds,
  *   MapCosts: Array<Array<number>>,
  *   Divisions: Array<crisisJson.Division>
+ *   Factions: Array<crisisJson.Faction>
+ *   UnitTypes: Array<crisisJson.UnitTypes>
  * }}
  */
 crisisJson.Crisis;
+
+/**
+ * @typedef {{
+ *   Id: number,
+ *   Name: string
+ * }}
+ */
+crisisJson.Faction;
+
+/**
+ * @typedef {{
+ *   Id: number
+ * }}
+ */
+crisisJson.DeleteFaction;
+
+/**
+ * @typedef {{
+ *   Name: string
+ * }}
+ */
+crisisJson.CreateFaction;
+
+/**
+ * @typedef {{
+ *   Id: number,
+ *   Name: string
+ * }}
+ */
+crisisJson.UnitType;
+
+/**
+ * @typedef {{
+ *   Id: number
+ * }}
+ */
+crisisJson.DeleteUnitType;
+
+/**
+ * @typedef {{
+ *   Name: string
+ * }}
+ */
+crisisJson.CreateUnitType;
 
 /**
  * @typedef {{

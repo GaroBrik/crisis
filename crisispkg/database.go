@@ -51,18 +51,6 @@ func GetUnitTypesByCrisisId(tx *pg.Tx, crisisId int) ([]UnitType, error) {
 	return unitTypes, nil
 }
 
-func GetFactionsByCrisisId(tx *pg.Tx, crisisId int) ([]Faction, error) {
-	var factions Factions
-	_, err := tx.Query(&factions, `
-            SELECT id, faction_name FROM faction WHERE crisis = ?
-        `, crisisId)
-	if err != nil {
-		return nil, err
-	}
-
-	return factions, nil
-}
-
 func DoUnitMovement(tx *pg.Tx) error {
 	moveAmount := 10
 	crises, err := GetAllActiveCrises(tx)

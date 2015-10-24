@@ -14,7 +14,7 @@ crisis.Unit = function(unitJson, div) {
     /** @type {number} */
     unit.type = unitJson.Type;
     /** @type {jQuery} */
-    unit.$listItem = crisis.cloneProto(crisis.$protoUnitListItem);
+    unit.$listItem = crisis.cloneProto(crisis.prototypes.$protoUnitListItem);
     /** @type {jQuery} */
     unit.$value = unit.$listItem.find('.value');
     /** @type {jQuery} */
@@ -67,5 +67,5 @@ crisis.Unit.prototype.disableEdit = function() {
 */
 crisis.Unit.typeHtml = function(typeId) {
     return crisis.cloneProto(
-        crisis.$protoUnitTypes.find(crisis.dataSelector(typeId, 'type')));
+        crisis.prototypes.$protoUnitTypes.find(crisis.dataSelector(typeId, 'type')));
 }

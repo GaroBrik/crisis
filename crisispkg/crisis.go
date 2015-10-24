@@ -10,6 +10,8 @@ type Crisis struct {
 	Active    bool
 	MapBounds Bounds
 	Divisions []Division
+	UnitTypes []UnitType
+	Factions  []Faction
 	MapCosts  [][]int
 }
 

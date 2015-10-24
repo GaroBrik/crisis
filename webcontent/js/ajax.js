@@ -8,7 +8,7 @@ crisis.ajax.path = 'ajax/';
  * @const
  * @type {string}
  */
-crisis.ajax.mapPath = crisis.ajax.path + 'map/';
+crisis.ajax.crisisPath = crisis.ajax.path + 'crisis/';
 /**
  * @const
  * @type {string}
@@ -29,6 +29,36 @@ crisis.ajax.deleteDivisionPath = crisis.ajax.path + 'deleteDivision/';
  * @type {string}
  */
 crisis.ajax.divisionRoutePath = crisis.ajax.path + 'divisionRoute/';
+/**
+ * @const
+ * @type {string}
+ */
+crisis.ajax.createFactionPath = crisis.ajax.path + 'createFaction/';
+/**
+ * @const
+ * @type {string}
+ */
+crisis.ajax.updateFactionPath = crisis.ajax.path + 'updateFaction/';
+/**
+ * @const
+ * @type {string}
+ */
+crisis.ajax.deleteFactionPath = crisis.ajax.path + 'deleteFaction/';
+/**
+ * @const
+ * @type {string}
+ */
+crisis.ajax.createUnitTypePath = crisis.ajax.path + 'createUnitType/';
+/**
+ * @const
+ * @type {string}
+ */
+crisis.ajax.updateUnitTypePath = crisis.ajax.path + 'updateUnitType/';
+/**
+ * @const
+ * @type {string}
+ */
+crisis.ajax.deleteUnitTypePath = crisis.ajax.path + 'deleteUnitType/';
 
 /**
  * @param {string} path
@@ -109,6 +139,74 @@ crisis.ajax.postDivisionRoute = function(divisionId, route, options) {
         Route: route
     };
     crisis.ajax.postData(crisis.ajax.divisionRoutePath, data, options);
+};
+
+/**
+ * @param {string} name
+ * @param {jQueryAjaxSettings=} options
+ */
+crisis.ajax.postFactionCreation = function(name, options) {
+    /** @type {crisisJson.CreateFaction} */
+    var data = { Name: name };
+    crisis.ajax.postData(crisis.ajax.createFactionPath, data, options);
+};
+
+/**
+ * @param {number} id
+ * @param {jQueryAjaxSettings=} options
+ */
+crisis.ajax.postFactionDeletion = function(id, options) {
+    /** @type {crisisJson.DeleteFaction} */
+    var data = { Id: id };
+    crisis.ajax.postData(crisis.ajax.deleteFactionPath, data, options);
+};
+
+/**
+ * @param {string} name
+ * @param {number} id
+ * @param {jQueryAjaxSettings=} options
+ */
+crisis.ajax.postFactionUpdate = function(name, id, options) {
+    /** @type {crisisJson.DeleteFaction} */
+    var data = {
+        Id: id,
+        Name: name
+    };
+    crisis.ajax.postData(crisis.ajax.updateFactionPath, data, options);
+};
+
+/**
+ * @param {string} name
+ * @param {jQueryAjaxSettings=} options
+ */
+crisis.ajax.postUnitTypeCreation = function(name, options) {
+    /** @type {crisisJson.CreateUnitType} */
+    var data = { Name: name };
+    crisis.ajax.postData(crisis.ajax.createUnitTypePath, data, options);
+};
+
+/**
+ * @param {number} id
+ * @param {jQueryAjaxSettings=} options
+ */
+crisis.ajax.postUnitTypeDeletion = function(id, options) {
+    /** @type {crisisJson.DeleteUnitType} */
+    var data = { Id: id };
+    crisis.ajax.postData(crisis.ajax.deleteUnitTypePath, data, options);
+};
+
+/**
+ * @param {string} name
+ * @param {number} id
+ * @param {jQueryAjaxSettings=} options
+ */
+crisis.ajax.postUnitTypeUpdate = function(name, id, options) {
+    /** @type {crisisJson.DeleteUnitType} */
+    var data = {
+        Id: id,
+        Name: name
+    };
+    crisis.ajax.postData(crisis.ajax.updateUnitTypePath, data, options);
 };
 
 /**

@@ -53,15 +53,26 @@
       </div>
       {{end}}
     </div>
-    <ul>
-      <li id="protoUnitListItem" class="unitListItem">
-        <span class="type"></span>
-        <span class="value"></span>
-        <input type="text" class="editField" style="display: none">
-        <input type="button" class="removeUnitButton" style="display: none" value="x">
-        <span class="invalidAlert" style="display: none">Invalid Unit Input</span>
-      </li>
-    </ul>
+    <li id="protoUnitListItem" class="unitListItem">
+      <span class="type"></span>
+      <span class="value"></span>
+      <input type="text" class="editField" style="display: none">
+      <input type="button" class="removeUnitButton" style="display: none" value="x">
+      <span class="invalidAlert" style="display: none">Invalid Unit Input</span>
+    </li>
+    <li id="protoFactionListItem" class="factionListItem">
+      <span class="name"></span>
+      <input type="text" class="editField" style="display: none">
+      <input type="button" class="editButton"  value="E">
+      <input type="button" class="cancelButton" style="display: none" value="N">
+      <input type="button" class="commitButton" style="display: none" value="Y">
+      <input type="button" class="deleteButton" style="display: none" value="D">
+    </li>
+    <li id="protoUnitTypeListItem" class="unitTypeListItem">
+      <span class="name"></span>
+      <input type="text" class="editField" style="display: none">
+      <input type="button" class="removeUnitTypeButton" style="display: none" value="x">
+    </li>
     <div id="protoUnitTypes">
       {{range .Types}}
         <span data-type="{{.Id}}">
@@ -89,10 +100,9 @@
   </div>
   <div id="header">
     {{if .CanEdit}}
-      <input type="button" id="newDivisionButton" value="Create New Division" >
+      <input type="button" id="newDivisionButton" value="Create New Division">
+      <input type="controls" id="controlsButton" value="Edit Crisis">
     {{end}}
-    <input type="button" id="zoomInButton" value="Zoom In" >
-    <input type="button" id="zoomOutButton" value="Zoom Out" >
   </div>
   <div id="main">
     <div id="mapOuterDiv">
@@ -102,6 +112,13 @@
       </div>
     </div>
   </div>
+  {{if .CanEdit}}
+    <div id="controls" style="display: hidden">
+      <input id="controlsEditMapButton" type="button" value="Edit Map">
+      <ul id="controlsFactionList"></ul>
+      <ul id="controlsUnitTypeList"></ul>
+    </div>
+  {{end}}
   <script type="text/javascript">
    $(document).ready(function() {
      crisis.init();

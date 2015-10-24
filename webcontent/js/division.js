@@ -21,12 +21,20 @@ crisis.Division = function(divJson) {
     /** @type {number} */
     this.factionId;
     /** @type {jQuery} */
-    this.$marker = crisis.cloneProto(crisis.$protoDivisionMarker);
+    this.$marker = crisis.cloneProto(crisis.prototypes.$protoDivisionMarker);
 
     this.update(divJson);
     this.$marker.click(function() { div.details.toggle(); });
 
     crisis.map.addAt(this.$marker, this.absCoords);
+};
+
+/**
+ * @param {crisisJson.Division} divJson
+ * @return {crisis.Division}
+ */
+crisis.Division.fromJson = function(divJson) {
+    return new crisis.Division(divJson);
 };
 
 /** @inheritDoc */

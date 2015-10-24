@@ -62,7 +62,7 @@ crisis.DivisionDetails = function(div) {
 crisis.DivisionDetails.prototype.init = function() {
     var dets = this;
 
-    dets.$pane = crisis.cloneProto(crisis.$protoDivisionPane);
+    dets.$pane = crisis.cloneProto(crisis.prototypes.$protoDivisionPane);
     dets.$closeButton = dets.$pane.find('.closeButton');
 
     dets.$details = dets.$pane.find('.details');
@@ -414,7 +414,7 @@ crisis.DivisionDetails.prototype.commitCreate = function() {
         dets.division.absCoords, newUnits, name, factionId, {
             success: function(divJson) {
                 dets.division.destroy();
-                crisis.map.addDivision(divJson);
+                crisis.addDivision(new crisis.Division(divJson));
             }
         });
 };

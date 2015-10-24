@@ -8,8 +8,6 @@ crisis.MapState = {
  * @export
  */
 crisis.map = {
-    /** @type {Array<crisis.Division>} */
-    divisions: [],
     /** @type {?crisis.Bounds} */
     absBounds: null,
     /** @type {crisis.Bounds} */
@@ -27,7 +25,9 @@ crisis.map = {
     /** @type {jQuery} */
     $outerMapDiv: null,
     /** @type {jQuery} */
-    $addDivisionButton: null,
+    $newDivisionButton: null,
+    /** @type {jQuery} */
+    $controlsButton: null,
     /** @type {boolean} */
     zooming: false,
     /** @type {function()} */
@@ -41,8 +41,6 @@ crisis.map.init = function() {
     crisis.map.$mapBounds = $('#mapBounds');
     crisis.map.$outerMapDiv = $('#mapOuterDiv');
     crisis.map.$newDivisionButton = $('#newDivisionButton');
-    crisis.map.$zoomInButton = $('#zoomInButton');
-    crisis.map.$zoomOutButton = $('#zoomOutButton');
 
     crisis.map.$holder.draggable({containment: crisis.map.$mapBounds});
 
@@ -76,34 +74,13 @@ crisis.map.init = function() {
             ));
         });
 
-    crisis.map.$zoomInButton.on('click' + crisis.event.baseNameSpace,
-        function() {
-            crisis.map.zoom(2, crisis.map.centerClick());
-        });
-
-    crisis.map.$zoomOutButton.on('click' + crisis.event.baseNameSpace,
-        function() {
-            crisis.map.zoom(0.5, crisis.map.centerClick());
-        });
-
-    crisis.ajax.pollNow(crisis.ajax.mapPath, {
-        success: function(data) {
-            crisis.map.updateData(data);
-        }
-    });
+    crisis.map.$controls.on('click' + crisis.event.baseNameSpace,
+                            crisis.controls.toggle);
 };
 
 /** @param {crisisJson.Crisis} crisisData */
 crisis.map.updateData = function(crisisData) {
     crisis.map.absBounds = crisis.Bounds.fromJson(crisisData.MapBounds);
-
-    crisis.updateElements(crisis.map.divisions, crisisData.Divisions,
-        function(divJson) { return new crisis.Division(divJson); });
-};
-
-/** @param {crisisJson.Division} divJson */
-crisis.map.addDivision = function(divJson) {
-    crisis.map.divisions.push(new crisis.Division(divJson));
 };
 
 /**
@@ -226,7 +203,7 @@ crisis.map.zoom = function(factor, fixPoint) {
  */
 crisis.map.showUnitTypeFinder = function(notInclude, $anchor, callback) {
     /** @type {jQuery} */
-    var $thisFinder = crisis.cloneProto(crisis.$protoUnitTypeFinder);
+    var $thisFinder = crisis.cloneProto(crisis.prototypes.$protoUnitTypeFinder);
 
     _.each(notInclude, function(num) {
         $thisFinder.find('li' + crisis.dataSelector(num, 'type')).remove();
@@ -289,16 +266,6 @@ crisis.map.stopGettingClick = function() {
     if (crisis.map.state !== crisis.MapState.GETTING_CLICK) return;
     crisis.map.$image.off('click' + crisis.event.getClickNameSpace);
     crisis.map.state = crisis.MapState.NORMAL;
-};
-
-/** @return {crisis.Coords} */
-crisis.map.centerClick = function() {
-    return new crisis.Coords(
-        crisis.map.$outerMapDiv.width() / 2 -
-            crisis.getCssPx(crisis.map.$holder, 'left'),
-        crisis.map.$outerMapDiv.height() / 2 -
-            crisis.getCssPx(crisis.map.$holder, 'top')
-    );
 };
 
 /**
