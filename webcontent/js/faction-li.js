@@ -11,8 +11,7 @@ crisis.FactionLi = function(faction, forCreation) {
 
     /** @type {jQuery} */
     this.$listItem = crisis.cloneProto(
-        crisis.prototypes.$controlsFactionListItem.find(
-            crisis.dataSelector(this.faction.id, 'faction')));
+        crisis.prototypes.$controlsFactionListItem);
     /** @type {jQuery} */
     this.$editButton = this.$listItem.find('.editButton');
     /** @type {jQuery} */
@@ -48,8 +47,7 @@ crisis.FactionLi = function(faction, forCreation) {
     } else {
         this.startEditing();
     }
-    console.log(this.$listItem);
-    console.log(crisis.controls.$factionList);
+
     crisis.controls.$factionList.append(this.$listItem);
 };
 

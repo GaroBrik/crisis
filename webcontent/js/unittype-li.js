@@ -11,8 +11,7 @@ crisis.UnitTypeLi = function(unitType, forCreation) {
 
     /** @type {jQuery} */
     this.$listItem = crisis.cloneProto(
-        crisis.prototypes.$controlsUnitTypeListItem.find(
-            crisis.dataSelector(unitType.id, 'unitType')));
+        crisis.prototypes.$controlsUnitTypeListItem);
     /** @type {jQuery} */
     this.$editButton = this.$listItem.find('.editButton');
     /** @type {jQuery} */
