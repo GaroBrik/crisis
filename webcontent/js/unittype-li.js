@@ -4,6 +4,9 @@
  * @param {boolean} forCreation
  */
 crisis.UnitTypeLi = function(unitType, forCreation) {
+    /** @type {crisis.UnitTypeLi} */
+    var thisLi = this;
+    
     /** @type {crisis.UnitType} */
     this.unitType = unitType;
     /** @type {boolean} */
@@ -26,20 +29,20 @@ crisis.UnitTypeLi = function(unitType, forCreation) {
     this.$nameSpan = this.$listItem.find('.name');
 
     this.$editButton.on('click' + crisis.event.baseNameSpace, function() {
-        this.startEditing();
+        thisLi.startEditing();
     });
     this.$cancelButton.on('click' + crisis.event.baseNameSpace, function() {
         if (forCreation) {
-            this.destroy();
+            thisLi.destroy();
         } else {
-            this.stopEditing();
+            thisLi.stopEditing();
         }
     });
     this.$deleteButton.on('click' + crisis.event.baseNameSpace, function() {
-        this.commitDelete();
+        thisLi.commitDelete();
     });
     this.$commitButton.on('click' + crisis.event.baseNameSpace, function() {
-        this.commit();
+        thisLi.commit();
     });
 
     if (!this.forCreation) {
@@ -77,6 +80,9 @@ crisis.UnitTypeLi.prototype.stopEditing = function() {
 };
 
 crisis.UnitTypeLi.prototype.commit = function() {
+    /** @type {crisis.UnitTypeLi} */
+    var thisLi = this;
+    
     /** @type {string} */
     var name = /** @type {string} */ (this.$editField.val());
     if (name === '' || name === null) {
@@ -87,7 +93,7 @@ crisis.UnitTypeLi.prototype.commit = function() {
         crisis.ajax.postUnitTypeCreation(name, {
             /** @param {crisisJson.UnitType} json */
             success: function(json) {
-                this.destroy();
+                thisLi.destroy();
                 crisis.addUnitType(new crisis.UnitType(json, false));
             }
         });
@@ -102,11 +108,14 @@ crisis.UnitTypeLi.prototype.commit = function() {
 };
 
 crisis.UnitTypeLi.prototype.commitDelete = function() {
+    /** @type {crisis.UnitTypeLi} */
+    var thsiLi = this;
+    
     crisis.ajax.postUnitTypeDeletion(this.unitType.id, {
         /** @param {crisisJson.Success} json */
         success: function(json) {
             if (json.Success) {
-                this.unitType.destroy();
+                thisLi.unitType.destroy();
             }
         }
     });

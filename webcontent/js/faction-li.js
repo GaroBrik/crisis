@@ -4,6 +4,9 @@
  * @param {boolean} forCreation
  */
 crisis.FactionLi = function(faction, forCreation) {
+    /** @type {crisis.FactionLi} */
+    var thisLi = this;
+    
     /** @type {crisis.Faction} */
     this.faction = faction;
     /** @type {boolean} */
@@ -26,20 +29,20 @@ crisis.FactionLi = function(faction, forCreation) {
     this.$nameSpan = this.$listItem.find('.name');
 
     this.$editButton.on('click' + crisis.event.baseNameSpace, function() {
-        this.startEditing();
+        thisLi.startEditing();
     });
     this.$cancelButton.on('click' + crisis.event.baseNameSpace, function() {
         if (forCreation) {
-            this.destroy();
+            thisLi.destroy();
         } else {
-            this.stopEditing();
+            thisLi.stopEditing();
         }
     });
     this.$deleteButton.on('click' + crisis.event.baseNameSpace, function() {
-        this.commitDelete();
+        thisLi.commitDelete();
     });
     this.$commitButton.on('click' + crisis.event.baseNameSpace, function() {
-        this.commit();
+        thisLi.commit();
     });
 
     if (!this.forCreation) {
@@ -78,6 +81,9 @@ crisis.FactionLi.prototype.stopEditing = function() {
 };
 
 crisis.FactionLi.prototype.commit = function() {
+    /** @type {crisis.FactionLi} */
+    var thisLi = this;
+    
     /** @type {string} */
     var name = /** @type {string} */ (this.$editField.val());
     if (name === '' || name === null) {
@@ -88,7 +94,7 @@ crisis.FactionLi.prototype.commit = function() {
         crisis.ajax.postFactionCreation(name, {
             /** @param {crisisJson.Faction} json */
             success: function(json) {
-                this.destroy();
+                thisLi.destroy();
                 crisis.addFaction(new crisis.Faction(json, false));
             }
         });
@@ -103,11 +109,14 @@ crisis.FactionLi.prototype.commit = function() {
 };
 
 crisis.FactionLi.prototype.commitDelete = function() {
+    /** @type {crisis.FactionLi} */
+    var thisLi = this;
+    
     crisis.ajax.postFactionDeletion(this.faction.id, {
         /** @param {crisisJson.Success} json */
         success: function(json) {
             if (json.Success) {
-                this.faction.destroy();
+                thisLi.faction.destroy();
             }
         }
     });
