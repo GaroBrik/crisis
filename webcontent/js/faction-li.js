@@ -102,7 +102,8 @@ crisis.FactionLi.prototype.commit = function() {
         crisis.ajax.postFactionUpdate(name, this.faction.id, {
             /** @param {crisisJson.Faction} json */
             success: function(json) {
-
+                thisLi.faction.update(json);
+                thisLi.stopEditing();
             }
         });
     }

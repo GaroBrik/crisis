@@ -101,7 +101,8 @@ crisis.UnitTypeLi.prototype.commit = function() {
         crisis.ajax.postUnitTypeUpdate(name, this.unitType.id, {
             /** @param {crisisJson.UnitType} json */
             success: function(json) {
-
+                thisLi.faction.update(json);
+                thisLi.stopEditing();
             }
         });
     }
