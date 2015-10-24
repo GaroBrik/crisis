@@ -11,6 +11,7 @@ var crisis = {
 /** @export */
 crisis.init = function() {
     crisis.prototypes.init();
+    crisis.controls.initialize();
     crisis.map.init();
 
     crisis.ajax.pollNow(crisis.ajax.crisisPath, {
