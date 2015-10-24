@@ -48,6 +48,8 @@ crisis.FactionLi = function(faction, forCreation) {
     } else {
         this.startEditing();
     }
+    console.log(this.$listItem);
+    console.log(crisis.controls.$factionList);
     crisis.controls.$factionList.append(this.$listItem);
 };
 

@@ -127,3 +127,13 @@ ul {
     width: 15px;
     background-color: red;
 }
+
+#controls {
+    left: 0px;
+    top: $headerHeight;
+    background-color: white;
+
+    ul {
+        position: relative;
+    }
+}
