@@ -7,7 +7,7 @@ import (
 func GetUnitTypesByCrisisId(tx *pg.Tx, crisisId int) ([]UnitType, error) {
 	var unitTypes UnitTypes
 	_, err := tx.Query(&unitTypes, `
-            SELECT id, unit_name FROM unit WHERE crisis = ?
+            SELECT id, unit_name FROM unit_type WHERE crisis = ?
         `, crisisId)
 	if err != nil {
 		return nil, err
@@ -33,12 +33,12 @@ func UpdateUnitType(tx *pg.Tx, typeId int, newName string) (UnitType, error) {
 	}
 
 	_, err = tx.QueryOne(&unitType, `
-            SELECT id, unit_name FROM unit WHERE id = ?
+            SELECT id, unit_name FROM unit_type WHERE id = ?
         `, typeId)
 	return unitType, err
 }
 
 func DeleteUnitType(tx *pg.Tx, typeId int) error {
-	_, err := tx.Exec(`DELETE FROM unit WHERE id = ?`, typeId)
+	_, err := tx.Exec(`DELETE FROM unit_type WHERE id = ?`, typeId)
 	return err
 }
