@@ -79,8 +79,6 @@ crisis.updateElements = function(elements, data, elementCreator) {
     _.each(data, function(datum) {
         elements.push(elementCreator(datum));
     });
-
-    _.each(elements, function(elem) { elem.reRender(); });
 };
 
 /** @param {crisis.Division} div */
