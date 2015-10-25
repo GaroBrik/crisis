@@ -76,8 +76,9 @@ func mainPage(res http.ResponseWriter, req *http.Request) {
 
 		return mainPageTmpl.Execute(res, pageInfo{
 			JSUrls: []string{
-				"static/compiled.js",
 				"static/jquery.mousewheel.js",
+				"static/buckets.min.js",
+				"static/compiled.js",
 			},
 			CSSUrl:   "static/main.css",
 			Types:    types,

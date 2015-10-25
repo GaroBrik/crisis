@@ -2,6 +2,7 @@
  * @constructor
  * @param {crisis.Faction} faction
  * @param {boolean} forCreation
+ * @implements {crisis.Faction.ChangeListener}
  */
 crisis.FactionLi = function(faction, forCreation) {
     /** @type {crisis.FactionLi} */
@@ -46,7 +47,8 @@ crisis.FactionLi = function(faction, forCreation) {
     });
 
     if (!this.forCreation) {
-        this.$nameSpan.html(this.faction.name);
+        this.$nameSpan.text(this.faction.name);
+        this.faction.listeners.add(this);
     } else {
         this.startEditing();
     }
@@ -125,8 +127,17 @@ crisis.FactionLi.prototype.commitDelete = function() {
 
 crisis.FactionLi.prototype.destroy = function() {
     this.$listItem.remove();
+    if (!this.forCreation) {
+        this.faction.listeners.remove(this);
+    }
 };
 
-crisis.FactionLi.prototype.reRender = function() {
-    this.$nameSpan.html(this.faction.name);
+/** @param {crisis.Faction} faction */
+crisis.FactionLi.prototype.factionChanged = function(faction) {
+    this.$nameSpan.text(faction.name);
+};
+
+/** @return {string} */
+crisis.FactionLi.prototype.listenerId = function() {
+    return 'factionLi(' + this.faction.id + ')';
 };

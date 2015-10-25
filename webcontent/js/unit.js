@@ -3,8 +3,10 @@
  * @param {crisisJson.Unit} unitJson
  * @param {crisis.Division} div
  * @implements {crisis.Updateable<crisisJson.Unit>}
+ * @implements {crisis.UnitType.ChangeListener}
  */
 crisis.Unit = function(unitJson, div) {
+    /** @type {crisis.Unit} */
     var unit = this;
 
     /** @type {crisis.Division} */
@@ -26,7 +28,8 @@ crisis.Unit = function(unitJson, div) {
     /** @type {jQuery} */
     unit.$invalidAlert = unit.$listItem.find('.invalidAlert');
 
-    unit.$type.append(crisis.Unit.typeHtml(unit.type));
+    unit.$type.text(crisis.unitTypes.get(unit.type).name);
+    crisis.unitTypes.get(unit.type).listeners.add(this);
     unit.$removeUnitButton.on('click' + crisis.event.baseNameSpace, function() {
         unit.division.details.removeUnit(unit);
     });
@@ -39,14 +42,10 @@ crisis.Unit.prototype.update = function(data) {
     this.$value.text(this.amount);
 };
 
-/** @inheritDoc */
-crisis.Unit.prototype.updateDataMatch = function(data) {
-    return this.type === data.Type;
-};
-
 crisis.Unit.prototype.destroy = function() {
     this.$listItem.remove();
     this.division.removeUnit(this);
+    crisis.unitTypes.get(this.type).listeners.remove(this);
 };
 
 crisis.Unit.prototype.enableEdit = function() {
@@ -61,11 +60,11 @@ crisis.Unit.prototype.disableEdit = function() {
     this.$value.show();
 };
 
-/**
- * @param {number} typeId
- * @return {jQuery}
-*/
-crisis.Unit.typeHtml = function(typeId) {
-    return crisis.cloneProto(
-        crisis.prototypes.$unitTypes.find(crisis.dataSelector(typeId, 'type')));
-}
+/** @param {crisis.UnitType} unitType */
+crisis.Unit.prototype.unitTypeChanged = function(unitType) {
+    this.$type.text(unitType.name);
+};
+
+crisis.Unit.prototype.listenerId = function() {
+    return 'division(' + this.division.id + ')';
+};

@@ -130,11 +130,12 @@ _.prototype.reduceRight = function(iterator, memo, opt_context) {};
 _.prototype.foldr = _.prototype.reduceRight;
 
 /**
- * Object-style notation
- * @param {Object|Array} obj
- * @param {Function} iterator
+ * Object-style notation 
+ * @template T
+ * @param {Array<T>} obj
+ * @param {function(T): boolean} iterator
  * @param {Object=} opt_context
- * @return {!*|_}
+ * @return {T}
  */
 _.find = function(obj, iterator, opt_context) {};
 _.detect = _.find;

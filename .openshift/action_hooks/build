@@ -30,10 +30,15 @@ pushd "${WEBCONTENT_DIR}/js" > /dev/null
            unit.js \
            map.js \
            routepoint.js"
-    EXTERNS="jquiexterns.js jsonexterns.js jquery-1.9.js underscore-1.5.1.js"
+    EXTERNS="jquiexterns.js \
+             jsonexterns.js \
+             jquery-1.9.js \
+             underscore-1.5.1.js \
+             bucketsexterns.js"
     java -jar "${CRISIS_CLOSURE_COMPILER_DIR}/compiler.jar" \
          --compilation_level SIMPLE_OPTIMIZATIONS \
          --js $INPUT --externs $EXTERNS --js_output_file $OUTPUT \
-         --generate_exports --warning_level VERBOSE --jscomp_warning=checkTypes
+         --generate_exports --warning_level VERBOSE \
+         --jscomp_warning=checkTypes --jscomp_warning=missingProperties
     cp -r "${WEBCONTENT_DIR}/js/thirdparty/." "${STATIC_DIR}/"
 } >> "${CRISIS_LOG_DIR}/go.log"

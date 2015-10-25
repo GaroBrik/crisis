@@ -1,16 +1,17 @@
 /**
  * @constructor
+ * @implements {crisis.UnitType.ChangeListener}
  * @param {crisis.UnitType} unitType
  * @param {boolean} forCreation
  */
 crisis.UnitTypeLi = function(unitType, forCreation) {
     /** @type {crisis.UnitTypeLi} */
     var thisLi = this;
-    
-    /** @type {crisis.UnitType} */
-    this.unitType = unitType;
+
     /** @type {boolean} */
     this.forCreation = forCreation;
+    /** @type {crisis.UnitType} */
+    this.unitType = unitType;
 
     /** @type {jQuery} */
     this.$listItem = crisis.cloneProto(
@@ -46,7 +47,8 @@ crisis.UnitTypeLi = function(unitType, forCreation) {
     });
 
     if (!this.forCreation) {
-        this.$nameSpan.html(this.unitType.name);
+        this.$nameSpan.text(unitType.name);
+        unitType.listeners.add(this);
     } else {
         this.startEditing();
     }
@@ -124,8 +126,17 @@ crisis.UnitTypeLi.prototype.commitDelete = function() {
 
 crisis.UnitTypeLi.prototype.destroy = function() {
     this.$listItem.remove();
+    if (!this.forCreation) {
+        this.unitType.listeners.remove(this);
+    }
 };
 
-crisis.UnitTypeLi.prototype.reRender = function() {
-    this.$nameSpan.html(this.unitType.name);
+/** @param {crisis.UnitType} unitType */
+crisis.UnitTypeLi.prototype.unitTypeChanged = function(unitType) {
+    this.$nameSpan.text(unitType.name);
+};
+
+/** @return {string} */
+crisis.UnitTypeLi.prototype.listenerId = function() {
+    return 'unitTypeLi(' + this.unitType.id + ')';
 };

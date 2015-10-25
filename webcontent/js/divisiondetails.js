@@ -1,6 +1,8 @@
 /**
  * @constructor
  * @param {crisis.Division} div
+ * @implements {crisis.Division.ChangeListener}
+ * @implements {crisis.Faction.ChangeListener}
  */
 crisis.DivisionDetails = function(div) {
     /** @type {jQuery} */
@@ -46,7 +48,9 @@ crisis.DivisionDetails = function(div) {
     /** @type {boolean} */
     this.isOpen = false;
     /** @type {boolean} */
-    this.unRendered = true;
+    this.updateFaction = true;
+    /** @type {boolean} */
+    this.updateDivision = true;
     /** @type {boolean} */
     this.uninitialized = true;
     /** @type {crisis.DivisionDetails.State} */
@@ -58,6 +62,14 @@ crisis.DivisionDetails = function(div) {
     /** @type {Array<crisis.RoutePoint>} */
     this.route = [];
 };
+
+/** @enum {string} */
+crisis.DivisionDetails.State = {
+    VIEWING: 'VIEWING',
+    EDITING: 'EDITING',
+    CREATING: 'CREATING',
+    ROUTING: 'ROUTING'
+}
 
 crisis.DivisionDetails.prototype.init = function() {
     var dets = this;
@@ -122,6 +134,9 @@ crisis.DivisionDetails.prototype.init = function() {
                                });
 
     crisis.map.$holder.append(dets.$pane);
+
+    crisis.factions.get(this.division.factionId).listeners.add(this);
+    this.division.listeners.add(this);
 };
 
 crisis.DivisionDetails.prototype.toggle = function() {
@@ -133,21 +148,16 @@ crisis.DivisionDetails.prototype.toggle = function() {
 };
 
 crisis.DivisionDetails.prototype.open = function() {
-    var dets = this;
-
-    if (dets.uninitialized) {
-        dets.init();
-        dets.uninitialized = false;
+    if (this.uninitialized) {
+        this.init();
+        this.uninitialized = false;
     }
 
-    if (dets.unRendered) {
-        dets.reRender();
-        dets.unRendered = false;
-    }
-    crisis.map.positionDropdown(dets.$pane, dets.division.$marker);
+    this.reRender();
+    crisis.map.positionDropdown(this.$pane, this.division.$marker);
 
-    dets.$pane.show();
-    dets.isOpen = true;
+    this.$pane.show();
+    this.isOpen = true;
 };
 
 crisis.DivisionDetails.prototype.close = function() {
@@ -156,18 +166,46 @@ crisis.DivisionDetails.prototype.close = function() {
 };
 
 crisis.DivisionDetails.prototype.reRender = function() {
-    var dets = this;
+    if (this.updateFaction) {
+        this.$factionNameSpan.text(
+            crisis.getFaction(this.division.factionId).name);
 
-    dets.$nameSpan.text(dets.division.name);
-    dets.$factionNameSpan.html(crisis.factionHtml(dets.division.factionId));
+        this.updateFaction = false;
+    }
 
-    _.each(dets.division.units.concat(dets.newUnits), function(unit) {
-        unit.$listItem.detach();
-    });
-    dets.$unitList.empty();
-    _.each(dets.division.units.concat(dets.newUnits), function(unit) {
-        dets.$unitList.append(unit.$listItem);
-    });
+    if (this.updateDivision) {
+        this.$nameSpan.text(this.division.name);
+
+        _.each(this.division.units.values().concat(this.newUnits), function(u) {
+            u.$listItem.detach();
+        });
+        this.$unitList.empty();
+        _.each(this.division.units.values().concat(this.newUnits), function(u) {
+            this.$unitList.append(u.$listItem);
+        });
+
+        this.updateDivision = false;
+    }
+};
+
+/** @param {crisis.Faction} faction */
+crisis.DivisionDetails.prototype.factionChanged = function(faction) {
+    this.updateFaction = true;
+    if (this.isOpen) {
+        this.reRender();
+    }
+};
+
+/** @param {crisis.Division} division */
+crisis.DivisionDetails.prototype.divisionChanged = function(division) {
+    this.updateDivision = true;
+    if (this.isOpen) {
+        this.reRender();
+    }
+};
+
+crisis.DivisionDetails.prototype.listenerId = function() {
+    return 'divDets(' + this.division.id + ')';
 };
 
 crisis.DivisionDetails.prototype.enableEdit = function() {
@@ -305,9 +343,8 @@ crisis.DivisionDetails.prototype.addUnit = function() {
     }
 
     var currentIds = /** @type {Array<number>} */
-        (_.map(dets.division.units.concat(dets.newUnits), function(unit) {
-            return unit.type;
-        }));
+        (_.map(dets.division.units.values().concat(dets.newUnits),
+               function(unit) { return unit.type; }));
 
     crisis.map.showUnitTypeFinder(currentIds, dets.$pane,
         function(num) {
@@ -343,7 +380,7 @@ crisis.DivisionDetails.prototype.commitEdit = function() {
     /** @type {Array<crisisJson.Unit>} */
     var newUnits = [];
     var validSubmit = true;
-    _.each(dets.division.units.concat(dets.newUnits), function(unit) {
+    _.each(dets.division.units.values().concat(dets.newUnits), function(unit) {
         if (_.contains(dets.removedUnits, unit)) return;
 
         /** @type {number} */
@@ -386,7 +423,7 @@ crisis.DivisionDetails.prototype.commitCreate = function() {
     /** @type {Array<crisisJson.Unit>} */
     var newUnits = [];
     var validSubmit = true;
-    _.each(dets.division.units.concat(dets.newUnits), function(unit) {
+    _.each(dets.division.units.values().concat(dets.newUnits), function(unit) {
         if (_.contains(dets.removedUnits, unit)) return;
 
         /** @type {number} */
@@ -451,10 +488,7 @@ crisis.DivisionDetails.prototype.commitDelete = function() {
     });
 };
 
-/** @enum {string} */
-crisis.DivisionDetails.State = {
-    VIEWING: 'VIEWING',
-    EDITING: 'EDITING',
-    CREATING: 'CREATING',
-    ROUTING: 'ROUTING'
-}
+crisis.DivisionDetails.prototype.destroy = function() {
+    crisis.factions.get(this.division.factionId).listeners.remove(this);
+    this.division.listeners.remove(this);
+};

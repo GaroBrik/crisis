@@ -4,7 +4,10 @@
  * @implements {crisis.Updateable<crisisJson.Division>}
  */
 crisis.Division = function(divJson) {
+    /** @type {crisis.Division} */
     var div = this;
+    /** @type {buckets.Set<crisis.Division.ChangeListener>} */
+    this.listeners = new buckets.Set(function(l) { return l.listenerId(); });
 
     /** @type {crisis.DivisionDetails} */
     this.details = new crisis.DivisionDetails(this);
@@ -14,8 +17,8 @@ crisis.Division = function(divJson) {
     this.id = divJson.Id;
     /** @type {crisis.Coords} */
     this.absCoords;
-    /** @type {Array<crisis.Unit>} */
-    this.units = [];
+    /** @type {buckets.Dictionary<number, crisis.Unit>} */
+    this.units = new buckets.Dictionary();
     /** @type {string} */
     this.name;
     /** @type {number} */
@@ -37,40 +40,61 @@ crisis.Division.fromJson = function(divJson) {
     return new crisis.Division(divJson);
 };
 
+/** @interface */
+crisis.Division.ChangeListener = function() {};
+/** @param {crisis.Division} fac */
+crisis.Division.ChangeListener.prototype.divisionChanged = function(fac) {};
+/** @return {string} */
+crisis.Division.ChangeListener.prototype.listenerId = function() {};
+
 /** @inheritDoc */
 crisis.Division.prototype.update = function(divJson) {
-    var div = this;
+    /** @type {crisis.Division} */
+    var thisDiv = this;
+    /** @type {boolean} */
+    var changed = false;
 
-    div.absCoords = crisis.Coords.fromJson(divJson.Coords);
-    div.name = divJson.Name;
-    div.factionId = divJson.FactionId;
-    crisis.updateElements(div.units, divJson.Units,
-        function(data) { return new crisis.Unit(data, div); });
-
-    if (div.details.isOpen) {
-        div.details.reRender();
-    } else {
-        div.details.unRendered = true;
+    if (!this.absCoords.equals(crisis.Coords.fromJson(divJson.Coords))) {
+        changed = true;
+        this.absCoords = crisis.Coords.fromJson(divJson.Coords);
     }
-    crisis.map.position(div.$marker, div.absCoords);
-    if (div.details.isOpen) {
-        crisis.map.positionDropdown(div.details.$pane, div.$marker);
-    }
-};
 
-/** @inheritDoc */
-crisis.Division.prototype.updateDataMatch = function(data) {
-    return this.id === data.Id;
+    if (this.name !== divJson.Name) {
+        changed = true;
+        this.name = divJson.Name;
+    }
+
+    if (this.factionId !== divJson.FactionId) {
+        changed = true;
+        this.factionId = divJson.FactionId;
+    }
+    
+    crisis.updateElements(
+        this.units, divJson.Units,
+        function(json) { return new crisis.Unit(json, thisDiv); },
+        function(json) { return json.Type; }
+    );
+
+    crisis.map.position(this.$marker, this.absCoords);
+    if (this.details.isOpen) {
+        crisis.map.positionDropdown(this.details.$pane, this.$marker);
+    }
+
+    if (changed) {
+        this.listeners.forEach(function(listener) {
+            listener.divisionChanged(thisDiv);
+        });
+    }
 };
 
 crisis.Division.prototype.destroy = function() {
     this.$marker.remove();
-    this.details.$pane.remove();
+    this.details.destroy();
 };
 
 /** @param {crisis.Unit} unit */
 crisis.Division.prototype.removeUnit = function(unit) {
-    this.units = _.without(this.units, unit);
+    this.units.remove(unit.type);
 };
 
 crisis.Division.prototype.position = function() {
@@ -79,4 +103,9 @@ crisis.Division.prototype.position = function() {
         'left': rel.x + '%',
         'top': rel.y + '%'
     });
-}
+};
+
+crisis.Division.prototype.reRender = function() {
+    this.position();
+    this.details.reRender();
+};

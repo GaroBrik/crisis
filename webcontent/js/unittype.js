@@ -9,6 +9,8 @@ crisis.UnitType = function(json, forCreation) {
     this.id = json.Id;
     /** @type {string} */
     this.name = json.Name;
+    /** @type {buckets.Set<crisis.UnitType.ChangeListener>} */
+    this.listeners = new buckets.Set(function(l) { return l.listenerId(); });
     /** @type {crisis.UnitTypeLi} */
     this.unitTypeLi = new crisis.UnitTypeLi(this, forCreation);
 };
@@ -21,23 +23,39 @@ crisis.UnitType.fromJson = function(unitTypeJson) {
     return new crisis.UnitType(unitTypeJson, false);
 };
 
+/** @interface */
+crisis.UnitType.ChangeListener = function() {};
+/** @param {crisis.UnitType} unitType */
+crisis.UnitType.ChangeListener.prototype.unitTypeChanged = function(unitType) {};
+/** @return {string} */
+crisis.UnitType.ChangeListener.prototype.listenerId = function() {};
+
 /** @param {crisisJson.UnitType} json */
 crisis.UnitType.prototype.update = function(json) {
+    /** @type {crisis.UnitType} */
+    var thisType = this;
+    
     if (this.id !== json.Id) {
         console.log('UnitType.update: mismatched data');
         return;
     }
 
-    this.name = json.Name;
-    this.unitTypeLi.reRender();
+    /** @type {boolean} */
+    var changed = false;
+    
+    if (this.name !== json.Name) {
+        changed = true;
+        this.name = json.Name;
+    }
+
+    if (changed) {
+        this.listeners.forEach(function(listener) {
+            listener.unitTypeChanged(thisType);
+        });
+    }
 };
 
 crisis.UnitType.prototype.destroy = function() {
     this.unitTypeLi.destroy();
-    crisis.unitTypes = _.without(crisis.unitTypes, this);
-};
-
-/** @param {crisisJson.UnitType} json */
-crisis.UnitType.prototype.updateDataMatch = function(json) {
-    return this.id === json.Id;
+    crisis.removeUnitType(this.id);
 };

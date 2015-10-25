@@ -10,6 +10,14 @@ crisis.Coords = function(x, y) {
     this.y = y;
 };
 
+/**
+ * @param {crisisJson.Coords} json
+ * @return {crisis.Coords}
+ */
+crisis.Coords.fromJson = function(json) {
+    return new crisis.Coords(json.X, json.Y);
+};
+
 /** @return {crisisJson.Coords} */
 crisis.Coords.prototype.toJson = function() {
     return {
@@ -19,9 +27,9 @@ crisis.Coords.prototype.toJson = function() {
 };
 
 /**
- * @param {crisisJson.Coords} json
- * @return {crisis.Coords}
+ * @param {crisis.Coords} other
+ * @return {boolean}
  */
-crisis.Coords.fromJson = function(json) {
-    return new crisis.Coords(json.X, json.Y);
-}
+crisis.Coords.prototype.equals = function(other) {
+    return this.x === other.x && this.y === other.y;
+};
