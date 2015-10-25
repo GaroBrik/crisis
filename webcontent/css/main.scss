@@ -3,10 +3,6 @@ $headerZ: 10000;
 $mapHolderZ: $headerZ / 2;
 $mapBoundsZ: -1;
 
-div {
-    position: absolute;
-}
-
 ul {
     list-style-type: none;
     padding: 0;
@@ -35,6 +31,10 @@ ul {
     top: $headerHeight;
     width: 100%;
     height: calc(100% - #{$headerHeight});
+
+    div {
+        position: absolute;
+    }
 }
 
 #mapOuterDiv {
@@ -132,8 +132,4 @@ ul {
     left: 0px;
     top: $headerHeight;
     background-color: white;
-
-    ul {
-        position: relative;
-    }
 }
