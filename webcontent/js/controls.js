@@ -54,7 +54,7 @@ crisis.controls.open = function() {
 };
 
 crisis.controls.close = function() {
-    if (crisis.controls.state !== crisis.controls.State.CLOSED) return;
+    if (crisis.controls.state !== crisis.controls.State.OPEN) return;
 
     crisis.controls.$controls.hide();
 
