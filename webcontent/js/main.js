@@ -27,17 +27,17 @@ crisis.updateData = function(json) {
     crisis.map.updateData(json);
 
     crisis.updateElements(
-        crisis.divisions, json.Divisions, crisis.Division.fromJson,
-        function(json) { return json.Id; }
-    );
-
-    crisis.updateElements(
         crisis.factions, json.Factions, crisis.Faction.fromJson,
         function(json) { return json.Id; }
     );
 
     crisis.updateElements(
         crisis.unitTypes, json.UnitTypes, crisis.UnitType.fromJson,
+        function(json) { return json.Id; }
+    );
+
+    crisis.updateElements(
+        crisis.divisions, json.Divisions, crisis.Division.fromJson,
         function(json) { return json.Id; }
     );
 
