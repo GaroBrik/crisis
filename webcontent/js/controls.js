@@ -25,6 +25,17 @@ crisis.controls.initialize = function() {
     crisis.controls.$controls = $('#controls');
     crisis.controls.$unitTypeList = $('#controlsUnitTypeList');
     crisis.controls.$factionList = $('#controlsFactionList');
+    crisis.controls.$addUnitTypeButton = $('#addUnitTypeButton');
+    crisis.controls.$addFactionButton = $('#addFactionButton');
+
+    crisis.controls.$addUnitTypeButton.on(
+        'click' + crisis.event.baseNameSpace, function() {
+            new crisis.UnitTypeLi(null, true);
+        });
+    crisis.controls.$addFactionButton.on(
+        'click' + crisis.event.baseNameSpace, function() {
+            new crisis.FactionLi(null, true);
+        });
 };
 
 crisis.controls.toggle = function() {

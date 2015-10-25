@@ -190,7 +190,10 @@ crisis.DivisionDetails.prototype.reRender = function() {
     }
 };
 
-/** @param {crisis.Faction} faction */
+/**
+ * @override
+ * @param {crisis.Faction} faction
+ */
 crisis.DivisionDetails.prototype.factionChanged = function(faction) {
     this.updateFaction = true;
     if (this.isOpen) {
@@ -198,7 +201,10 @@ crisis.DivisionDetails.prototype.factionChanged = function(faction) {
     }
 };
 
-/** @param {crisis.Division} division */
+/**
+ * @override
+ * @param {crisis.Division} division
+ */
 crisis.DivisionDetails.prototype.divisionChanged = function(division) {
     this.updateDivision = true;
     if (this.isOpen) {
@@ -206,6 +212,15 @@ crisis.DivisionDetails.prototype.divisionChanged = function(division) {
     }
 };
 
+/** @override */
+crisis.DivisionDetails.prototype.divisionDestroyed = function() {
+    this.$pane.remove();
+};
+
+/**
+ * @override
+ * @return {string}
+ */
 crisis.DivisionDetails.prototype.listenerId = function() {
     return 'divDets(' + this.division.id + ')';
 };
