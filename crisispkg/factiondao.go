@@ -19,7 +19,8 @@ func GetFactionsByCrisisId(tx *pg.Tx, crisisId int) ([]Faction, error) {
 func CreateFaction(tx *pg.Tx, name string, crisisId int) (Faction, error) {
 	fac := Faction{Name: name}
 	_, err := tx.QueryOne(&fac, `
-            INSERT INTO faction (name, crisis) VALUES (?, ?) RETURNING id
+            INSERT INTO faction (faction_name, crisis) 
+            VALUES (?, ?) RETURNING id
         `, fac.Name, crisisId)
 	return fac, err
 }

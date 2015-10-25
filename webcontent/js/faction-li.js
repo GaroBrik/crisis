@@ -66,7 +66,9 @@ crisis.FactionLi.prototype.startEditing = function() {
 
     this.$editField.show();
     this.$cancelButton.show();
-    this.$deleteButton.show();
+    if (!this.forCreation) {
+        this.$deleteButton.show();
+    }
     this.$commitButton.show();
 };
 

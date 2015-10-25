@@ -4,8 +4,6 @@ crisis.controls = {
         OPEN: 'OPEN',
         CLOSED: 'CLOSED'
     },
-    /** @type {crisis.controls.State} */
-    state: null,
     /** @type {boolean} */
     initialized: false,
     /** @type {boolean} */
@@ -19,9 +17,10 @@ crisis.controls = {
     $factionList: null
 };
 
+/** @type {crisis.controls.State} */
+crisis.controls.state = crisis.controls.State.CLOSED;
+
 crisis.controls.initialize = function() {
-    crisis.controls.state = crisis.controls.State.CLOSED;
-    
     crisis.controls.$controls = $('#controls');
     crisis.controls.$unitTypeList = $('#controlsUnitTypeList');
     crisis.controls.$factionList = $('#controlsFactionList');
