@@ -5,7 +5,7 @@ crisis.controls = {
         CLOSED: 'CLOSED'
     },
     /** @type {crisis.controls.State} */
-    crisis.controls.state: null,
+    state: null,
     /** @type {boolean} */
     unRendered: true,
 
