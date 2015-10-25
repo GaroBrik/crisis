@@ -233,7 +233,7 @@ crisis.DivisionDetails.prototype.enableEdit = function() {
     dets.$deleteButton.show();
     dets.$addUnitButton.show();
 
-    _.each(dets.division.units, function(unit) {
+    dets.division.units.forEach(function(k, unit) {
         unit.enableEdit();
     });
 
@@ -261,7 +261,7 @@ crisis.DivisionDetails.prototype.enableCreate = function() {
     dets.$createButton.show();
     dets.$addUnitButton.show();
 
-    _.each(dets.division.units, function(unit) {
+    dets.division.units.forEach(function(k, unit) {
         unit.enableEdit();
     });
 
@@ -304,7 +304,7 @@ crisis.DivisionDetails.prototype.disableEdit = function() {
 
     dets.$detailsInvalidAlert.hide();
     _.each(dets.newUnits, function(unit) { unit.destroy(); });
-    _.each(dets.division.units, function(unit) { unit.disableEdit(); });
+    dets.division.units.forEach(function(k, unit) { unit.disableEdit(); });
     _.each(dets.removedUnits, function(unit) { unit.$listItem.show(); });
 
     dets.state = crisis.DivisionDetails.State.VIEWING;

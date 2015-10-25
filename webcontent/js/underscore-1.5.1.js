@@ -36,9 +36,10 @@ function _(obj) {};
 
 /**
  * Object-style annotation
- * @param {Object|Array} obj
- * @param {Function} iterator
+ * @param {Array<T>} obj
+ * @param {function(T)} iterator
  * @param {Object=} opt_context
+ * @template T
  */
 _.each = function(obj, iterator, opt_context) {};
 _.forEach = _.each;

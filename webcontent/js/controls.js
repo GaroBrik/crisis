@@ -70,6 +70,6 @@ crisis.controls.reRender = function() {
 };
 
 crisis.controls.render = function() {
-    _.each(crisis.factions, function(fac) { fac.factionLi.reRender(); });
-    _.each(crisis.unitTypes, function(uType) { uType.unitTypeLi.reRender(); });
+    crisis.factions.forEach(function(k, fac) { fac.factionLi.reRender(); });
+    crisis.unitTypes.forEach(function(k, uType) { uType.unitTypeLi.reRender(); });
 };
