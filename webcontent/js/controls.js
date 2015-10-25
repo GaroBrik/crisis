@@ -4,8 +4,8 @@ crisis.controls = {
         OPEN: 'OPEN',
         CLOSED: 'CLOSED'
     },
-    /** @type {boolean} */
-    initialized: false,
+    /** @type {crisis.controls.State} */
+    crisis.controls.state: null,
     /** @type {boolean} */
     unRendered: true,
 
@@ -16,9 +16,6 @@ crisis.controls = {
     /** @type {jQuery} */
     $factionList: null
 };
-
-/** @type {crisis.controls.State} */
-crisis.controls.state = crisis.controls.State.CLOSED;
 
 crisis.controls.initialize = function() {
     crisis.controls.$controls = $('#controls');
@@ -47,11 +44,6 @@ crisis.controls.toggle = function() {
 
 crisis.controls.open = function() {
     if (crisis.controls.state === crisis.controls.State.OPEN) return;
-
-    if (!crisis.controls.initialized) {
-        crisis.controls.initialize();
-        crisis.controls.initialized = true;
-    }
 
     if (crisis.controls.unRendered) {
         crisis.controls.render();

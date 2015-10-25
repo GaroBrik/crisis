@@ -6,8 +6,8 @@ VALUES ('A Conflict of Totally Epic Proportions', 'password', '{{1,1,1,1,1,1,1,1
 INSERT INTO faction (crisis, faction_name) VALUES (1, 'Myanmar'); 
 INSERT INTO faction (crisis, faction_name) VALUES (1, 'Philippines');
 
-INSERT INTO unit_type (crisis, unit_name, unit_speed) VALUES(1, 'Sniper');
-INSERT INTO unit_type (crisis, unit_name, unit_speed) VALUES(1, 'Baller');
+INSERT INTO unit_type (crisis, unit_name) VALUES(1, 'Sniper');
+INSERT INTO unit_type (crisis, unit_name) VALUES(1, 'Baller');
 
 INSERT INTO division (faction, division_name, route)
                VALUES(1, 'Greg''s Dudes', '{"(10, 11)"}'::coords[]);
