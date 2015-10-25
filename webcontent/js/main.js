@@ -77,6 +77,8 @@ crisis.updateElements = function(elements, data, elementCreator, keyGetter) {
     });
 
     elements.forEach(function(key, value) { value.destroy(); });
+
+    elements = newElements;
 };
 
 /** @param {crisis.Division} div */
