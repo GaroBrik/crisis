@@ -131,5 +131,6 @@ ul {
 #controls {
     left: 0px;
     top: $headerHeight;
+    position: fixed;
     background-color: white;
 }
