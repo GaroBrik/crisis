@@ -69,7 +69,4 @@ crisis.controls.reRender = function() {
     }
 };
 
-crisis.controls.render = function() {
-    crisis.factions.forEach(function(k, fac) { fac.factionLi.reRender(); });
-    crisis.unitTypes.forEach(function(k, uType) { uType.unitTypeLi.reRender(); });
-};
+crisis.controls.render = function() {};
