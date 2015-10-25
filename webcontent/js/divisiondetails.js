@@ -166,6 +166,8 @@ crisis.DivisionDetails.prototype.close = function() {
 };
 
 crisis.DivisionDetails.prototype.reRender = function() {
+    var thisDets = this;
+
     if (this.updateFaction) {
         this.$factionNameSpan.text(
             crisis.getFaction(this.division.factionId).name);
@@ -181,7 +183,7 @@ crisis.DivisionDetails.prototype.reRender = function() {
         });
         this.$unitList.empty();
         _.each(this.division.units.values().concat(this.newUnits), function(u) {
-            this.$unitList.append(u.$listItem);
+            thisDets.$unitList.append(u.$listItem);
         });
 
         this.updateDivision = false;

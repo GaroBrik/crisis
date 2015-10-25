@@ -48,3 +48,5 @@ buckets.Dictionary.prototype.forEach = function(callback) {};
 
 /** @return {Array<V>} */
 buckets.Dictionary.prototype.values = function() {};
+
+buckets.Dictionary.prototype.clear = function() {};
