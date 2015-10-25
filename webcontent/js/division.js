@@ -54,7 +54,9 @@ crisis.Division.prototype.update = function(divJson) {
     /** @type {boolean} */
     var changed = false;
 
-    if (!this.absCoords.equals(crisis.Coords.fromJson(divJson.Coords))) {
+    if (this.absCoords === undefined ||
+        !this.absCoords.equals(crisis.Coords.fromJson(divJson.Coords)))
+    {
         changed = true;
         this.absCoords = crisis.Coords.fromJson(divJson.Coords);
     }
