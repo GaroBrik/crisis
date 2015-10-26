@@ -24,6 +24,8 @@ crisis.controls.initialize = function() {
     crisis.controls.$addUnitTypeButton = $('#addUnitTypeButton');
     crisis.controls.$addFactionButton = $('#addFactionButton');
 
+    crisis.controls.state = crisis.controls.State.CLOSED;
+
     crisis.controls.$addUnitTypeButton.on(
         'click' + crisis.event.baseNameSpace, function() {
             new crisis.UnitTypeLi(null, true);
