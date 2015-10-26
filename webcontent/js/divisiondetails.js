@@ -196,12 +196,17 @@ crisis.DivisionDetails = function(division, forCreation) {
         
         if (this.updateDivision) {
             this.$nameSpan.text(division.name);
-            
-            _.each(division.units.values().concat(this.newUnits), function(u) {
+
+            /** @type {Array<crisis.DetailsUnitLi>} */
+            var currentUnitLis = _.map(division.units.values(), function(unit) {
+                return unit.detailsLi;
+            });
+            currentUnitLis = currentUnitLis.concat(this.newUnits);
+            _.each(currentUnitLis, function(u) {
                 u.$listItem.detach();
             });
             this.$unitList.empty();
-            _.each(division.units.values().concat(this.newUnits), function(u) {
+            _.each(currentUnitLis, function(u) {
                 thisDets.$unitList.append(u.$listItem);
             });
             
@@ -355,14 +360,16 @@ crisis.DivisionDetails = function(division, forCreation) {
             return;
         }
 
+        /** @type {Array<crisis.DetailsUnitLi>} */
         var toLoop = this.forCreation ? dets.newUnits :
             division.units.values().concat(dets.newUnits);
-        var currentIds = /** @type {Array<number>} */
-            (_.map(toLoop, function(unit) { return unit.type; }));
+        /** @type {Array<number>} */
+        var currentIds = _.map(toLoop, function(unit) { return unit.typeId; });
 
         crisis.map.showUnitTypeFinder(currentIds, dets.$pane,
             function(num) {
                 if (num === null) return;
+                /** @type {crisis.DetailsUnitLi} */
                 var newUnit = crisis.DetailsUnitLi.forCreation(dets, num);
                 dets.newUnits.push(newUnit);
             });

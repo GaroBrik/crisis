@@ -54,10 +54,11 @@ _.prototype.forEach = _.prototype.each;
 
 /**
  * Object-style annotation
- * @param {Object|Array} obj
- * @param {Function} iterator
+ * @param {Array<T>} obj
+ * @param {function(T):U} iterator
  * @param {Object=} opt_context
- * @return {!Array|_}
+ * @return {!Array<U>}
+ * @template T, U
  */
 _.map = function(obj, iterator, opt_context) {};
 
