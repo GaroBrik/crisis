@@ -519,6 +519,7 @@ crisis.DivisionDetails = function(division, forCreation) {
     };
     
     if (this.forCreation) {
+        this.open();
         this.enableEdit();
     }
 };
