@@ -60,6 +60,8 @@ crisis.DivisionDetails = function(division, forCreation) {
     this.uninitialized = true;
     /** @type {crisis.DivisionDetails.State} */
     this.state = crisis.DivisionDetails.State.VIEWING;
+    /** @type {?crisis.UnitTypeChooser} */
+    this.chooser = null;
     /** @type {Array<crisis.DetailsUnitLi>} */
     this.newUnits = [];
     /** @type {Array<crisis.DetailsUnitLi>} */
@@ -325,6 +327,7 @@ crisis.DivisionDetails = function(division, forCreation) {
         thisDets.$commitButton.hide();
         thisDets.$deleteButton.hide();
         thisDets.$addUnitButton.hide();
+        if (thisDets.chooser !== null) thisDets.chooser.destroy();
 
         thisDets.$factionNameSpan.show();
         thisDets.$nameSpan.show();
@@ -371,8 +374,7 @@ crisis.DivisionDetails = function(division, forCreation) {
         var currentIds = _.map(this.currentUnitLis(),
                                function(unit) { return unit.typeId; });
 
-        /** @type {crisis.UnitTypeChooser} */
-        var chooser = new crisis.UnitTypeChooser(
+        thisDets.chooser = new crisis.UnitTypeChooser(
             'divDetsTypeChooser(' + division.id + ')',
             function(num) {
                 if (num === null) return;
@@ -380,9 +382,11 @@ crisis.DivisionDetails = function(division, forCreation) {
                 var newUnit = crisis.DetailsUnitLi.forCreation(thisDets, num);
                 thisDets.newUnits.push(newUnit);
                 thisDets.$addUnitButton.show();
-            });
+            },
+            currentIds
+        );
         thisDets.$addUnitButton.hide();
-        thisDets.$details.append(chooser.$chooser);
+        thisDets.$details.append(thisDets.chooser.$chooser);
     };
 
     /** @param {crisis.DetailsUnitLi} unit */

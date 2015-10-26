@@ -2,10 +2,11 @@
  * @constructor
  * @param {string} uuid
  * @param {function(number)} callback
+ * @param {Array<number>} notInclude
  * @implements {crisis.UnitType.ChangeListener}
  * @implements {crisis.ModelChangeListener<crisis.UnitType>}
  */
-crisis.UnitTypeChooser = function(uuid, callback) {
+crisis.UnitTypeChooser = function(uuid, callback, notInclude) {
     /** @type {crisis.UnitTypeChooser} */
     var thisChooser = this;
 
@@ -70,6 +71,7 @@ crisis.UnitTypeChooser = function(uuid, callback) {
     };
 
     crisis.unitTypes.forEach(function(id, unitType) {
+        if (_.contains(notInclude, id)) return;
         thisChooser.modelAdded(unitType);
     });
     crisis.unitTypesListeners.add(this);
