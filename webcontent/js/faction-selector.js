@@ -38,6 +38,7 @@ crisis.FactionSelector = function(uuid) {
             ($('<option/>').val(fac.id.toString()).text(fac.name))
         thisSelector.options.set(fac.id, newOption);
         fac.listeners.add(thisSelector);
+        thisSelector.$selector.append(newOption);
     };
  
     if (uuid === undefined) {
