@@ -28,13 +28,6 @@ crisis.DetailsUnitLi = function(forCreation, details, typeId, amount) {
     /** @type {jQuery} */
     this.$invalidAlert = this.$listItem.find('.invalidAlert');
 
-    this.$type.text(crisis.getUnitType(typeId).name);
-    crisis.getUnitType(typeId).listeners.add(this);
-    this.$removeUnitButton.on('click' + crisis.event.baseNameSpace, function() {
-        details.removeUnitLi(thisUnitLi);
-    });
-    this.$value.text(amount);
-
     /**
      * @override
      * @param {crisis.UnitType} unitType
@@ -86,6 +79,12 @@ crisis.DetailsUnitLi = function(forCreation, details, typeId, amount) {
 
     this.destroy = function() { this.$listItem.remove(); };
 
+    this.$type.text(crisis.getUnitType(typeId).name);
+    crisis.getUnitType(typeId).listeners.add(this);
+    this.$removeUnitButton.on('click' + crisis.event.baseNameSpace, function() {
+        details.removeUnitLi(thisUnitLi);
+    });
+    this.$value.text(amount);
     details.$unitList.append(this.$listItem);
     if (this.forCreation) this.enableEdit();
 };
