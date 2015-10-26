@@ -6,9 +6,12 @@
  * @implements {crisis.Faction.ChangeListener}
  */
 crisis.DivisionDetails = function(division, forCreation) {
+    /** @type {crisis.DivisionDetails} */
+    var thisDets = this;
+
     /** @type {boolean} */
     this.forCreation = forCreation;
-    
+
     /** @type {jQuery} */
     this.$pane = null;
     /** @type {jQuery} */
@@ -65,163 +68,171 @@ crisis.DivisionDetails = function(division, forCreation) {
     this.route = [];
 
     this.init = function() {
-        var dets = this;
+        thisDets.$pane = crisis.cloneProto(crisis.prototypes.$divisionPane);
+        thisDets.$closeButton = thisDets.$pane.find('.closeButton');
 
-        dets.$pane = crisis.cloneProto(crisis.prototypes.$divisionPane);
-        dets.$closeButton = dets.$pane.find('.closeButton');
-
-        dets.$details = dets.$pane.find('.details');
-        dets.$detailsInvalidAlert = dets.$details.find('.detailsInvalidAlert');
-        dets.$factionNameSpan = dets.$details.find('.factionNameSpan');
-        dets.factionSelector = new crisis.FactionSelector(
+        thisDets.$details = thisDets.$pane.find('.details');
+        thisDets.$detailsInvalidAlert =
+            thisDets.$details.find('.detailsInvalidAlert');
+        thisDets.$factionNameSpan = thisDets.$details.find('.factionNameSpan');
+        thisDets.factionSelector = new crisis.FactionSelector(
             'factionSelectorForDivDets(' + division.id + ')');
-        dets.$details.find('.factionSelectorPlace').replaceWith(
-            dets.factionSelector.$selector);
-        dets.$nameSpan = dets.$details.find('.divisionNameSpan');
-        dets.$editNameField = dets.$details.find('.editNameField');
-        dets.$unitList = dets.$details.find('ul');
-        dets.$editButton = dets.$details.find('.editButton');
-        dets.$routeButton = dets.$details.find('.routeButton');
-        dets.$addUnitButton = dets.$details.find('.addUnitButton');
-        dets.$cancelButton = dets.$details.find('.cancelButton');
-        dets.$commitButton = dets.$details.find('.commitButton');
-        dets.$deleteButton = dets.$details.find('.deleteButton');
+        thisDets.$details.find('.factionSelectorPlace').replaceWith(
+            thisDets.factionSelector.$selector);
+        thisDets.$nameSpan = thisDets.$details.find('.divisionNameSpan');
+        thisDets.$editNameField = thisDets.$details.find('.editNameField');
+        thisDets.$unitList = thisDets.$details.find('ul');
+        thisDets.$editButton = thisDets.$details.find('.editButton');
+        thisDets.$routeButton = thisDets.$details.find('.routeButton');
+        thisDets.$addUnitButton = thisDets.$details.find('.addUnitButton');
+        thisDets.$cancelButton = thisDets.$details.find('.cancelButton');
+        thisDets.$commitButton = thisDets.$details.find('.commitButton');
+        thisDets.$deleteButton = thisDets.$details.find('.deleteButton');
 
-        dets.$editButton.on('click' + crisis.event.baseNameSpace, function() {
-            dets.enableEdit();
-        });
-        dets.$routeButton.on('click' + crisis.event.baseNameSpace, function() {
-            dets.enableRoute();
-        });
-        dets.$addUnitButton.on('click' + crisis.event.baseNameSpace,
+        thisDets.$editButton.on('click' + crisis.event.baseNameSpace,
+                                function() {
+                                    thisDets.enableEdit();
+                                });
+        thisDets.$routeButton.on('click' + crisis.event.baseNameSpace,
+                                 function() {
+                                     thisDets.enableRoute();
+                                 });
+        thisDets.$addUnitButton.on('click' + crisis.event.baseNameSpace,
                                function() {
-                                   dets.addUnit();
+                                   thisDets.addUnit();
                                });
-        dets.$cancelButton.on('click' + crisis.event.baseNameSpace, function() {
-            if (dets.forCreation) {
-                dets.destroy();
-            } else {
-                dets.disableEdit();
-            }
-        });
-        dets.$commitButton.on('click' + crisis.event.baseNameSpace, function() {
-            if (dets.forCreation) {
-                dets.commitCreate();
-            } else {
-                dets.commitEdit();
-            }
-        });
-        dets.$deleteButton.on('click' + crisis.event.baseNameSpace, function() {
-            dets.commitDelete();
-        });
-        dets.$closeButton.on('click' + crisis.event.baseNameSpace, function() {
-            if (dets.forCreation) {
-                dets.destroy();
-            } else {
-                dets.close();
-            }
-        });
+        thisDets.$cancelButton.on('click' + crisis.event.baseNameSpace,
+                                  function() {
+                                      if (thisDets.forCreation) {
+                                          thisDets.destroy();
+                                      } else {
+                                          thisDets.disableEdit();
+                                      }
+                                  });
+        thisDets.$commitButton.on('click' + crisis.event.baseNameSpace,
+                                  function() {
+                                      if (thisDets.forCreation) {
+                                          thisDets.commitCreate();
+                                      } else {
+                                          thisDets.commitEdit();
+                                      }
+                                  });
+        thisDets.$deleteButton.on('click' + crisis.event.baseNameSpace,
+                                  function() {
+                                      thisDets.commitDelete();
+                                  });
+        thisDets.$closeButton.on('click' + crisis.event.baseNameSpace,
+                                 function() {
+                                     if (thisDets.forCreation) {
+                                         thisDets.destroy();
+                                     } else {
+                                         thisDets.close();
+                                     }
+                                 });
 
-        dets.$routePlotter = dets.$pane.find('.routePlotter');
-        dets.$routeInvalidAlert = dets.$routePlotter.find('.routeInvalidAlert');
-        dets.$undoRouteButton = dets.$routePlotter.find('.undoRouteButton');
-        dets.$cancelRouteButton = dets.$routePlotter.find('.cancelRouteButton');
-        dets.$commitRouteButton = dets.$routePlotter.find('.commitRouteButton');
+        thisDets.$routePlotter = thisDets.$pane.find('.routePlotter');
+        thisDets.$routeInvalidAlert =
+            thisDets.$routePlotter.find('.routeInvalidAlert');
+        thisDets.$undoRouteButton =
+            thisDets.$routePlotter.find('.undoRouteButton');
+        thisDets.$cancelRouteButton =
+            thisDets.$routePlotter.find('.cancelRouteButton');
+        thisDets.$commitRouteButton =
+            thisDets.$routePlotter.find('.commitRouteButton');
 
-        dets.$undoRouteButton.on('click' + crisis.event.baseNameSpace, function() {
-            dets.undoRoute();
-        });
-        dets.$cancelRouteButton.on('click' + crisis.event.baseNameSpace,
+        thisDets.$undoRouteButton.on('click' + crisis.event.baseNameSpace,
+                                 function() {
+                                     thisDets.undoRoute();
+                                 });
+        thisDets.$cancelRouteButton.on('click' + crisis.event.baseNameSpace,
                                    function() {
-                                       dets.disableRoute();
+                                       thisDets.disableRoute();
                                    });
-        dets.$commitRouteButton.on('click' + crisis.event.baseNameSpace,
+        thisDets.$commitRouteButton.on('click' + crisis.event.baseNameSpace,
                                    function() {
-                                       dets.commitRoute();
+                                       thisDets.commitRoute();
                                    });
 
-        crisis.map.$holder.append(dets.$pane);
+        crisis.map.$holder.append(thisDets.$pane);
 
-        if (this.forCreation) return;
+        if (thisDets.forCreation) return;
 
         division.units.forEach(function(typeId, unit) {
-            dets.$unitList.append(unit.detailsLi.$listItem);
+            thisDets.$unitList.append(unit.detailsLi.$listItem);
         });
-        crisis.getFaction(division.factionId).listeners.add(this);
-        division.listeners.add(this);
+        crisis.getFaction(division.factionId).listeners.add(thisDets);
+        division.listeners.add(thisDets);
     };
 
     this.toggle = function() {
-        if (this.isOpen) {
-            this.close();
+        if (thisDets.isOpen) {
+            thisDets.close();
         } else {
-            this.open();
+            thisDets.open();
         }
     };
 
     this.open = function() {
-        if (this.uninitialized) {
-            this.init();
-            this.uninitialized = false;
+        if (thisDets.uninitialized) {
+            thisDets.init();
+            thisDets.uninitialized = false;
         }
 
-        this.reRender();
+        thisDets.reRender();
 
-        this.$pane.show();
-        this.isOpen = true;
+        thisDets.$pane.show();
+        thisDets.isOpen = true;
     };
 
     this.close = function() {
-        this.$pane.hide();
-        this.isOpen = false;
+        thisDets.$pane.hide();
+        thisDets.isOpen = false;
     };
 
     this.reRender = function() {
-        var thisDets = this;
-        
-        if (this.forCreation) {
-            this.$pane.css({
+        if (thisDets.forCreation) {
+            thisDets.$pane.css({
                 'left': '0',
                 'top': '0'
             });
             return;
         }
-        
-        if (this.updateFaction) {
-            this.$factionNameSpan.text(
-                crisis.getFaction(division.factionId).name);
-            
-            this.updateFaction = false;
-        }
-        
-        if (this.updateDivision) {
-            this.$nameSpan.text(division.name);
 
-            _.each(this.currentUnitLis(), function(u) {
+        if (thisDets.updateFaction) {
+            thisDets.$factionNameSpan.text(
+                crisis.getFaction(division.factionId).name);
+
+            thisDets.updateFaction = false;
+        }
+
+        if (thisDets.updateDivision) {
+            thisDets.$nameSpan.text(division.name);
+
+            _.each(thisDets.currentUnitLis(), function(u) {
                 u.$listItem.detach();
             });
-            this.$unitList.empty();
-            _.each(this.currentUnitLis(), function(u) {
+            thisDets.$unitList.empty();
+            _.each(thisDets.currentUnitLis(), function(u) {
                 thisDets.$unitList.append(u.$listItem);
             });
-            
-            this.updateDivision = false;
+
+            thisDets.updateDivision = false;
         }
-        
+
         crisis.map.positionDropdown(
-            this.$pane, division.mapMarker.$marker);
+            thisDets.$pane, division.mapMarker.$marker);
     };
 
     /** @return {Array<crisis.DetailsUnitLi>} */
     this.currentUnitLis = function() {
         /** @type {Array<crisis.DetailsUnitLi>} */
         var currentUnitLis = [];
-        if (!this.forCreation) {
+        if (!thisDets.forCreation) {
             currentUnitLis = _.map(division.units.values(), function(unit) {
                 return unit.detailsLi;
             });
         }
-        return currentUnitLis.concat(this.newUnits);
+        return currentUnitLis.concat(thisDets.newUnits);
     };
 
     /**
@@ -229,30 +240,30 @@ crisis.DivisionDetails = function(division, forCreation) {
      * @param {crisis.Faction} faction
      */
     this.factionChanged = function(faction) {
-        this.updateFaction = true;
-        if (this.isOpen) {
-            this.reRender();
+        thisDets.updateFaction = true;
+        if (thisDets.isOpen) {
+            thisDets.reRender();
         }
     };
 
     /** @override */
     this.factionDestroyed = _.noop;
-    
+
     /**
      * @override
      * @param {crisis.Division} division
      */
     this.divisionChanged = function(division) {
-        this.updateDivision = true;
-        this.updateFaction = true;
-        if (this.isOpen) {
-            this.reRender();
+        thisDets.updateDivision = true;
+        thisDets.updateFaction = true;
+        if (thisDets.isOpen) {
+            thisDets.reRender();
         }
     };
 
     /** @override */
     this.divisionDestroyed = function() {
-        this.$pane.remove();
+        thisDets.$pane.remove();
     };
 
     /**
@@ -264,106 +275,94 @@ crisis.DivisionDetails = function(division, forCreation) {
     };
 
     this.enableEdit = function() {
-        var dets = this;
-
-        if (!this.forCreation) {
-            dets.$editNameField.val(division.name);
-            dets.factionSelector.setSelectedFaction(division.factionId);
+        if (!thisDets.forCreation) {
+            thisDets.$editNameField.val(division.name);
+            thisDets.factionSelector.setSelectedFaction(division.factionId);
         }
 
-        dets.$factionNameSpan.hide();
-        dets.$nameSpan.hide();
-        dets.$editButton.hide();
-        dets.$routeButton.hide();
+        thisDets.$factionNameSpan.hide();
+        thisDets.$nameSpan.hide();
+        thisDets.$editButton.hide();
+        thisDets.$routeButton.hide();
 
-        dets.factionSelector.$selector.show();
-        dets.$editNameField.show();
-        dets.$cancelButton.show();
-        dets.$commitButton.show();
-        dets.$deleteButton.show();
-        dets.$addUnitButton.show();
+        thisDets.factionSelector.$selector.show();
+        thisDets.$editNameField.show();
+        thisDets.$cancelButton.show();
+        thisDets.$commitButton.show();
+        thisDets.$deleteButton.show();
+        thisDets.$addUnitButton.show();
 
-        if (!this.forCreation) {
+        if (!thisDets.forCreation) {
             division.units.forEach(function(k, unit) {
                 unit.detailsLi.enableEdit();
             });
         }
 
-        dets.state = crisis.DivisionDetails.State.EDITING;
+        thisDets.state = crisis.DivisionDetails.State.EDITING;
     };
 
     this.enableRoute = function() {
-        var dets = this;
+        thisDets.$details.hide();
+        thisDets.$routePlotter.show();
 
-        dets.$details.hide();
-        dets.$routePlotter.show();
-
-        dets.route = [];
+        thisDets.route = [];
 
         /** @param {crisis.Coords} coords */
         var clickCallback = function(coords) {
-            dets.route.push(new crisis.RoutePoint(coords));
+            thisDets.route.push(new crisis.RoutePoint(coords));
             crisis.map.getClick(clickCallback);
         };
 
         crisis.map.getClick(clickCallback);
 
-        dets.state = crisis.DivisionDetails.State.ROUTING;
+        thisDets.state = crisis.DivisionDetails.State.ROUTING;
     };
 
     this.disableEdit = function() {
-        var dets = this;
+        thisDets.factionSelector.$selector.hide();
+        thisDets.$editNameField.hide();
+        thisDets.$cancelButton.hide();
+        thisDets.$commitButton.hide();
+        thisDets.$deleteButton.hide();
+        thisDets.$addUnitButton.hide();
 
-        dets.factionSelector.$selector.hide();
-        dets.$editNameField.hide();
-        dets.$cancelButton.hide();
-        dets.$commitButton.hide();
-        dets.$deleteButton.hide();
-        dets.$addUnitButton.hide();
+        thisDets.$factionNameSpan.show();
+        thisDets.$nameSpan.show();
+        thisDets.$editButton.show();
+        thisDets.$routeButton.show();
 
-        dets.$factionNameSpan.show();
-        dets.$nameSpan.show();
-        dets.$editButton.show();
-        dets.$routeButton.show();
-
-        dets.$detailsInvalidAlert.hide();
-        _.each(dets.newUnits, function(unit) { unit.destroy(); });
+        thisDets.$detailsInvalidAlert.hide();
+        _.each(thisDets.newUnits, function(unit) { unit.destroy(); });
         division.units.forEach(function(k, unit) {
             unit.detailsLi.disableEdit();
         });
-        _.each(dets.removedUnits, function(unit) {
+        _.each(thisDets.removedUnits, function(unit) {
             unit.$listItem.show();
         });
 
-        dets.state = crisis.DivisionDetails.State.VIEWING;
+        thisDets.state = crisis.DivisionDetails.State.VIEWING;
     };
 
     this.disableRoute = function() {
-        var dets = this;
-
-        dets.$routePlotter.hide();
-        dets.$details.show();
+        thisDets.$routePlotter.hide();
+        thisDets.$details.show();
 
         crisis.map.stopGettingClick();
-        _.each(dets.route, function(routePoint) { routePoint.destroy(); });
+        _.each(thisDets.route, function(routePoint) { routePoint.destroy(); });
 
-        dets.state = crisis.DivisionDetails.State.VIEWING;
+        thisDets.state = crisis.DivisionDetails.State.VIEWING;
     };
 
     this.undoRoute = function() {
-        var dets = this;
-
-        if (dets.route.length > 0) {
-            dets.route[dets.route.length - 1].destroy();
-            dets.route = dets.route.slice(0, dets.route.length - 1);
+        if (thisDets.route.length > 0) {
+            thisDets.route[thisDets.route.length - 1].destroy();
+            thisDets.route = thisDets.route.slice(0, thisDets.route.length - 1);
         }
     };
 
     this.addUnit = function() {
-        var dets = this;
-
-        if (dets.state !== crisis.DivisionDetails.State.EDITING &&
-            dets.state !== crisis.DivisionDetails.State.CREATING)
+        if (thisDets.state !== crisis.DivisionDetails.State.EDITING &&
+            thisDets.state !== crisis.DivisionDetails.State.CREATING)
         {
             return;
         }
@@ -372,44 +371,43 @@ crisis.DivisionDetails = function(division, forCreation) {
         var currentIds = _.map(this.currentUnitLis(),
                                function(unit) { return unit.typeId; });
 
-        crisis.map.showUnitTypeFinder(currentIds, dets.$pane,
+        /** @type {crisis.UnitTypeChooser} */
+        var chooser = new crisis.UnitTypeChooser(
+            'divDetsTypeChooser(' + division.id + ')',
             function(num) {
                 if (num === null) return;
                 /** @type {crisis.DetailsUnitLi} */
-                var newUnit = crisis.DetailsUnitLi.forCreation(dets, num);
-                dets.newUnits.push(newUnit);
+                var newUnit = crisis.DetailsUnitLi.forCreation(thisDets, num);
+                thisDets.newUnits.push(newUnit);
             });
+        thisDets.$pane.append(chooser.$chooser);
     };
 
     /** @param {crisis.DetailsUnitLi} unit */
     this.removeUnitLi = function(unit) {
-        var dets = this;
-
-        if (_.contains(dets.newUnits, unit)) {
-            dets.newUnits = _.without(dets.newUnits, unit);
+        if (_.contains(thisDets.newUnits, unit)) {
+            thisDets.newUnits = _.without(thisDets.newUnits, unit);
             unit.destroy();
         } else {
-            dets.removedUnits.push(unit);
+            thisDets.removedUnits.push(unit);
             unit.$listItem.hide();
         }
     };
 
     this.commitEdit = function() {
-        var dets = this;
-
-        if (dets.state !== crisis.DivisionDetails.State.EDITING) return;
+        if (thisDets.state !== crisis.DivisionDetails.State.EDITING) return;
 
         /** @type {Array<crisisJson.Unit>} */
         var newUnits = [];
         var validSubmit = true;
         _.each(this.currentUnitLis(), function(unit) {
-            if (_.contains(dets.removedUnits, unit)) return;
+            if (_.contains(thisDets.removedUnits, unit)) return;
 
             /** @type {number} */
             var newVal = parseInt(unit.$editField.val(), 10);
             if (isNaN(newVal)) {
                 unit.$invalidAlert.show();
-                dets.$detailsInvalidAlert.show();
+                thisDets.$detailsInvalidAlert.show();
                 validSubmit = false;
             } else {
                 newUnits.push({Type: unit.typeId, Amount: newVal});
@@ -417,10 +415,10 @@ crisis.DivisionDetails = function(division, forCreation) {
         });
 
 
-        var name = /** @type {string?} */(dets.$editNameField.val());
+        var name = /** @type {string?} */(thisDets.$editNameField.val());
         if (name === division.name) name = null;
 
-        var factionId = dets.factionSelector.getSelectedFaction();
+        var factionId = thisDets.factionSelector.getSelectedFaction();
         if (factionId === division.factionId) factionId = null;
 
         if (!validSubmit) return;
@@ -429,80 +427,76 @@ crisis.DivisionDetails = function(division, forCreation) {
             {
                 /** @param {crisisJson.Division} divData */
                 success: function(divData) {
-                    _.each(dets.newUnits, function(unit) { unit.destroy(); });
-                    dets.newUnits = [];
+                    _.each(thisDets.newUnits, function(unit) {
+                        unit.destroy();
+                    });
+                    thisDets.newUnits = [];
                     division.update(divData);
-                    dets.disableEdit();
+                    thisDets.disableEdit();
                 }
             });
     };
 
     this.commitCreate = function() {
-        var dets = this;
-
-        if (dets.state !== crisis.DivisionDetails.State.CREATING) return;
+        if (thisDets.state !== crisis.DivisionDetails.State.CREATING) return;
 
         /** @type {Array<crisisJson.Unit>} */
         var newUnits = [];
         var validSubmit = true;
-        _.each(dets.newUnits, function(unit) {
-            if (_.contains(dets.removedUnits, unit)) return;
+        _.each(thisDets.newUnits, function(unit) {
+            if (_.contains(thisDets.removedUnits, unit)) return;
 
             /** @type {number} */
             var newVal = parseInt(unit.$editField.val(), 10);
             if (isNaN(newVal)) {
                 unit.$invalidAlert.show();
-                dets.$detailsInvalidAlert.show();
+                thisDets.$detailsInvalidAlert.show();
                 validSubmit = false;
             } else {
                 newUnits.push({Type: unit.typeId, Amount: newVal});
             }
         });
 
-        var name = /** @type {string} */(dets.$editNameField.val());
+        var name = /** @type {string} */(thisDets.$editNameField.val());
         if (name === '') {
-            dets.$detailsInvalidAlert.show();
+            thisDets.$detailsInvalidAlert.show();
             validSubmit = false;
         }
 
         /** @type {number} */
-        var factionId = dets.factionSelector.getSelectedFaction();
+        var factionId = thisDets.factionSelector.getSelectedFaction();
 
         if (!validSubmit) return;
         crisis.ajax.postDivisionCreation(
             division.absCoords, newUnits, name, factionId, {
                 success: function(divJson) {
-                    dets.destroy();
+                    thisDets.destroy();
                     crisis.addDivision(new crisis.Division(divJson));
                 }
             });
     };
 
     this.commitRoute = function() {
-        var dets = this;
-
-        if (dets.state !== crisis.DivisionDetails.State.ROUTING) return;
+        if (thisDets.state !== crisis.DivisionDetails.State.ROUTING) return;
 
         /** @type {Array<crisisJson.Coords>} */
         var route = /** @type {Array<crisisJson.Coords>} */
-            (_.map(dets.route, function(routePoint) {
+            (_.map(thisDets.route, function(routePoint) {
                 return routePoint.coords.toJson();
             }));
 
         crisis.ajax.postDivisionRoute(division.id, route, {
             success: function(result) {
                 if (result.Success) {
-                    dets.disableRoute();
+                    thisDets.disableRoute();
                 } else {
-                    dets.$routeInvalidAlert.show();
+                    thisDets.$routeInvalidAlert.show();
                 }
             }
         })
     };
 
     this.commitDelete = function() {
-        var dets = this;
-
         crisis.ajax.postDivisionDeletion(division.id, {
             success: function() {
                 division.destroy();
@@ -511,24 +505,28 @@ crisis.DivisionDetails = function(division, forCreation) {
     };
 
     this.destroy = function() {
-        this.$pane.remove();
-        if (!this.forCreation) {
-            crisis.getFaction(division.factionId).listeners.remove(this);
-            division.listeners.remove(this);
+        thisDets.$pane.remove();
+        if (!thisDets.forCreation) {
+            crisis.getFaction(division.factionId).listeners.remove(thisDets);
+            division.listeners.remove(thisDets);
         }
     };
-    
+
     if (this.forCreation) {
         this.open();
         this.enableEdit();
     }
 };
 
-/** @param {crisis.Division} div */
+/**
+ * @param {crisis.Division} div
+ * @return {crisis.DivisionDetails}
+ */
 crisis.DivisionDetails.fromDivision = function(div) {
     return new crisis.DivisionDetails(div, false);
 };
 
+/** @return {crisis.DivisionDetails} */
 crisis.DivisionDetails.forCreation = function() {
     return new crisis.DivisionDetails(null, true);
 };

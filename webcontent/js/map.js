@@ -187,39 +187,6 @@ crisis.map.zoom = function(factor, fixPoint) {
 };
 
 /**
- * @param {Array<number>} notInclude
- * @param {jQuery} $anchor
- * @param {function(?number)} callback
- * @return {function()} a function which cancels this process
- */
-crisis.map.showUnitTypeFinder = function(notInclude, $anchor, callback) {
-    /** @type {jQuery} */
-    var $thisFinder = crisis.cloneProto(crisis.prototypes.$unitTypeFinder);
-
-    _.each(notInclude, function(num) {
-        $thisFinder.find('li' + crisis.dataSelector(num, 'type')).remove();
-    });
-
-    /** @type {function()} */
-    var cancel;
-
-    $thisFinder.find('li').on('click' + crisis.event.baseNameSpace, function() {
-        console.log(this);
-        callback(crisis.getNumericData($(this), 'type'));
-        cancel();
-    });
-
-    cancel = function() {
-        $thisFinder.remove();
-    };
-
-    crisis.map.$holder.append($thisFinder);
-    crisis.map.positionDropdown($thisFinder, $anchor);
-
-    return cancel;
-};
-
-/**
  * @param {jQuery.Event} clickEvent
  * @return {crisis.Coords}
  */

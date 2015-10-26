@@ -80,15 +80,8 @@
         </span>
       {{end}}
     </div>
-    <div id="protoUnitTypeFinder" class="unitTypeFinder">
-      <ul>
-        {{range .Types}}
-          <li data-type="{{.Id}}">
-            <input type="button" value="{{.Name}}">
-          </li>
-        {{end}}
-      </ul>
-    </div>
+    <ul id="protoUnitTypeChooser" class="unitTypeChooser"></ul>
+    <input id="protoTypeChooserButton" type="button">
     <div id="protoFactions">
       {{range .Factions}}
         <span data-faction="{{.Id}}">

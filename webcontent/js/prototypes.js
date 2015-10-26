@@ -8,7 +8,9 @@ crisis.prototypes = {
     /** @type {jQuery} */
     $unitTypes: null,
     /** @type {jQuery} */
-    $unitTypeFinder: null,
+    $unitTypeChooser: null,
+    /** @type {jQuery} */
+    $typeChooserButton: null,
     /** @type {jQuery} */
     $factions: null,
     /** @type {jQuery} */
@@ -29,8 +31,10 @@ crisis.prototypes.init = function() {
     crisis.prototypes.$divisionPane = $prototypes.find('#protoDivisionPane');
     crisis.prototypes.$unitListItem = $prototypes.find('#protoUnitListItem');
     crisis.prototypes.$unitTypes = $prototypes.find('#protoUnitTypes');
-    crisis.prototypes.$unitTypeFinder =
-        $prototypes.find('#protoUnitTypeFinder');
+    crisis.prototypes.$unitTypeChooser =
+        $prototypes.find('#protoUnitTypeChooser');
+    crisis.prototypes.$typeChooserButton =
+        $prototypes.find('#protoTypeChooserButton');
     crisis.prototypes.$factions = $prototypes.find('#protoFactions');
     crisis.prototypes.$routePoint = $prototypes.find('#protoRoutePoint');
     crisis.prototypes.$controlsFactionListItem =
@@ -39,4 +43,22 @@ crisis.prototypes.init = function() {
         $prototypes.find('#protoUnitTypeListItem');
     crisis.prototypes.$factionSelector =
         $prototypes.find('#protoFactionSelector');
+};
+
+/**
+ * @param {crisis.UnitType} type
+ * @param {function(number)} callback
+ * @return {jQuery}
+ */
+crisis.prototypes.typeChooserButton = function(type, callback) {
+    var $button = /** @type {jQuery} */ (
+        crisis.cloneProto(crisis.prototypes.$typeChooserButton)
+            .val(type.name)
+    );
+
+    $button.on('click' + crisis.event.baseNameSpace, function() {
+        callback(type.id);
+    });
+
+    return $button;
 };

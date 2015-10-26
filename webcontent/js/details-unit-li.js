@@ -9,8 +9,8 @@
  */
 crisis.DetailsUnitLi = function(forCreation, details, typeId, amount) {
     /** @type {crisis.DetailsUnitLi} */
-    var thisUnitLi = this;
-    
+    var thisLi = this;
+
     /** @type {boolean} */
     this.forCreation = forCreation;
     /** @type {number} */
@@ -33,7 +33,7 @@ crisis.DetailsUnitLi = function(forCreation, details, typeId, amount) {
      * @param {crisis.UnitType} unitType
      */
     this.unitTypeChanged = function(unitType) {
-        this.$type.text(unitType.name);
+        thisLi.$type.text(unitType.name);
     };
 
     /**
@@ -41,14 +41,14 @@ crisis.DetailsUnitLi = function(forCreation, details, typeId, amount) {
      * @param {crisis.Unit} unit
      */
     this.unitChanged = function(unit) {
-        this.$value.text(unit.amount);
+        thisLi.$value.text(unit.amount);
     };
 
     /** @override */
-    this.unitTypeDestroyed = function() { this.destroy(); };
+    this.unitTypeDestroyed = function() { thisLi.destroy(); };
 
     /** @override */
-    this.unitDestroyed = function() { this.destroy(); };
+    this.unitDestroyed = function() { thisLi.destroy(); };
 
     /** @type {number} */
     var uuid = (new Date).getTime();
@@ -61,29 +61,29 @@ crisis.DetailsUnitLi = function(forCreation, details, typeId, amount) {
     };
 
     this.enableEdit = function() {
-        this.$editField.val(this.$value.text());
-        this.$value.hide();
-        this.$editField.show();
-        this.$removeUnitButton.show();
+        thisLi.$editField.val(/** @type {string} */ (thisLi.$value.text()));
+        thisLi.$value.hide();
+        thisLi.$editField.show();
+        thisLi.$removeUnitButton.show();
     };
 
     this.disableEdit = function() {
-        if (this.forCreation) {
-            this.destroy();
+        if (thisLi.forCreation) {
+            thisLi.destroy();
         } else {
-            this.$editField.hide();
-            this.$removeUnitButton.hide();
-            this.$value.show();
-            this.$invalidAlert.hide();
+            thisLi.$editField.hide();
+            thisLi.$removeUnitButton.hide();
+            thisLi.$value.show();
+            thisLi.$invalidAlert.hide();
         }
     };
 
-    this.destroy = function() { this.$listItem.remove(); };
+    this.destroy = function() { thisLi.$listItem.remove(); };
 
     this.$type.text(crisis.getUnitType(typeId).name);
     crisis.getUnitType(typeId).listeners.add(this);
     this.$removeUnitButton.on('click' + crisis.event.baseNameSpace, function() {
-        details.removeUnitLi(thisUnitLi);
+        details.removeUnitLi(thisLi);
     });
     this.$value.text(amount);
     if (!details.uninitialized) {
@@ -92,7 +92,10 @@ crisis.DetailsUnitLi = function(forCreation, details, typeId, amount) {
     if (this.forCreation) this.enableEdit();
 };
 
-/** @param {crisis.Unit} unit */
+/**
+ * @param {crisis.Unit} unit
+ * @return {crisis.DetailsUnitLi}
+ */
 crisis.DetailsUnitLi.fromUnit = function(unit) {
     return new crisis.DetailsUnitLi(
         false, unit.division.details, unit.type, unit.amount);
@@ -101,6 +104,7 @@ crisis.DetailsUnitLi.fromUnit = function(unit) {
 /**
  * @param {crisis.DivisionDetails} details
  * @param {number} typeId
+ * @return {crisis.DetailsUnitLi}
  */
 crisis.DetailsUnitLi.forCreation = function(details, typeId) {
     return new crisis.DetailsUnitLi(true, details, typeId, 0);

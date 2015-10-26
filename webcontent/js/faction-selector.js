@@ -1,12 +1,13 @@
 /**
  * @constructor
+ * @param {string} uuid
  * @implements {crisis.Faction.ChangeListener}
  * @implements {crisis.ModelChangeListener<crisis.Faction>}
  */
 crisis.FactionSelector = function(uuid) {
     /** @type {crisis.FactionSelector} */
     var thisSelector = this;
-    
+
     /** @type {jQuery} */
     this.$selector = crisis.cloneProto(crisis.prototypes.$factionSelector);
     this.$selector.hide();
@@ -18,7 +19,7 @@ crisis.FactionSelector = function(uuid) {
      * @param {crisis.Faction} faction
      */
     this.factionChanged = function(faction) {
-        this.options.get(faction.id).text(faction.name);
+        thisSelector.options.get(faction.id).text(faction.name);
     };
 
     /**
@@ -26,8 +27,8 @@ crisis.FactionSelector = function(uuid) {
      * @param {number} facId
      */
     this.factionDestroyed = function(facId) {
-        this.options.get(facId).remove();
-        this.options.remove(facId);
+        thisSelector.options.get(facId).remove();
+        thisSelector.options.remove(facId);
     };
 
     /**
@@ -41,7 +42,7 @@ crisis.FactionSelector = function(uuid) {
         fac.listeners.add(thisSelector);
         thisSelector.$selector.append(newOption);
     };
- 
+
     if (uuid === undefined) {
         uuid = 'factionSelector(' + (new Date).getTime() + ')';
     }
@@ -54,23 +55,24 @@ crisis.FactionSelector = function(uuid) {
     };
 
     this.destroy = function() {
-        this.$selector.remove();
-        this.options.forEach(function(facId) {
-            crisis.getFaction(facId).listeners.remove(this);
+        thisSelector.$selector.remove();
+        thisSelector.options.forEach(function(facId) {
+            crisis.getFaction(facId).listeners.remove(thisSelector);
         });
-        crisis.factionsListeners.remove(this);
+        crisis.factionsListeners.remove(thisSelector);
     };
 
     /** @return {number} */
     this.getSelectedFaction = function() {
-        return crisis.stringToInt(/** @type {string} */ (this.$selector.val()));
+        return crisis.stringToInt(
+            /** @type {string} */ (thisSelector.$selector.val()));
     };
 
     /** @param {number} factionId */
     this.setSelectedFaction = function(factionId) {
-        this.$selector.val(factionId.toString());
+        thisSelector.$selector.val(factionId.toString());
     };
-    
+
     crisis.factions.forEach(function(id, faction) {
         thisSelector.modelAdded(faction);
     });
