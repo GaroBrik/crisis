@@ -1,10 +1,14 @@
 /**
  * @constructor
  * @param {crisis.Division} div
+ * @param {boolean} forCreation
  * @implements {crisis.Division.ChangeListener}
  * @implements {crisis.Faction.ChangeListener}
  */
-crisis.DivisionDetails = function(div) {
+crisis.DivisionDetails = function(div, forCreation) {
+    /** @type {boolean} */
+    this.forCreation = forCreation;
+    
     /** @type {jQuery} */
     this.$pane = null;
     /** @type {jQuery} */
@@ -61,6 +65,19 @@ crisis.DivisionDetails = function(div) {
     this.removedUnits = [];
     /** @type {Array<crisis.RoutePoint>} */
     this.route = [];
+
+    if (this.forCreation) {
+        this.enableEdit();
+    }
+};
+
+/** @param {crisis.Division} div */
+crisis.DivisionDetails.fromDivision = function(div) {
+    return new crisis.DivisionDetails(div, false);
+};
+
+crisis.DivisionDetails.forCreation = function() {
+    return new crisis.DivisionDetails(null, true);
 };
 
 /** @enum {string} */
@@ -89,7 +106,6 @@ crisis.DivisionDetails.prototype.init = function() {
     dets.$addUnitButton = dets.$details.find('.addUnitButton');
     dets.$cancelButton = dets.$details.find('.cancelButton');
     dets.$commitButton = dets.$details.find('.commitButton');
-    dets.$createButton = dets.$details.find('.createButton');
     dets.$deleteButton = dets.$details.find('.deleteButton');
 
     dets.$editButton.on('click' + crisis.event.baseNameSpace, function() {
@@ -102,17 +118,29 @@ crisis.DivisionDetails.prototype.init = function() {
                            function() {
                                dets.addUnit();
                            });
-    dets.$commitButton.on('click' + crisis.event.baseNameSpace, function() {
-        dets.commitEdit();
+    dets.$cancelButton.on('click' + crisis.event.baseNameSpace, function() {
+        if (dets.forCreation) {
+            dets.destroy();
+        } else {
+            dets.disableEdit();
+        }
     });
-    dets.$createButton.on('click' + crisis.event.baseNameSpace, function() {
-        dets.commitCreate();
+    dets.$commitButton.on('click' + crisis.event.baseNameSpace, function() {
+        if (dets.forCreation) {
+            dets.commitCreate();
+        } else {
+            dets.commitEdit();
+        }
     });
     dets.$deleteButton.on('click' + crisis.event.baseNameSpace, function() {
         dets.commitDelete();
     });
     dets.$closeButton.on('click' + crisis.event.baseNameSpace, function() {
-        dets.close();
+        if (dets.forCreation) {
+            dets.destroy();
+        } else {
+            dets.close();
+        }
     });
 
     dets.$routePlotter = dets.$pane.find('.routePlotter');
@@ -135,7 +163,7 @@ crisis.DivisionDetails.prototype.init = function() {
 
     crisis.map.$holder.append(dets.$pane);
 
-    crisis.factions.get(this.division.factionId).listeners.add(this);
+    crisis.getFaction(this.division.factionId).listeners.add(this);
     this.division.listeners.add(this);
 };
 
@@ -154,7 +182,6 @@ crisis.DivisionDetails.prototype.open = function() {
     }
 
     this.reRender();
-    crisis.map.positionDropdown(this.$pane, this.division.$marker);
 
     this.$pane.show();
     this.isOpen = true;
@@ -187,6 +214,16 @@ crisis.DivisionDetails.prototype.reRender = function() {
         });
 
         this.updateDivision = false;
+    }
+
+    if (this.forCreation) {
+        this.$pane.css({
+            'left': '0',
+            'top': '0'
+        });
+    } else {
+        crisis.map.positionDropdown(
+            this.$pane, this.division.mapMarker.$marker);
     }
 };
 
@@ -228,13 +265,10 @@ crisis.DivisionDetails.prototype.listenerId = function() {
 crisis.DivisionDetails.prototype.enableEdit = function() {
     var dets = this;
 
-    dets.$cancelButton.off('click' + crisis.event.baseNameSpace);
-    dets.$cancelButton.on('click' + crisis.event.baseNameSpace, function() {
-        dets.disableEdit();
-    });
-
-    dets.$editNameField.val(dets.division.name);
-    dets.$factionSelector.val(dets.division.factionId.toString());
+    if (!this.forCreation) {
+        dets.$editNameField.val(dets.division.name);
+        dets.$factionSelector.val(dets.division.factionId.toString());
+    }
 
     dets.$factionNameSpan.hide();
     dets.$nameSpan.hide();
@@ -248,39 +282,13 @@ crisis.DivisionDetails.prototype.enableEdit = function() {
     dets.$deleteButton.show();
     dets.$addUnitButton.show();
 
-    dets.division.units.forEach(function(k, unit) {
-        unit.enableEdit();
-    });
+    if (!this.forCreation) {
+        dets.division.units.forEach(function(k, unit) {
+            unit.enableEdit();
+        });
+    }
 
     dets.state = crisis.DivisionDetails.State.EDITING;
-};
-
-crisis.DivisionDetails.prototype.enableCreate = function() {
-    var dets = this;
-
-    dets.$cancelButton.off('click' + crisis.event.baseNameSpace);
-    dets.$cancelButton.on('click' + crisis.event.baseNameSpace, function() {
-        dets.disableCreate();
-    });
-
-    dets.$editNameField.val(dets.division.name);
-
-    dets.$factionNameSpan.hide();
-    dets.$nameSpan.hide();
-    dets.$editButton.hide();
-    dets.$routeButton.hide();
-
-    dets.$factionSelector.show();
-    dets.$editNameField.show();
-    dets.$cancelButton.show();
-    dets.$createButton.show();
-    dets.$addUnitButton.show();
-
-    dets.division.units.forEach(function(k, unit) {
-        unit.enableEdit();
-    });
-
-    dets.state = crisis.DivisionDetails.State.CREATING;
 };
 
 crisis.DivisionDetails.prototype.enableRoute = function() {
@@ -323,10 +331,6 @@ crisis.DivisionDetails.prototype.disableEdit = function() {
     _.each(dets.removedUnits, function(unit) { unit.$listItem.show(); });
 
     dets.state = crisis.DivisionDetails.State.VIEWING;
-};
-
-crisis.DivisionDetails.prototype.disableCreate = function() {
-    this.division.destroy();
 };
 
 crisis.DivisionDetails.prototype.disableRoute = function() {

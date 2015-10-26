@@ -9,10 +9,10 @@ crisis.Division = function(divJson) {
     /** @type {buckets.Set<crisis.Division.ChangeListener>} */
     this.listeners = new buckets.Set(function(l) { return l.listenerId(); });
 
+    /** @type {crisis.DivisionMapMarker} */
+    this.mapMarker = new crisis.DivisionMapMarker(this);
     /** @type {crisis.DivisionDetails} */
-    this.details = new crisis.DivisionDetails(this);
-    /** @type {boolean} */
-    this.editing = false;
+    this.details = crisis.DivisionDetails.fromDivision(this);
     /** @type {number} */
     this.id = divJson.Id;
     /** @type {crisis.Coords} */
@@ -23,13 +23,8 @@ crisis.Division = function(divJson) {
     this.name;
     /** @type {number} */
     this.factionId;
-    /** @type {jQuery} */
-    this.$marker = crisis.cloneProto(crisis.prototypes.$divisionMarker);
 
     this.update(divJson);
-    this.$marker.click(function() { div.details.toggle(); });
-
-    crisis.map.addAt(this.$marker, this.absCoords);
 };
 
 /**
@@ -42,8 +37,9 @@ crisis.Division.fromJson = function(divJson) {
 
 /** @interface */
 crisis.Division.ChangeListener = function() {};
-/** @param {crisis.Division} fac */
-crisis.Division.ChangeListener.prototype.divisionChanged = function(fac) {};
+/** @param {crisis.Division} div */
+crisis.Division.ChangeListener.prototype.divisionChanged = function(div) {};
+crisis.Division.ChangeListener.prototype.divisionDestroyed = function() {};
 /** @return {string} */
 crisis.Division.ChangeListener.prototype.listenerId = function() {};
 
@@ -77,11 +73,6 @@ crisis.Division.prototype.update = function(divJson) {
         function(json) { return json.Type; }
     );
 
-    crisis.map.position(this.$marker, this.absCoords);
-    if (this.details.isOpen) {
-        crisis.map.positionDropdown(this.details.$pane, this.$marker);
-    }
-
     if (changed) {
         this.listeners.forEach(function(listener) {
             listener.divisionChanged(thisDiv);
@@ -90,24 +81,10 @@ crisis.Division.prototype.update = function(divJson) {
 };
 
 crisis.Division.prototype.destroy = function() {
-    this.$marker.remove();
     this.details.destroy();
 };
 
 /** @param {crisis.Unit} unit */
 crisis.Division.prototype.removeUnit = function(unit) {
     this.units.remove(unit.type);
-};
-
-crisis.Division.prototype.position = function() {
-    var rel = crisis.map.relativeCoordsOfAbs(this.absCoords);
-    this.$marker.css({
-        'left': rel.x + '%',
-        'top': rel.y + '%'
-    });
-};
-
-crisis.Division.prototype.reRender = function() {
-    this.position();
-    this.details.reRender();
 };

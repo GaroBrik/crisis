@@ -22,6 +22,7 @@ pushd "${WEBCONTENT_DIR}/js" > /dev/null
            bounds.js \
            ajax.js \
            division.js \
+           divisionMapMarker.js \
            divisiondetails.js \
            unittype.js \
            unittype-li.js \

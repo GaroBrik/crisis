@@ -48,17 +48,7 @@ crisis.map.init = function() {
     crisis.map.$newDivisionButton.on('click' + crisis.event.baseNameSpace,
         function() {
             crisis.map.getClick(function(absCoords) {
-                /** @type {crisis.Division} */
-                var tmpDiv = new crisis.Division({
-                    Id: -1,
-                    Coords: absCoords.toJson(),
-                    Units: [],
-                    Name: '',
-                    FactionId: -1
-                });
-                tmpDiv.details.open();
-                tmpDiv.$marker.hide();
-                tmpDiv.details.enableCreate();
+                crisis.DivisionDetails.forCreation();
             });
         });
 

@@ -7,33 +7,33 @@
  */
 crisis.Unit = function(unitJson, div) {
     /** @type {crisis.Unit} */
-    var unit = this;
+    var thisUnit = this;
 
     /** @type {crisis.Division} */
-    unit.division = div;
+    this.division = div;
     /** @type {number} */
-    unit.amount = unitJson.Amount;
+    this.amount = unitJson.Amount;
     /** @type {number} */
-    unit.type = unitJson.Type;
+    this.type = unitJson.Type;
     /** @type {jQuery} */
-    unit.$listItem = crisis.cloneProto(crisis.prototypes.$unitListItem);
+    this.$listItem = crisis.cloneProto(crisis.prototypes.$unitListItem);
     /** @type {jQuery} */
-    unit.$value = unit.$listItem.find('.value');
+    this.$value = this.$listItem.find('.value');
     /** @type {jQuery} */
-    unit.$type = unit.$listItem.find('.type');
+    this.$type = this.$listItem.find('.type');
     /** @type {jQuery} */
-    unit.$editField = unit.$listItem.find('.editField');
+    this.$editField = this.$listItem.find('.editField');
     /** @type {jQuery} */
-    unit.$removeUnitButton = unit.$listItem.find('.removeUnitButton');
+    this.$removeUnitButton = this.$listItem.find('.removeUnitButton');
     /** @type {jQuery} */
-    unit.$invalidAlert = unit.$listItem.find('.invalidAlert');
+    this.$invalidAlert = this.$listItem.find('.invalidAlert');
 
-    unit.$type.text(crisis.unitTypes.get(unit.type).name);
-    crisis.unitTypes.get(unit.type).listeners.add(this);
-    unit.$removeUnitButton.on('click' + crisis.event.baseNameSpace, function() {
-        unit.division.details.removeUnit(unit);
+    this.$type.text(crisis.getUnitType(this.type).name);
+    crisis.unitTypes.get(this.type).listeners.add(this);
+    this.$removeUnitButton.on('click' + crisis.event.baseNameSpace, function() {
+        thisUnit.division.details.removeUnit(thisUnit);
     });
-    unit.$value.text(unit.amount);
+    this.$value.text(this.amount);
 };
 
 /** @inheritDoc */
@@ -49,7 +49,7 @@ crisis.Unit.prototype.destroy = function() {
 };
 
 crisis.Unit.prototype.enableEdit = function() {
-    this.$editField.val(this.amount).show();
+    this.$editField.val(this.amount.toString()).show();
     this.$removeUnitButton.show();
     this.$value.hide();
 };
