@@ -7,7 +7,10 @@ crisis.Division = function(divJson) {
     /** @type {crisis.Division} */
     var div = this;
     /** @type {buckets.Set<crisis.Division.ChangeListener>} */
-    this.listeners = new buckets.Set(function(l) { return l.listenerId(); });
+    this.listeners = new buckets.Set(function(l) {
+        console.log(l);
+        return l.listenerId();
+    });
 
     /** @type {crisis.DivisionMapMarker} */
     this.mapMarker = new crisis.DivisionMapMarker(this);
