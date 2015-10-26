@@ -29,6 +29,7 @@ pushd "${WEBCONTENT_DIR}/js" > /dev/null
            faction.js \
            faction-li.js \
            unit.js \
+           details-unit-li.js \
            map.js \
            routepoint.js"
     EXTERNS="jquiexterns.js \
