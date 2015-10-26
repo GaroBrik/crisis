@@ -61,7 +61,7 @@ crisis.DetailsUnitLi = function(forCreation, details, typeId, amount) {
     };
 
     this.enableEdit = function() {
-        this.$editField.val(/** @type {string} */(this.$value.val()));
+        this.$editField.val(this.$value.text());
         this.$value.hide();
         this.$editField.show();
         this.$removeUnitButton.show();
@@ -74,6 +74,7 @@ crisis.DetailsUnitLi = function(forCreation, details, typeId, amount) {
             this.$editField.hide();
             this.$removeUnitButton.hide();
             this.$value.show();
+            this.$invalidAlert.hide();
         }
     };
 
