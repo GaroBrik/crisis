@@ -144,6 +144,9 @@ crisis.DivisionDetails = function(division, forCreation) {
 
         if (this.forCreation) return;
 
+        division.units.forEach(function(typeId, unit) {
+            dets.$unitList.append(unit.detailsLi.$listItem);
+        });
         crisis.getFaction(division.factionId).listeners.add(this);
         division.listeners.add(this);
     };

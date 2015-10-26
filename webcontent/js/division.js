@@ -24,7 +24,6 @@ crisis.Division = function(divJson) {
     /** @type {number} */
     this.factionId;
 
-    this.details.init();
     this.update(divJson);
     crisis.divisionsListeners.forEach(function(l) { l.modelAdded(div); });
 };

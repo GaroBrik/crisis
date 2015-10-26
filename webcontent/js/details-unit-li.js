@@ -85,7 +85,9 @@ crisis.DetailsUnitLi = function(forCreation, details, typeId, amount) {
         details.removeUnitLi(thisUnitLi);
     });
     this.$value.text(amount);
-    details.$unitList.append(this.$listItem);
+    if (!details.uninitialized) {
+        details.$unitList.append(this.$listItem);
+    }
     if (this.forCreation) this.enableEdit();
 };
 
