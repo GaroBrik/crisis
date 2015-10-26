@@ -229,6 +229,7 @@ crisis.DivisionDetails = function(division, forCreation) {
      * @param {crisis.Faction} faction
      */
     this.factionChanged = function(faction) {
+        console.log(this);
         this.updateFaction = true;
         if (this.isOpen) {
             this.reRender();
@@ -512,7 +513,7 @@ crisis.DivisionDetails = function(division, forCreation) {
     this.destroy = function() {
         this.$pane.remove();
         if (!this.forCreation) {
-            crisis.factions.get(division.factionId).listeners.remove(this);
+            crisis.getFaction(division.factionId).listeners.remove(this);
             division.listeners.remove(this);
         }
     };

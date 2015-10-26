@@ -9,6 +9,7 @@ crisis.FactionSelector = function(uuid) {
     
     /** @type {jQuery} */
     this.$selector = crisis.cloneProto(crisis.prototypes.$factionSelector);
+    this.$selector.hide();
     /** @type {buckets.Dictionary<number, jQuery>} */
     this.options = new buckets.Dictionary();
 
