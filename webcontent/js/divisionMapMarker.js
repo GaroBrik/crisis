@@ -7,10 +7,6 @@ crisis.DivisionMapMarker = function(div) {
     /** @type {jQuery} */
     this.$marker = crisis.cloneProto(crisis.prototypes.$divisionMarker);
 
-    this.$marker.click(function() { div.details.toggle(); });
-    crisis.map.add(this.$marker);
-    div.listeners.add(this);
-
     /** @override */
     this.divisionChanged = function() {
         crisis.map.position(this.$marker, div.absCoords);
@@ -28,4 +24,8 @@ crisis.DivisionMapMarker = function(div) {
     this.divisionDestroyed = function() {
         this.$marker.remove();
     };
+
+    this.$marker.click(function() { div.details.toggle(); });
+    crisis.map.add(this.$marker);
+    div.listeners.add(this);
 };
