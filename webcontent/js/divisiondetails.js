@@ -379,8 +379,10 @@ crisis.DivisionDetails = function(division, forCreation) {
                 /** @type {crisis.DetailsUnitLi} */
                 var newUnit = crisis.DetailsUnitLi.forCreation(thisDets, num);
                 thisDets.newUnits.push(newUnit);
+                thisDets.$addUnitButton.show();
             });
-        thisDets.$pane.append(chooser.$chooser);
+        thisDets.$addUnitButton.hide();
+        thisDets.$details.append(chooser.$chooser);
     };
 
     /** @param {crisis.DetailsUnitLi} unit */
