@@ -229,7 +229,6 @@ crisis.DivisionDetails = function(division, forCreation) {
      * @param {crisis.Faction} faction
      */
     this.factionChanged = function(faction) {
-        console.log(this);
         this.updateFaction = true;
         if (this.isOpen) {
             this.reRender();
@@ -245,6 +244,7 @@ crisis.DivisionDetails = function(division, forCreation) {
      */
     this.divisionChanged = function(division) {
         this.updateDivision = true;
+        this.updateFaction = true;
         if (this.isOpen) {
             this.reRender();
         }
