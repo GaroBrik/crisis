@@ -8,7 +8,7 @@ crisis.DivisionMapMarker = function(div) {
     this.$marker = crisis.cloneProto(crisis.prototypes.$divisionMarker);
 
     this.$marker.click(function() { div.details.toggle(); });
-    crisis.map.addAt(this.$marker, div.absCoords);
+    crisis.map.add(this.$marker);
     div.listeners.add(this);
 
     /** @override */

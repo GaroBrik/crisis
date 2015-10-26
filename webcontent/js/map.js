@@ -271,11 +271,16 @@ crisis.map.position = function($elem, absCoords) {
     });
 };
 
+/** @param {jQuery} $elem */
+crisis.map.add = function($elem) {
+    crisis.map.$holder.append($elem);
+};
+
 /**
  * @param {jQuery} $elem
  * @param {crisis.Coords} absCoords
  */
 crisis.map.addAt = function($elem, absCoords) {
     crisis.map.position($elem, absCoords);
-    crisis.map.$holder.append($elem);
+    crisis.map.add($elem);
 };
