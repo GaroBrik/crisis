@@ -197,16 +197,11 @@ crisis.DivisionDetails = function(division, forCreation) {
         if (this.updateDivision) {
             this.$nameSpan.text(division.name);
 
-            /** @type {Array<crisis.DetailsUnitLi>} */
-            var currentUnitLis = _.map(division.units.values(), function(unit) {
-                return unit.detailsLi;
-            });
-            currentUnitLis = currentUnitLis.concat(this.newUnits);
-            _.each(currentUnitLis, function(u) {
+            _.each(this.currentUnitLis(), function(u) {
                 u.$listItem.detach();
             });
             this.$unitList.empty();
-            _.each(currentUnitLis, function(u) {
+            _.each(this.currentUnitLis(), function(u) {
                 thisDets.$unitList.append(u.$listItem);
             });
             
@@ -215,6 +210,18 @@ crisis.DivisionDetails = function(division, forCreation) {
         
         crisis.map.positionDropdown(
             this.$pane, division.mapMarker.$marker);
+    };
+
+    /** @return {Array<crisis.DetailsUnitLi>} */
+    this.currentUnitLis = function() {
+        /** @type {Array<crisis.DetailsUnitLi>} */
+        var currentUnitLis = [];
+        if (!this.forCreation) {
+            currentUnitLis = _.map(division.units.values(), function(unit) {
+                return unit.detailsLi;
+            });
+        }
+        return currentUnitLis.concat(this.newUnits);
     };
 
     /**
@@ -360,11 +367,9 @@ crisis.DivisionDetails = function(division, forCreation) {
             return;
         }
 
-        /** @type {Array<crisis.DetailsUnitLi>} */
-        var toLoop = this.forCreation ? dets.newUnits :
-            division.units.values().concat(dets.newUnits);
         /** @type {Array<number>} */
-        var currentIds = _.map(toLoop, function(unit) { return unit.typeId; });
+        var currentIds = _.map(this.currentUnitLis(),
+                               function(unit) { return unit.typeId; });
 
         crisis.map.showUnitTypeFinder(currentIds, dets.$pane,
             function(num) {
@@ -396,7 +401,7 @@ crisis.DivisionDetails = function(division, forCreation) {
         /** @type {Array<crisisJson.Unit>} */
         var newUnits = [];
         var validSubmit = true;
-        _.each(division.units.values().concat(dets.newUnits), function(unit) {
+        _.each(this.currentUnitLis(), function(unit) {
             if (_.contains(dets.removedUnits, unit)) return;
 
             /** @type {number} */
@@ -406,7 +411,7 @@ crisis.DivisionDetails = function(division, forCreation) {
                 dets.$detailsInvalidAlert.show();
                 validSubmit = false;
             } else {
-                newUnits.push({Type: unit.type, Amount: newVal});
+                newUnits.push({Type: unit.typeId, Amount: newVal});
             }
         });
 
