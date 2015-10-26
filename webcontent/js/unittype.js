@@ -1,10 +1,12 @@
 /**
  * @constructor
  * @param {crisisJson.UnitType} json
- * @param {boolean} forCreation
  * @implements {crisis.Updateable<crisisJson.UnitType>}
  */
-crisis.UnitType = function(json, forCreation) {
+crisis.UnitType = function(json) {
+    /** @type {crisis.UnitType} */
+    var thisType = this;
+    
     /** @type {number} */
     this.id = json.Id;
     /** @type {string} */
@@ -12,7 +14,9 @@ crisis.UnitType = function(json, forCreation) {
     /** @type {buckets.Set<crisis.UnitType.ChangeListener>} */
     this.listeners = new buckets.Set(function(l) { return l.listenerId(); });
     /** @type {crisis.UnitTypeLi} */
-    this.unitTypeLi = new crisis.UnitTypeLi(this, forCreation);
+    this.unitTypeLi = new crisis.UnitTypeLi(this, false);
+
+    crisis.unitTypesListeners.forEach(function(l) { l.modelAdded(thisType); });
 };
 
 /**
@@ -20,7 +24,7 @@ crisis.UnitType = function(json, forCreation) {
  * @return {crisis.UnitType}
  */
 crisis.UnitType.fromJson = function(unitTypeJson) {
-    return new crisis.UnitType(unitTypeJson, false);
+    return new crisis.UnitType(unitTypeJson);
 };
 
 /** @interface */

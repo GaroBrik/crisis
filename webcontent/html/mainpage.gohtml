@@ -14,6 +14,7 @@
 <body>
   <div style="display: none" id="htmlObjectPrototypes">
     <div id="protoDivisionMarker" class="divisionMarker"></div>
+    <select id="protoFactionSelector" class="factionSelector"></select>
     <div id="protoDivisionPane" class="dropdown divisionPane" style="display: none">
       <div class="details">
         <input type="button" class="closeButton" value="x">
@@ -22,11 +23,7 @@
         {{end}}
         <span class="factionNameSpan"></span>
         {{if .CanEdit}}
-          <select class="factionSelector" style="display: none">
-            {{range .Factions}}
-              <option value="{{.Id}}">{{.Name}}</option>
-            {{end}}
-          </select>
+          <span class="factionSelectorPlace" style="display: none"></span>
         {{end}}
         <br>
         <span class="divisionNameSpan"></span>

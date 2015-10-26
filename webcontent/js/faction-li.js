@@ -99,7 +99,7 @@ crisis.FactionLi.prototype.commit = function() {
             /** @param {crisisJson.Faction} json */
             success: function(json) {
                 thisLi.destroy();
-                crisis.addFaction(new crisis.Faction(json, false));
+                crisis.addFaction(crisis.Faction.fromJson(json));
             }
         });
     } else {
@@ -129,17 +129,28 @@ crisis.FactionLi.prototype.commitDelete = function() {
 
 crisis.FactionLi.prototype.destroy = function() {
     this.$listItem.remove();
-    if (!this.forCreation) {
-        this.faction.listeners.remove(this);
-    }
 };
 
-/** @param {crisis.Faction} faction */
+/** 
+ * @override
+ * @param {crisis.Faction} faction 
+ */
 crisis.FactionLi.prototype.factionChanged = function(faction) {
     this.$nameSpan.text(faction.name);
 };
 
-/** @return {string} */
+/**
+ * @override
+ * @param {number} facId
+ */
+crisis.FactionLi.prototype.factionDestroyed = function(facId) {
+    this.destroy();
+};
+
+/**
+ * @override
+ * @return {string}
+ */
 crisis.FactionLi.prototype.listenerId = function() {
     return 'factionLi(' + this.faction.id + ')';
 };

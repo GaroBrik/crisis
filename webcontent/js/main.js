@@ -1,12 +1,28 @@
 /** @export */
 var crisis = {
-    /** @type {buckets.Dictionary<number, !crisis.Division>} */
+    /** @type {buckets.Dictionary<number, crisis.Division>} */
     divisions: new buckets.Dictionary(),
-    /** @type {buckets.Dictionary<number, !crisis.Faction>} */
+    /** @type {buckets.Set<crisis.ModelChangeListener<crisis.Division>>} */
+    divisionsListeners: new buckets.Set(function(l) { return l.listenerId(); }),
+    /** @type {buckets.Dictionary<number, crisis.Faction>} */
     factions: new buckets.Dictionary(),
-    /** @type {buckets.Dictionary<number, !crisis.UnitType>} */
-    unitTypes: new buckets.Dictionary()
+    /** @type {buckets.Set<crisis.ModelChangeListener<crisis.Faction>>} */
+    factionsListeners: new buckets.Set(function(l) { return l.listenerId(); }),
+    /** @type {buckets.Dictionary<number, crisis.UnitType>} */
+    unitTypes: new buckets.Dictionary(),
+    /** @type {buckets.Set<crisis.ModelChangeListener<crisis.UnitType>>} */
+    unitTypesListeners: new buckets.Set(function(l) { return l.listenerId(); })
 };
+
+/** 
+ * @interface
+ * @template T
+ */
+crisis.ModelChangeListener = function() {};
+/** @param {T} model */
+crisis.ModelChangeListener.prototype.modelAdded = function(model) {};
+/** @return {string} */
+crisis.ModelChangeListener.prototype.listenerId = function() {};
 
 /** @export */
 crisis.init = function() {

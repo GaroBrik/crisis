@@ -98,7 +98,7 @@ crisis.UnitTypeLi.prototype.commit = function() {
             /** @param {crisisJson.UnitType} json */
             success: function(json) {
                 thisLi.destroy();
-                crisis.addUnitType(new crisis.UnitType(json, false));
+                crisis.addUnitType(crisis.UnitType.fromJson(json));
             }
         });
     } else {

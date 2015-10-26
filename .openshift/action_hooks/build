@@ -28,6 +28,7 @@ pushd "${WEBCONTENT_DIR}/js" > /dev/null
            unittype-li.js \
            faction.js \
            faction-li.js \
+           faction-selector.js \
            unit.js \
            details-unit-li.js \
            map.js \

@@ -16,7 +16,9 @@ crisis.prototypes = {
     /** @type {jQuery} */
     $controlsFactionListItem: null,
     /** @type {jQuery} */
-    $controlsUnitTypeListItem: null
+    $controlsUnitTypeListItem: null,
+    /** @type {jQuery} */
+    $factionSelector: null
 };
 
 crisis.prototypes.init = function() {
@@ -35,4 +37,6 @@ crisis.prototypes.init = function() {
         $prototypes.find('#protoFactionListItem');
     crisis.prototypes.$controlsUnitTypeListItem =
         $prototypes.find('#protoUnitTypeListItem');
+    crisis.prototypes.$factionSelector =
+        $prototypes.find('#protoFactionSelector');
 };

@@ -15,8 +15,8 @@ crisis.DivisionDetails = function(division, forCreation) {
     this.$details = null;
     /** @type {jQuery} */
     this.$factionSpan = null;
-    /** @type {jQuery} */
-    this.$factionSelector = null;
+    /** @type {crisis.FactionSelector} */
+    this.factionSelector = null;
     /** @type {jQuery} */
     this.$nameSpan = null;
     /** @type {jQuery} */
@@ -73,7 +73,10 @@ crisis.DivisionDetails = function(division, forCreation) {
         dets.$details = dets.$pane.find('.details');
         dets.$detailsInvalidAlert = dets.$details.find('.detailsInvalidAlert');
         dets.$factionNameSpan = dets.$details.find('.factionNameSpan');
-        dets.$factionSelector = dets.$details.find('.factionSelector');
+        dets.factionSelector = new crisis.FactionSelector(
+            'factionSelectorForDivDets(' + division.id + ')');
+        dets.$details.find('.factionSelectorPlace').replaceWith(
+            dets.factionSelector.$selector);
         dets.$nameSpan = dets.$details.find('.divisionNameSpan');
         dets.$editNameField = dets.$details.find('.editNameField');
         dets.$unitList = dets.$details.find('ul');
@@ -217,6 +220,9 @@ crisis.DivisionDetails = function(division, forCreation) {
         }
     };
 
+    /** @override */
+    this.factionDestroyed = _.noop;
+    
     /**
      * @override
      * @param {crisis.Division} division
@@ -246,7 +252,7 @@ crisis.DivisionDetails = function(division, forCreation) {
 
         if (!this.forCreation) {
             dets.$editNameField.val(division.name);
-            dets.$factionSelector.val(division.factionId.toString());
+            dets.factionSelector.setSelectedFaction(division.factionId);
         }
 
         dets.$factionNameSpan.hide();
@@ -254,7 +260,7 @@ crisis.DivisionDetails = function(division, forCreation) {
         dets.$editButton.hide();
         dets.$routeButton.hide();
 
-        dets.$factionSelector.show();
+        dets.factionSelector.$selector.show();
         dets.$editNameField.show();
         dets.$cancelButton.show();
         dets.$commitButton.show();
@@ -292,7 +298,7 @@ crisis.DivisionDetails = function(division, forCreation) {
     this.disableEdit = function() {
         var dets = this;
 
-        dets.$factionSelector.hide();
+        dets.factionSelector.$selector.hide();
         dets.$editNameField.hide();
         dets.$cancelButton.hide();
         dets.$commitButton.hide();
@@ -398,8 +404,7 @@ crisis.DivisionDetails = function(division, forCreation) {
         var name = /** @type {string?} */(dets.$editNameField.val());
         if (name === division.name) name = null;
 
-        var factionId = /** @type {number?} */ (crisis.stringToInt(
-            /** @type {string} */ (dets.$factionSelector.val())));
+        var factionId = dets.factionSelector.getSelectedFaction();
         if (factionId === division.factionId) factionId = null;
 
         if (!validSubmit) return;
@@ -444,8 +449,8 @@ crisis.DivisionDetails = function(division, forCreation) {
             validSubmit = false;
         }
 
-        var factionId = /** @type {number} */ (crisis.stringToInt(
-            /** @type {string} */ (dets.$factionSelector.val())));
+        /** @type {number} */
+        var factionId = dets.factionSelector.getSelectedFaction();
 
         if (!validSubmit) return;
         crisis.ajax.postDivisionCreation(

@@ -1,10 +1,12 @@
 /**
  * @constructor
  * @param {crisisJson.Faction} json
- * @param {boolean} forCreation
  * @implements {crisis.Updateable<crisisJson.Faction>}
  */
-crisis.Faction = function(json, forCreation) {
+crisis.Faction = function(json) {
+    /** @type {crisis.Faction} */
+    var thisFac = this;
+    
     /** @type {number} */
     this.id = json.Id;
     /** @type {string} */
@@ -12,7 +14,9 @@ crisis.Faction = function(json, forCreation) {
     /** @type {buckets.Set<crisis.Faction.ChangeListener>} */
     this.listeners = new buckets.Set(function(l) { return l.listenerId(); });
     /** @type {crisis.FactionLi} */
-    this.factionLi = new crisis.FactionLi(this, forCreation);
+    this.factionLi = new crisis.FactionLi(this, false);
+
+    crisis.factionsListeners.forEach(function(l) { l.modelAdded(thisFac); });
 };
 
 /**
@@ -20,13 +24,15 @@ crisis.Faction = function(json, forCreation) {
  * @return {crisis.Faction}
  */
 crisis.Faction.fromJson = function(factionJson) {
-    return new crisis.Faction(factionJson, false);
+    return new crisis.Faction(factionJson);
 };
 
 /** @interface */
 crisis.Faction.ChangeListener = function() {};
 /** @param {crisis.Faction} fac */
 crisis.Faction.ChangeListener.prototype.factionChanged = function(fac) {};
+/** @param {number} facId */
+crisis.Faction.ChangeListener.prototype.factionDestroyed = function(facId) {};
 /** @return {string} */
 crisis.Faction.ChangeListener.prototype.listenerId = function() {};
 
@@ -55,6 +61,11 @@ crisis.Faction.prototype.update = function(json) {
 };
 
 crisis.Faction.prototype.destroy = function() {
-    this.factionLi.destroy();
+    /** @type {crisis.Faction} */
+    var thisFac = this;
+    
+    this.listeners.forEach(function(listener) {
+        listener.factionDestroyed(thisFac.id);
+    });
     crisis.factions.remove(this.id);
 };

@@ -57,12 +57,14 @@ crisis.DetailsUnitLi = function(forCreation, details, typeId, amount) {
     /** @override */
     this.unitDestroyed = function() { this.destroy(); };
 
+    /** @type {number} */
+    var uuid = (new Date).getTime();
     /**
      * @override
      * @return {string}
      */
     this.listenerId = function() {
-        return 'detailsUnitLi(' + (new Date).getTime() + ')';
+        return 'detailsUnitLi(' + uuid + ')';
     };
 
     this.enableEdit = function() {
