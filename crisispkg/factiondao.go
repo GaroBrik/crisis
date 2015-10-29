@@ -19,8 +19,9 @@ func GetFactionsByCrisisId(tx *pg.Tx, crisisId int) ([]Faction, error) {
 func GetFactionByName(tx *pg.Tx, crisisId int, name string) (Faction, error) {
 	var faction Faction
 	_, err := tx.QueryOne(&faction, `
-            SELECT id, faction_name FROM faction WHERE crisis = ?
-        `, crisisId)
+            SELECT id, faction_name FROM faction 
+            WHERE lower(faction_name) = lower(?)
+        `, name)
 	return faction, err
 }
 
