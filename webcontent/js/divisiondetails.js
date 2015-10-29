@@ -2,10 +2,11 @@
  * @constructor
  * @param {crisis.Division} division
  * @param {boolean} forCreation
+ * @param {crisis.Coords=} coords
  * @implements {crisis.Division.ChangeListener}
  * @implements {crisis.Faction.ChangeListener}
  */
-crisis.DivisionDetails = function(division, forCreation) {
+crisis.DivisionDetails = function(division, forCreation, coords) {
     /** @type {crisis.DivisionDetails} */
     var thisDets = this;
 
@@ -202,10 +203,7 @@ crisis.DivisionDetails = function(division, forCreation) {
 
     this.reRender = function() {
         if (thisDets.forCreation) {
-            thisDets.$pane.css({
-                'left': '0',
-                'top': '0'
-            });
+            map.position(thisDets.$pane, coords);
             return;
         }
 
@@ -588,9 +586,12 @@ crisis.DivisionDetails.fromDivision = function(div) {
     return new crisis.DivisionDetails(div, false);
 };
 
-/** @return {crisis.DivisionDetails} */
-crisis.DivisionDetails.forCreation = function() {
-    return new crisis.DivisionDetails(null, true);
+/**
+ * @param {crisis.Coords} coords
+ * @return {crisis.DivisionDetails}
+ */
+crisis.DivisionDetails.forCreation = function(coords) {
+    return new crisis.DivisionDetails(null, true, coords);
 };
 
 /** @enum {string} */
