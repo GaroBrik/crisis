@@ -56,6 +56,31 @@ func UpdateDivision(tx *pg.Tx, divisionId int, units []Unit,
 	return err
 }
 
+func UpdateDivisionVisibility(tx *pg.Tx, divId int, factionIds []int) error {
+	_, err := tx.Exec(`
+            DELETE FROM division_view WHERE division_id = $1
+        `, divId)
+	if err != nil {
+		return err
+	}
+
+	stmt, err := tx.Prepare(`
+            INSERT INTO division_view (division_id, faction_id) VALUES $1, $2
+        `)
+	if err != nil {
+		return err
+	}
+
+	for _, facId := range factionIds {
+		_, err = stmt.Exec(divId, facId)
+		if err != nil {
+			return err
+		}
+	}
+
+	return nil
+}
+
 func UpdateDivisionUnits(tx *pg.Tx, divisionId int, units []Unit) error {
 	_, err := tx.Exec(`
             DELETE FROM unit WHERE unit.division = ?
@@ -141,6 +166,11 @@ func LoadDivision(tx *pg.Tx, division *Division) (Division, error) {
 	}
 
 	division.Units, err = GetUnitsByDivisionId(tx, division.Id)
+	if err != nil {
+		return *division, err
+	}
+
+	division.VisibleTo, err = GetVisibilityByDivisionId(tx, division.Id)
 	return *division, err
 }
 
@@ -173,4 +203,12 @@ func GetUnitsByDivisionId(tx *pg.Tx, divisionId int) ([]Unit, error) {
 		    WHERE unit.division = ?
         `, divisionId)
 	return units, err
+}
+
+func GetVisibilityByDivisionId(tx *pg.Tx, divisionId int) ([]int64, error) {
+	var ints pg.Ints
+	_, err := tx.Query(&ints, `
+            SELECT faction_id FROM division_view WHERE division_id = $1
+        `, divisionId)
+	return ints, err
 }

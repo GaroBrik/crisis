@@ -30,6 +30,7 @@ pushd "${WEBCONTENT_DIR}/js" > /dev/null
            faction.js \
            faction-li.js \
            faction-selector.js \
+           faction-visibility-selector.js \
            unit.js \
            details-unit-li.js \
            map.js \

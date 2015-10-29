@@ -11,18 +11,19 @@ type AjaxHandler struct {
 }
 
 const (
-	ajaxPath           = "ajax/"
-	crisisPath         = ajaxPath + "crisis/"
-	updateDivisionPath = ajaxPath + "updateDivision/"
-	createDivisionPath = ajaxPath + "createDivision/"
-	deleteDivisionPath = ajaxPath + "deleteDivision/"
-	updateFactionPath  = ajaxPath + "updateFaction/"
-	createFactionPath  = ajaxPath + "createFaction/"
-	deleteFactionPath  = ajaxPath + "deleteFaction/"
-	updateUnitTypePath = ajaxPath + "updateUnitType/"
-	createUnitTypePath = ajaxPath + "createUnitType/"
-	deleteUnitTypePath = ajaxPath + "deleteUnitType/"
-	divisionRoutePath  = ajaxPath + "divisionRoute/"
+	ajaxPath                     = "ajax/"
+	crisisPath                   = ajaxPath + "crisis/"
+	updateDivisionPath           = ajaxPath + "updateDivision/"
+	updateDivisionVisibilityPath = ajaxPath + "updateDivisionVisibility/"
+	createDivisionPath           = ajaxPath + "createDivision/"
+	deleteDivisionPath           = ajaxPath + "deleteDivision/"
+	updateFactionPath            = ajaxPath + "updateFaction/"
+	createFactionPath            = ajaxPath + "createFaction/"
+	deleteFactionPath            = ajaxPath + "deleteFaction/"
+	updateUnitTypePath           = ajaxPath + "updateUnitType/"
+	createUnitTypePath           = ajaxPath + "createUnitType/"
+	deleteUnitTypePath           = ajaxPath + "deleteUnitType/"
+	divisionRoutePath            = ajaxPath + "divisionRoute/"
 )
 
 var m_ajaxHandler *AjaxHandler
@@ -101,6 +102,38 @@ func (handler *AjaxHandler) HandleRequest(res http.ResponseWriter, req *http.Req
 			}
 
 			div, err := GetDivision(tx, jsonSent.Id)
+			if err != nil {
+				return err
+			}
+
+			newDiv = div
+			return nil
+		})
+		maybePanic(err)
+
+		json, err := json.Marshal(newDiv)
+		maybePanic(err)
+
+		res.Write(json)
+
+	case updateDivisionVisibilityPath:
+		type DivisionVisibilityUpdateJson struct {
+			DivisionId int
+			VisibleTo  []int
+		}
+		var jsonSent DivisionVisibilityUpdateJson
+		err := json.NewDecoder(req.Body).Decode(&jsonSent)
+		maybePanic(err)
+
+		var newDiv Division
+		err = handler.db.db.RunInTransaction(func(tx *pg.Tx) error {
+			err = UpdateDivisionVisibility(
+				tx, jsonSent.DivisionId, jsonSent.VisibleTo)
+			if err != nil {
+				return err
+			}
+
+			div, err := GetDivision(tx, jsonSent.DivisionId)
 			if err != nil {
 				return err
 			}

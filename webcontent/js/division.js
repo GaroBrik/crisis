@@ -19,6 +19,8 @@ crisis.Division = function(divJson) {
     this.absCoords;
     /** @type {buckets.Dictionary<number, crisis.Unit>} */
     this.units = new buckets.Dictionary();
+    /** @type {buckets.Set<number>} */
+    this.visibleTo = new buckets.Set();
     /** @type {string} */
     this.name;
     /** @type {number} */
@@ -63,11 +65,19 @@ crisis.Division.prototype.update = function(divJson) {
         this.name = divJson.Name;
     }
 
+    /** @type {buckets.Set<number>} */
+    var newFactionsSet = new buckets.Set();
+    _.each(divJson.VisibleTo, function(id) { newFactionsSet.add(id); });
+    if (!this.visibleTo.equals(newFactionsSet)) {
+        changed = true;
+        this.visibleTo = newFactionsSet;
+    }
+
     if (this.factionId !== divJson.FactionId) {
         changed = true;
         this.factionId = divJson.FactionId;
     }
-    
+
     crisis.updateElements(
         this.units, divJson.Units,
         function(json) { return new crisis.Unit(json, thisDiv); },

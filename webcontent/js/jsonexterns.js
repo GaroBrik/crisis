@@ -63,6 +63,7 @@ crisisJson.CreateUnitType;
  *   Name: string,
  *   Coords: crisisJson.Coords,
  *   FactionId: number,
+ *   VisibleTo: Array<number>,
  *   Units: Array<crisisJson.Unit>
  * }}
  */
@@ -77,6 +78,14 @@ crisisJson.Division;
  * }}
  */
 crisisJson.DivisionUpdate;
+
+/**
+ * @typedef {{
+ *   DivisionId: number,
+ *   VisibleTo: Array<number>
+ * }}
+ */
+crisisJson.DivisionVisibilityUpdate;
 
 /**
  * @typedef {{

@@ -18,6 +18,12 @@ crisis.ajax.updateDivisionPath = crisis.ajax.path + 'updateDivision/';
  * @const
  * @type {string}
  */
+crisis.ajax.updateDivisionVisibilityPath =
+    crisis.ajax.path + 'updateDivisionVisibility/';
+/**
+ * @const
+ * @type {string}
+ */
 crisis.ajax.createDivisionPath = crisis.ajax.path + 'createDivision/';
 /**
  * @const
@@ -93,6 +99,23 @@ crisis.ajax.postDivisionUpdate = function(
         FactionId: factionId
     };
     crisis.ajax.postData(crisis.ajax.updateDivisionPath, data, options);
+};
+
+/**
+ * @param {Array<number>} newVisibility
+ * @param {number} divisionId
+ * @param {jQueryAjaxSettings=} options
+ */
+crisis.ajax.postDivisionVisibilityUpdate = function(
+    newVisibility, divisionId, options)
+{
+    /** @type {crisisJson.DivisionVisibilityUpdate} */
+    var data = {
+        VisibleTo: newVisibility,
+        DivisionId: divisionId
+    };
+    crisis.ajax.postData(crisis.ajax.updateDivisionVisibilityPath,
+                         data, options);
 };
 
 /**

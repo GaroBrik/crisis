@@ -31,6 +31,8 @@ crisis.DivisionDetails = function(division, forCreation) {
     /** @type {jQuery} */
     this.$addUnitButton = null;
     /** @type {jQuery} */
+    this.$changeVisibilityButton = null;
+    /** @type {jQuery} */
     this.$cancelButton = null;
     /** @type {jQuery} */
     this.$commitButton = null;
@@ -87,6 +89,8 @@ crisis.DivisionDetails = function(division, forCreation) {
         thisDets.$editButton = thisDets.$details.find('.editButton');
         thisDets.$routeButton = thisDets.$details.find('.routeButton');
         thisDets.$addUnitButton = thisDets.$details.find('.addUnitButton');
+        thisDets.$changeVisibilityButton =
+            thisDets.$details.find('.changeVisibilityButton');
         thisDets.$cancelButton = thisDets.$details.find('.cancelButton');
         thisDets.$commitButton = thisDets.$details.find('.commitButton');
         thisDets.$deleteButton = thisDets.$details.find('.deleteButton');
@@ -103,6 +107,10 @@ crisis.DivisionDetails = function(division, forCreation) {
                                function() {
                                    thisDets.addUnit();
                                });
+        thisDets.$changeVisibilityButton.on('click' + crisis.event.baseNameSpace,
+                                            function() {
+                                                thisDets.changeVisibility();
+                                            });
         thisDets.$cancelButton.on('click' + crisis.event.baseNameSpace,
                                   function() {
                                       if (thisDets.forCreation) {
@@ -387,6 +395,34 @@ crisis.DivisionDetails = function(division, forCreation) {
         );
         thisDets.$addUnitButton.hide();
         thisDets.$details.append(thisDets.chooser.$chooser);
+    };
+
+    this.changeVisibility = function() {
+        var visibilitySelector = new crisis.FactionVisibilitySelector(
+            'divDets(' + division.id + ')', division.visibleTo);
+
+        thisDets.$details.append(visibilitySelector.$selector);
+
+        thisDets.$changeVisibilityButton.off(
+            'click' + crisis.event.factionVisibilityOn);
+        thisDets.$changeVisibilityButton.on(
+            'click' + crisis.event.factionVisibilityOff,
+            function() {
+                crisis.ajax.postDivisionVisibilityUpdate(
+                    visibilitySelector.getSelectedFactions(), division.id, {
+                        success: function() {
+                            visibilitySelector.destroy();
+                            thisDets.$changeVisibilityButton.off(
+                                'click' + crisis.event.factionVisibilityOff);
+                            thisDets.$changeVisibilityButton.on(
+                                'click' + crisis.event.factionVisibilityOn,
+                                function() { thisDets.changeVisibility(); }
+                            );
+                        }
+                    }
+                );
+            }
+        );
     };
 
     /** @param {crisis.DetailsUnitLi} unit */

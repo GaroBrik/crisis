@@ -1,129 +1,129 @@
 <!DOCTYPE html>
 <html>
-<head>
-  <title>Hi there</title>
-  <script src="http://code.jquery.com/jquery-2.1.4.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.8.3/underscore-min.js"></script>
-  <script src="https://code.jquery.com/ui/1.11.3/jquery-ui.min.js"></script>
-  {{range .JSUrls}}
-    <script src="{{.}}"></script>
-  {{end}}
-  <link rel="stylesheet" type="text/css" href="{{.CSSUrl}}">
-  <link rel="stylesheet" type="text/css" href="https://code.jquery.com/ui/1.11.3/themes/smoothness/jquery-ui.css">
-</head>
-<body>
-  <div style="display: none" id="htmlObjectPrototypes">
-    <div id="protoDivisionMarker" class="divisionMarker"></div>
-    <select id="protoFactionSelector" class="factionSelector"></select>
-    <div id="protoDivisionPane" class="dropdown divisionPane" style="display: none">
-      <div class="details">
-        <input type="button" class="closeButton" value="x">
-        {{if .CanEdit}}
-          <span class="paneInvalidAlert" style="display: none">Invalid Input<br></span>
-        {{end}}
-        <span class="factionNameSpan"></span>
-        {{if .CanEdit}}
-          <span class="factionSelectorPlace" style="display: none"></span>
-        {{end}}
-        <br>
-        <span class="divisionNameSpan"></span>
-        {{if .CanEdit}}
-          <input type="text" class="editNameField" style="display: none">
-        {{end}}
-        <br>
-        <ul class="unitList"></ul>
-        {{if .CanEdit}}
-        <input type="button" class="editButton" value="Edit">
-        <input type="button" class="routeButton" value="Route">
-        <input type="button" class="cancelButton" style="display: none" value="Cancel">
-        <input type="button" class="commitButton" style="display: none" value="Commit">
-        <input type="button" class="deleteButton" style="display: none" value="Delete">
-        <input type="button" class="addUnitButton" style="display: none" value="+">
-        <input type="button" class="createButton" style="display: none" value="Create">
-        {{end}}
-      </div>
-      {{if .CanEdit}}
-      <div class="routePlotter" style="display: none">
-        <input type="button" class="commitRouteButton" value="Commit">
-        <input type="button"  class="undoRouteButton" value="Undo">
-        <input type="button" class="cancelRouteButton" value="Cancel">
-      </div>
-      {{end}}
-    </div>
-    <li id="protoUnitListItem" class="unitListItem">
-      <span class="type"></span>
-      <span class="value"></span>
-      <input type="text" class="editField" style="display: none">
-      <input type="button" class="removeUnitButton" style="display: none" value="x">
-      <span class="invalidAlert" style="display: none">Invalid Unit Input</span>
-    </li>
-    <li id="protoFactionListItem" class="factionListItem">
-      <span class="name"></span>
-      <input type="text" class="editField" style="display: none">
-      <input type="button" class="editButton"  value="E">
-      <input type="button" class="cancelButton" style="display: none" value="N">
-      <input type="button" class="commitButton" style="display: none" value="Y">
-      <input type="button" class="deleteButton" style="display: none" value="D">
-    </li>
-    <li id="protoUnitTypeListItem" class="unitTypeListItem">
-      <span class="name"></span>
-      <input type="text" class="editField" style="display: none">
-      <input type="button" class="editButton"  value="E">
-      <input type="button" class="cancelButton" style="display: none" value="N">
-      <input type="button" class="commitButton" style="display: none" value="Y">
-      <input type="button" class="deleteButton" style="display: none" value="D">
-    </li>
-    <div id="protoUnitTypes">
-      {{range .Types}}
-        <span data-type="{{.Id}}">
-	        {{.Name}}:
-        </span>
-      {{end}}
-    </div>
-    <ul id="protoUnitTypeChooser" class="unitTypeChooser"></ul>
-    <input id="protoTypeChooserButton" type="button">
-    <div id="protoFactions">
-      {{range .Factions}}
-        <span data-faction="{{.Id}}">
-	        {{.Name}}
-        </span>
-      {{end}}
-    </div>
-    <div id="protoRoutePoint" class="routePoint"></div>
-  </div>
-  <div id="header">
-    {{if .CanEdit}}
-      <input type="button" id="newDivisionButton" value="Create New Division">
-      <input type="button" id="controlsButton" value="Edit Crisis">
+  <head>
+    <title>Hi there</title>
+    <script src="http://code.jquery.com/jquery-2.1.4.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.8.3/underscore-min.js"></script>
+    <script src="https://code.jquery.com/ui/1.11.3/jquery-ui.min.js"></script>
+    {{range .JSUrls}}
+      <script src="{{.}}"></script>
     {{end}}
-  </div>
-  <div id="main">
-    <div id="mapOuterDiv">
-      <div id="mapBounds" style="position: absolute"></div>
-      <div id="mapHolder">
-        <img src="http://i.imgur.com/8JoB8Mh.jpg" id="mapImage">
+    <link rel="stylesheet" type="text/css" href="{{.CSSUrl}}">
+    <link rel="stylesheet" type="text/css" href="https://code.jquery.com/ui/1.11.3/themes/smoothness/jquery-ui.css">
+  </head>
+  <body>
+    <div style="display: none" id="htmlObjectPrototypes">
+      <div id="protoDivisionMarker" class="divisionMarker"></div>
+      <select id="protoFactionSelector" class="factionSelector"></select>
+      <div id="protoDivisionPane" class="dropdown divisionPane" style="display: none">
+        <div class="details">
+          <input type="button" class="closeButton" value="x">
+          {{if .CanEdit}}
+            <span class="paneInvalidAlert" style="display: none">Invalid Input<br></span>
+          {{end}}
+          <span class="factionNameSpan"></span>
+          {{if .CanEdit}}
+            <span class="factionSelectorPlace" style="display: none"></span>
+          {{end}}
+          <br>
+          <span class="divisionNameSpan"></span>
+          {{if .CanEdit}}
+            <input type="text" class="editNameField" style="display: none">
+          {{end}}
+          <br>
+          <ul class="unitList"></ul>
+          {{if .CanEdit}}
+            <input type="button" class="editButton" value="Edit">
+            <input type="button" class="routeButton" value="Route">
+            <input type="button" class="cancelButton" style="display: none" value="Cancel">
+            <input type="button" class="commitButton" style="display: none" value="Commit">
+            <input type="button" class="deleteButton" style="display: none" value="Delete">
+            <input type="button" class="addUnitButton" style="display: none" value="+">
+            <input type="button" class="changeVisibilityButton" style="display: none" value="View">
+          {{end}}
+        </div>
+        {{if .CanEdit}}
+          <div class="routePlotter" style="display: none">
+            <input type="button" class="commitRouteButton" value="Commit">
+            <input type="button"  class="undoRouteButton" value="Undo">
+            <input type="button" class="cancelRouteButton" value="Cancel">
+          </div>
+        {{end}}
+      </div>
+      <li id="protoUnitListItem" class="unitListItem">
+        <span class="type"></span>
+        <span class="value"></span>
+        <input type="text" class="editField" style="display: none">
+        <input type="button" class="removeUnitButton" style="display: none" value="x">
+        <span class="invalidAlert" style="display: none">Invalid Unit Input</span>
+      </li>
+      <li id="protoFactionListItem" class="factionListItem">
+        <span class="name"></span>
+        <input type="text" class="editField" style="display: none">
+        <input type="button" class="editButton"  value="E">
+        <input type="button" class="cancelButton" style="display: none" value="N">
+        <input type="button" class="commitButton" style="display: none" value="Y">
+        <input type="button" class="deleteButton" style="display: none" value="D">
+      </li>
+      <li id="protoUnitTypeListItem" class="unitTypeListItem">
+        <span class="name"></span>
+        <input type="text" class="editField" style="display: none">
+        <input type="button" class="editButton"  value="E">
+        <input type="button" class="cancelButton" style="display: none" value="N">
+        <input type="button" class="commitButton" style="display: none" value="Y">
+        <input type="button" class="deleteButton" style="display: none" value="D">
+      </li>
+      <div id="protoUnitTypes">
+        {{range .Types}}
+          <span data-type="{{.Id}}">
+            {{.Name}}:
+          </span>
+        {{end}}
+      </div>
+      <ul id="protoUnitTypeChooser" class="unitTypeChooser"></ul>
+      <input id="protoTypeChooserButton" type="button">
+      <div id="protoFactions">
+        {{range .Factions}}
+          <span data-faction="{{.Id}}">
+            {{.Name}}
+          </span>
+        {{end}}
+      </div>
+      <div id="protoRoutePoint" class="routePoint"></div>
+    </div>
+    <div id="header">
+      {{if .CanEdit}}
+        <input type="button" id="newDivisionButton" value="Create New Division">
+        <input type="button" id="controlsButton" value="Edit Crisis">
+      {{end}}
+    </div>
+    <div id="main">
+      <div id="mapOuterDiv">
+        <div id="mapBounds" style="position: absolute"></div>
+        <div id="mapHolder">
+          <img src="http://i.imgur.com/8JoB8Mh.jpg" id="mapImage">
+        </div>
       </div>
     </div>
-  </div>
-  {{if .CanEdit}}
-    <div id="controls" style="display: none">
-      <input id="controlsEditMapButton" type="button" value="Edit Map">
-      <div>
-        Factions
-        <ul id="controlsFactionList"></ul>
-        <input id="addFactionButton" type="button" value="Add Faction">
+    {{if .CanEdit}}
+      <div id="controls" style="display: none">
+        <input id="controlsEditMapButton" type="button" value="Edit Map">
+        <div>
+          Factions
+          <ul id="controlsFactionList"></ul>
+          <input id="addFactionButton" type="button" value="Add Faction">
+        </div>
+        <div>
+          Unit Types
+          <ul id="controlsUnitTypeList"></ul>
+          <input id="addUnitTypeButton" type="button" value="Add Unit Type">
+        </div>
       </div>
-      <div>
-        Unit Types
-        <ul id="controlsUnitTypeList"></ul>
-        <input id="addUnitTypeButton" type="button" value="Add Unit Type">
-      </div>
-    </div>
-  {{end}}
-  <script type="text/javascript">
-   $(document).ready(function() {
-     crisis.init();
-   });
-  </script>
-</body>
+    {{end}}
+    <script type="text/javascript">
+     $(document).ready(function() {
+       crisis.init();
+     });
+    </script>
+  </body>
 </html>
