@@ -421,8 +421,9 @@ crisis.DivisionDetails = function(division, forCreation) {
                 crisis.ajax.postDivisionVisibilityUpdate(
                     thisDets.visibilitySelector.getSelectedFactions(),
                     division.id, {
-                        success: function() {
+                        success: function(divJson) {
                             thisDets.stopChangingVisibility();
+                            division.update(divJson);
                         }
                     }
                 );

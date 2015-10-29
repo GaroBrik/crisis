@@ -25,7 +25,7 @@ ul {
     z-index: $headerZ;
 }
 
-#main {
+.mainBody {
     position: fixed;
     left: 0;
     top: $headerHeight;
