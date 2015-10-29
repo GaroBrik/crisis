@@ -243,7 +243,7 @@ crisis.ajax.poll = function(url, data, ajaxSettings, frequency) {
 
     setTimeout(function() {
         crisis.ajax.postData(url, data, ajaxSettings);
-        crisis.ajax.poll(url, ajaxSettings, frequency);
+        crisis.ajax.poll(url, data, ajaxSettings, frequency);
     }, frequency);
 };
 
@@ -255,5 +255,5 @@ crisis.ajax.poll = function(url, data, ajaxSettings, frequency) {
  */
 crisis.ajax.pollNow = function(url, data, ajaxSettings, frequency) {
     crisis.ajax.postData(url, data, ajaxSettings);
-    crisis.ajax.poll(url, ajaxSettings, frequency);
+    crisis.ajax.poll(url, data, ajaxSettings, frequency);
 }
