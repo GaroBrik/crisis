@@ -144,9 +144,16 @@ ul {
     position: absolute;
     background-color: rgba(44,44,44,0.9);
     z-index: 10000;
+    padding-top: 10px;
 
     input {
         background-color: #444444;
+    }
+
+    div {
+        position: relative;
+        display: inline-block;
+        vertical-align: top;
     }
 
     * {
@@ -155,6 +162,7 @@ ul {
     
     form {
         display: inline;
+        vertical-align: top;
     }
 
     -webkit-box-shadow: 0px 5px 5px 0px rgba(0,0,0,0.75);
