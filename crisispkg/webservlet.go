@@ -17,6 +17,7 @@ const (
 
 type pageInfo struct {
 	CanEdit   bool
+	ViewAs    int
 	JSUrls    []string
 	CSSUrl    string
 	Types     []UnitType
@@ -77,6 +78,11 @@ func mainPage(res http.ResponseWriter, req *http.Request) {
 			return err
 		}
 
+		viewAs := -1
+		if authInfo.ViewAs != nil {
+			viewAs = *authInfo.ViewAs
+		}
+
 		return mainPageTmpl.Execute(res, pageInfo{
 			JSUrls: []string{
 				"static/jquery.mousewheel.js",
@@ -87,7 +93,7 @@ func mainPage(res http.ResponseWriter, req *http.Request) {
 			Types:    types,
 			Factions: facs,
 			CanEdit:  authInfo.CanEdit,
-			ViewAs:   *authInfo.ViewAs,
+			ViewAs:   viewAs,
 		})
 	})
 	maybePanic(err)

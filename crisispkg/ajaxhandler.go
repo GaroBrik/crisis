@@ -40,9 +40,11 @@ func (handler *AjaxHandler) HandleRequest(res http.ResponseWriter, req *http.Req
 
 	var authInfo *AuthInfo
 	err := handler.db.db.RunInTransaction(func(tx *pg.Tx) error {
-		authInfo, err := AuthInfoOf(tx, req)
+		authInfoP, err := AuthInfoOf(tx, req)
+		authInfo = authInfoP
 		return err
 	})
+	maybePanic(err)
 
 	switch req.URL.Path[1:] {
 	case crisisPath:
