@@ -39,8 +39,8 @@ func StartListening() {
 	})
 
 	imagePath := os.Getenv("CRISIS_IMAGE_DIR")
+	log.Println(imagePath)
 	http.HandleFunc("/uploadBG", func(w http.ResponseWriter, r *http.Request) {
-		log.Println(r.URL.Path, r.Header)
 		file, _, err := r.FormFile("background")
 		maybePanic(err)
 
