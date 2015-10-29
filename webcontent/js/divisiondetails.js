@@ -537,7 +537,7 @@ crisis.DivisionDetails = function(division, forCreation, coords) {
 
         if (!validSubmit) return;
         crisis.ajax.postDivisionCreation(
-            division.absCoords, newUnits, name, factionId, {
+            coords, newUnits, name, factionId, {
                 success: function(divJson) {
                     thisDets.destroy();
                     crisis.addDivision(new crisis.Division(divJson));
