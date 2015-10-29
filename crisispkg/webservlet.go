@@ -38,7 +38,7 @@ func StartListening() {
 		ajaxHandler.HandleRequest(w, r)
 	})
 
-	http.HandleFunc("/uploadBG/", func(w http.ResponseWriter, r *http.Request) {
+	http.HandleFunc("/uploadBG", func(w http.ResponseWriter, r *http.Request) {
 		log.Println(r.URL.Path, r.Header)
 		file, _, err := r.FormFile("background")
 		maybePanic(err)
