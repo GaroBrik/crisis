@@ -23,6 +23,10 @@ ul {
     background-color: white;
     padding: 10px;
     z-index: $headerZ;
+
+    form {
+        display: inline;
+    }
 }
 
 .mainBody {
