@@ -338,10 +338,7 @@ crisis.DivisionDetails = function(division, forCreation) {
         thisDets.$deleteButton.hide();
         thisDets.$addUnitButton.hide();
         thisDets.$changeVisibilityButton.hide();
-        if (thisDets.visibilitySelector !== null) {
-            thisDets.visibilitySelector.destroy();
-            thisDets.visibilitySelector = null;
-        }
+        thisDets.stopChangingVisibility();
         if (thisDets.unitTypeChooser !== null) {
             thisDets.unitTypeChooser.destroy();
             thisDets.unitTypeChooser = null;
@@ -425,20 +422,26 @@ crisis.DivisionDetails = function(division, forCreation) {
                     thisDets.visibilitySelector.getSelectedFactions(),
                     division.id, {
                         success: function() {
-                            thisDets.visibilitySelector.destroy();
-                            thisDets.$changeVisibilityButton.off(
-                                'click' + crisis.event.factionVisibilityOff);
-                            thisDets.$changeVisibilityButton.on(
-                                'click' + crisis.event.factionVisibilityOn,
-                                function() { thisDets.changeVisibility(); }
-                            );
-                            thisDets.$changeVisibilityButton.prop(
-                                'value', 'View');
+                            thisDets.stopChangingVisibility();
                         }
                     }
                 );
             }
         );
+    };
+
+    this.stopChangingVisibility = function() {
+        if (thisDets.visibilitySelector !== null) {
+            thisDets.visibilitySelector.destroy();
+            thisDets.visibilitySelector = null;
+        }
+        thisDets.$changeVisibilityButton.off(
+            'click' + crisis.event.factionVisibilityOff);
+        thisDets.$changeVisibilityButton.on(
+            'click' + crisis.event.factionVisibilityOn,
+            function() { thisDets.changeVisibility(); }
+        );
+        thisDets.$changeVisibilityButton.prop('value', 'View');
     };
 
     /** @param {crisis.DetailsUnitLi} unit */
