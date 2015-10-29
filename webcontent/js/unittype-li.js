@@ -40,7 +40,11 @@ crisis.UnitTypeLi = function(unitType, forCreation) {
         }
     });
     this.$deleteButton.on('click' + crisis.event.baseNameSpace, function() {
-        thisLi.commitDelete();
+        if (confirm('Deleting a unit type will delete all units of that type.' +
+                    ' Are you sure?'))
+        {
+            thisLi.commitDelete();
+        }
     });
     this.$commitButton.on('click' + crisis.event.baseNameSpace, function() {
         thisLi.commit();
