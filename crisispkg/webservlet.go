@@ -44,7 +44,7 @@ func StartListening() {
 		file, _, err := r.FormFile("background")
 		maybePanic(err)
 
-		out1, err := os.Create(imagePath + "1.png")
+		out1, err := os.Create(imagePath + "/1.png")
 		maybePanic(err)
 		out2, err := os.Create(staticPath + "bgs/1.png")
 		maybePanic(err)
