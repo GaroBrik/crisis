@@ -88,7 +88,7 @@ crisis.updateElements = function(elements, data, elementCreator, keyGetter) {
     var newElements = new buckets.Dictionary();
     _.each(data, function(datum) {
         var elem = elements.get(keyGetter(datum));
-        
+
         if (elem === undefined) {
             newElements.set(keyGetter(datum), elementCreator(datum));
         } else {
@@ -111,8 +111,8 @@ crisis.addDivision = function(div) {
     }
 };
 
-/** 
- * @param {number} divId 
+/**
+ * @param {number} divId
  * @return {crisis.Division}
  */
 crisis.getDivision = function(divId) {

@@ -81,7 +81,9 @@ crisis.DivisionDetails = function(division, forCreation, coords) {
             thisDets.$details.find('.detailsInvalidAlert');
         thisDets.$factionNameSpan = thisDets.$details.find('.factionNameSpan');
         thisDets.factionSelector = new crisis.FactionSelector(
-            'factionSelectorForDivDets(' + division.id + ')');
+            'factionSelectorForDivDets(' +
+                (forCreation ? (new Date).getTime() : division.id) +
+                ')');
         thisDets.$details.find('.factionSelectorPlace').replaceWith(
             thisDets.factionSelector.$selector);
         thisDets.$nameSpan = thisDets.$details.find('.divisionNameSpan');
