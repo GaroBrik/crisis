@@ -65,7 +65,7 @@ func UpdateDivisionVisibility(tx *pg.Tx, divId int, factionIds []int) error {
 	}
 
 	stmt, err := tx.Prepare(`
-            INSERT INTO division_view (division_id, faction_id) VALUES ?, ?
+            INSERT INTO division_view (division_id, faction_id) VALUES (?, ?)
         `)
 	if err != nil {
 		return err
