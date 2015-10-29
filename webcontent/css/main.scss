@@ -84,9 +84,6 @@ ul {
 
 .divisionMarker {
     position: absolute;
-    width: 10px;
-    height: 10px;
-    background-color: purple;
 }
 
 .divisionPane {
@@ -124,12 +121,6 @@ ul {
     .routePlotter {
         position: relative;
     }
-}
-
-.routePoint {
-    height: 15px;
-    width: 15px;
-    background-color: red;
 }
 
 #controls {
