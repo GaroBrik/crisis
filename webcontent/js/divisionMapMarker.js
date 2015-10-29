@@ -9,11 +9,11 @@ crisis.DivisionMapMarker = function(div) {
 
     /** @type {jQuery} */
     this.$marker = crisis.cloneProto(crisis.prototypes.$divisionMarker);
-    /** @type {Array<crisis.Division} */
-    var arr = crisis.divisions.toArray();
-    arr.sort(function(div1, div2) { return div1.id - div2.id; });
+    /** @type {Array<number>} */
+    var arr = crisis.divisions.keys();
+    arr.sort();
     /** @type {number} */
-    var i = _.findIndex(arr, function(d) { return d.id === div.id; });
+    var i = _.find(arr, function(id) { return id === div.id; });
     this.$marker.css('color', crisis.DivisionMapMarker.colors[i]);
 
     /** @override */

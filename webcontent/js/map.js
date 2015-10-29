@@ -48,6 +48,7 @@ crisis.map.init = function() {
     crisis.map.$newDivisionButton.on('click' + crisis.event.baseNameSpace,
         function() {
             crisis.map.getClick(function(absCoords) {
+                console.log(absCoords);
                 crisis.DivisionDetails.forCreation(absCoords);
             });
         });

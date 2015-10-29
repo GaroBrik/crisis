@@ -203,7 +203,8 @@ crisis.DivisionDetails = function(division, forCreation, coords) {
 
     this.reRender = function() {
         if (thisDets.forCreation) {
-            map.position(thisDets.$pane, coords);
+            crisis.map.position(thisDets.$pane,
+                                /** @type {crisis.Coords} */(coords));
             return;
         }
 
