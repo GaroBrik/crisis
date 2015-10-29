@@ -29,6 +29,13 @@ ul {
     }
 }
 
+.mfa-button {
+    cursor: pointer;
+    :hover {
+        color: grey;
+    }
+}
+
 .mainBody {
     position: fixed;
     left: 0;
