@@ -52,7 +52,7 @@ CREATE TABLE unit (
 
 CREATE TABLE division_view (
        division_id INTEGER REFERENCES division(id) ON DELETE CASCADE,
-       faction_id INTEGER REFERENCES faction(id) ON DELETE CASCADE
+       faction_id INTEGER REFERENCES faction(id) ON DELETE CASCADE,
        PRIMARY KEY (division_id, faction_id)
 );
 
