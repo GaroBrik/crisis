@@ -27,15 +27,12 @@ INSERT INTO unit VALUES (3, 1, 10);
 INSERT INTO unit VALUES (4, 2, 15);
 INSERT INTO unit VALUES (4, 1, 75);
 
-INSERT INTO division_view VALUES (1, 1, TRUE);
-INSERT INTO division_view VALUES (1, 2, FALSE);
-INSERT INTO division_view VALUES (2, 1, TRUE);
-INSERT INTO division_view VALUES (2, 2, TRUE);
-INSERT INTO division_view VALUES (3, 1, FALSE);
-INSERT INTO division_view VALUES (3, 2, TRUE);
-INSERT INTO division_view VALUES (4, 1, TRUE);
-INSERT INTO division_view VALUES (4, 2, TRUE);
-INSERT INTO division_view VALUES (5, 1, FALSE);
-INSERT INTO division_view VALUES (5, 2, TRUE);
+INSERT INTO division_view VALUES (1, 1);
+INSERT INTO division_view VALUES (2, 1);
+INSERT INTO division_view VALUES (2, 2);
+INSERT INTO division_view VALUES (3, 2);
+INSERT INTO division_view VALUES (4, 1);
+INSERT INTO division_view VALUES (4, 2);
+INSERT INTO division_view VALUES (5, 2);
 
 COMMIT;
