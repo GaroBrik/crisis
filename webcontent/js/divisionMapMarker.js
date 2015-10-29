@@ -13,6 +13,7 @@ crisis.DivisionMapMarker = function(div) {
     var arr = crisis.divisions.keys();
     arr.sort();
     /** @type {number} */
+    console.log(i, crisis.DivisionMapMarker.colors[i]);
     var i = _.find(arr, function(id) { return id === div.id; });
     this.$marker.css('color', crisis.DivisionMapMarker.colors[i]);
 
