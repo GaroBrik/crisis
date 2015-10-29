@@ -107,10 +107,11 @@ crisis.DivisionDetails = function(division, forCreation) {
                                function() {
                                    thisDets.addUnit();
                                });
-        thisDets.$changeVisibilityButton.on('click' + crisis.event.baseNameSpace,
-                                            function() {
-                                                thisDets.changeVisibility();
-                                            });
+        thisDets.$changeVisibilityButton.on(
+            'click' + crisis.event.factionVisibilityOn,
+            function() {
+                thisDets.changeVisibility();
+            });
         thisDets.$cancelButton.on('click' + crisis.event.baseNameSpace,
                                   function() {
                                       if (thisDets.forCreation) {
@@ -301,7 +302,7 @@ crisis.DivisionDetails = function(division, forCreation) {
         thisDets.$commitButton.show();
         thisDets.$deleteButton.show();
         thisDets.$addUnitButton.show();
-        thisDets.$changeVisibilityButton.show();
+        thisDets.$changeVisibilityButton.prop('value', 'View').show();
 
         if (!thisDets.forCreation) {
             division.units.forEach(function(k, unit) {
@@ -339,9 +340,11 @@ crisis.DivisionDetails = function(division, forCreation) {
         thisDets.$changeVisibilityButton.hide();
         if (thisDets.visibilitySelector !== null) {
             thisDets.visibilitySelector.destroy();
+            thisDets.visibilitySelector = null;
         }
         if (thisDets.unitTypeChooser !== null) {
             thisDets.unitTypeChooser.destroy();
+            thisDets.unitTypeChooser = null;
         }
 
         thisDets.$factionNameSpan.show();
@@ -405,6 +408,8 @@ crisis.DivisionDetails = function(division, forCreation) {
     };
 
     this.changeVisibility = function() {
+        if (thisDets.visibilitySelector !== null) return;
+
         thisDets.visibilitySelector = new crisis.FactionVisibilitySelector(
             'divDets(' + division.id + ')', division.visibleTo);
 
@@ -412,6 +417,7 @@ crisis.DivisionDetails = function(division, forCreation) {
 
         thisDets.$changeVisibilityButton.off(
             'click' + crisis.event.factionVisibilityOn);
+        thisDets.$changeVisibilityButton.prop('value', 'Commit View');
         thisDets.$changeVisibilityButton.on(
             'click' + crisis.event.factionVisibilityOff,
             function() {
@@ -426,6 +432,8 @@ crisis.DivisionDetails = function(division, forCreation) {
                                 'click' + crisis.event.factionVisibilityOn,
                                 function() { thisDets.changeVisibility(); }
                             );
+                            thisDets.$changeVisibilityButton.prop(
+                                'value', 'View');
                         }
                     }
                 );
