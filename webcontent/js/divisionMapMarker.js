@@ -9,14 +9,6 @@ crisis.DivisionMapMarker = function(div) {
 
     /** @type {jQuery} */
     this.$marker = crisis.cloneProto(crisis.prototypes.$divisionMarker);
-    /** @type {Array<number>} */
-    var arr = crisis.divisions.keys();
-    arr.sort();
-    console.log(arr);
-    /** @type {number} */
-    var i = _.find(arr, function(id) { return id === div.id; });
-    console.log(i, crisis.DivisionMapMarker.colors[i]);
-    this.$marker.css('color', crisis.DivisionMapMarker.colors[i]);
 
     /** @override */
     this.divisionChanged = function() {
@@ -34,6 +26,15 @@ crisis.DivisionMapMarker = function(div) {
     /** @override */
     this.divisionDestroyed = function() {
         thisMarker.$marker.remove();
+    };
+
+    this.color = function() {
+        /** @type {Array<number>} */
+        var arr = crisis.divisions.keys();
+        arr.sort();
+        /** @type {number} */
+        var i = _.find(arr, function(id) { return id === div.id; });
+        thisMarker.$marker.css('color', crisis.DivisionMapMarker.colors[i]);
     };
 
     this.$marker.click(function() { div.details.toggle(); });

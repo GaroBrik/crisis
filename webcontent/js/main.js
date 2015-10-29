@@ -63,6 +63,10 @@ crisis.updateData = function(json) {
         function(json) { return json.Id; }
     );
 
+    crisis.divisions.forEach(function(k, div) {
+        div.mapMarker.color();
+    });
+
     crisis.controls.reRender();
 };
 
@@ -138,8 +142,8 @@ crisis.addFaction = function(faction) {
     }
 };
 
-/** 
- * @param {number} facId 
+/**
+ * @param {number} facId
  * @return {crisis.Faction}
  */
 crisis.getFaction = function(facId) {
@@ -165,8 +169,8 @@ crisis.addUnitType = function(unitType) {
     }
 };
 
-/** 
- * @param {number} typeId 
+/**
+ * @param {number} typeId
  * @return {crisis.UnitType}
  */
 crisis.getUnitType = function(typeId) {
