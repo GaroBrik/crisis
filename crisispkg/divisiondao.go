@@ -58,14 +58,14 @@ func UpdateDivision(tx *pg.Tx, divisionId int, units []Unit,
 
 func UpdateDivisionVisibility(tx *pg.Tx, divId int, factionIds []int) error {
 	_, err := tx.Exec(`
-            DELETE FROM division_view WHERE division_id = $1
+            DELETE FROM division_view WHERE division_id = ?
         `, divId)
 	if err != nil {
 		return err
 	}
 
 	stmt, err := tx.Prepare(`
-            INSERT INTO division_view (division_id, faction_id) VALUES $1, $2
+            INSERT INTO division_view (division_id, faction_id) VALUES ?, ?
         `)
 	if err != nil {
 		return err
@@ -208,7 +208,7 @@ func GetUnitsByDivisionId(tx *pg.Tx, divisionId int) ([]Unit, error) {
 func GetVisibilityByDivisionId(tx *pg.Tx, divisionId int) ([]int64, error) {
 	var ints pg.Ints
 	_, err := tx.Query(&ints, `
-            SELECT faction_id FROM division_view WHERE division_id = $1
+            SELECT faction_id FROM division_view WHERE division_id = ?
         `, divisionId)
 	return ints, err
 }
