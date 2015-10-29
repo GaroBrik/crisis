@@ -38,12 +38,13 @@ func StartListening() {
 		ajaxHandler.HandleRequest(w, r)
 	})
 
+	imagePath := os.Getenv("CRISIS_IMAGE_DIR")
 	http.HandleFunc("/uploadBG", func(w http.ResponseWriter, r *http.Request) {
 		log.Println(r.URL.Path, r.Header)
 		file, _, err := r.FormFile("background")
 		maybePanic(err)
 
-		out, err := os.Create(staticPath + "bgs/1.png")
+		out, err := os.Create(imagePath + "1.png")
 		maybePanic(err)
 
 		_, err = io.Copy(out, file)
