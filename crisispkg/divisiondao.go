@@ -28,6 +28,11 @@ func CreateDivision(tx *pg.Tx, coords Coords, units []Unit, name string,
 		return 0, err
 	}
 
+	err = UpdateDivisionVisibility(tx, div.Id, []int{factionId})
+	if err != nil {
+		return 0, err
+	}
+
 	err = UpdateDivisionUnits(tx, div.Id, div.Units)
 	return div.Id, err
 }

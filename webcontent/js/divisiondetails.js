@@ -573,6 +573,7 @@ crisis.DivisionDetails = function(division, forCreation, coords) {
     };
 
     if (this.forCreation) {
+        crisis.map.add(thisDets.$pane);
         this.open();
         this.enableEdit();
     }
