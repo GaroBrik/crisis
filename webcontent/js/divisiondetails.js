@@ -30,8 +30,8 @@ crisis.DivisionDetails = function(division, forCreation) {
     this.$editButton = null;
     /** @type {jQuery} */
     this.$addUnitButton = null;
-    /** @type {jQuery} */
-    this.$changeVisibilityButton = null;
+    /** @type {crisis.FactionVisibilitySelector} */
+    this.visibilitySelector = null;
     /** @type {jQuery} */
     this.$cancelButton = null;
     /** @type {jQuery} */
@@ -63,7 +63,7 @@ crisis.DivisionDetails = function(division, forCreation) {
     /** @type {crisis.DivisionDetails.State} */
     this.state = crisis.DivisionDetails.State.VIEWING;
     /** @type {?crisis.UnitTypeChooser} */
-    this.chooser = null;
+    this.unitTypeChooser = null;
     /** @type {Array<crisis.DetailsUnitLi>} */
     this.newUnits = [];
     /** @type {Array<crisis.DetailsUnitLi>} */
@@ -301,6 +301,7 @@ crisis.DivisionDetails = function(division, forCreation) {
         thisDets.$commitButton.show();
         thisDets.$deleteButton.show();
         thisDets.$addUnitButton.show();
+        thisDets.$changeVisibilityButton.show();
 
         if (!thisDets.forCreation) {
             division.units.forEach(function(k, unit) {
@@ -335,7 +336,13 @@ crisis.DivisionDetails = function(division, forCreation) {
         thisDets.$commitButton.hide();
         thisDets.$deleteButton.hide();
         thisDets.$addUnitButton.hide();
-        if (thisDets.chooser !== null) thisDets.chooser.destroy();
+        thisDets.$changeVisibilityButton.hide();
+        if (thisDets.visibilitySelector !== null) {
+            thisDets.visibilitySelector.destroy();
+        }
+        if (thisDets.unitTypeChooser !== null) {
+            thisDets.unitTypeChooser.destroy();
+        }
 
         thisDets.$factionNameSpan.show();
         thisDets.$nameSpan.show();
@@ -382,7 +389,7 @@ crisis.DivisionDetails = function(division, forCreation) {
         var currentIds = _.map(this.currentUnitLis(),
                                function(unit) { return unit.typeId; });
 
-        thisDets.chooser = new crisis.UnitTypeChooser(
+        thisDets.unitTypeChooser = new crisis.UnitTypeChooser(
             'divDetsTypeChooser(' + division.id + ')',
             function(num) {
                 if (num === null) return;
@@ -394,14 +401,14 @@ crisis.DivisionDetails = function(division, forCreation) {
             currentIds
         );
         thisDets.$addUnitButton.hide();
-        thisDets.$details.append(thisDets.chooser.$chooser);
+        thisDets.$details.append(thisDets.unitTypeChooser.$chooser);
     };
 
     this.changeVisibility = function() {
-        var visibilitySelector = new crisis.FactionVisibilitySelector(
+        thisDets.visibilitySelector = new crisis.FactionVisibilitySelector(
             'divDets(' + division.id + ')', division.visibleTo);
 
-        thisDets.$details.append(visibilitySelector.$selector);
+        thisDets.$details.append(thisDets.visibilitySelector.$selector);
 
         thisDets.$changeVisibilityButton.off(
             'click' + crisis.event.factionVisibilityOn);
@@ -409,9 +416,10 @@ crisis.DivisionDetails = function(division, forCreation) {
             'click' + crisis.event.factionVisibilityOff,
             function() {
                 crisis.ajax.postDivisionVisibilityUpdate(
-                    visibilitySelector.getSelectedFactions(), division.id, {
+                    thisDets.visibilitySelector.getSelectedFactions(),
+                    division.id, {
                         success: function() {
-                            visibilitySelector.destroy();
+                            thisDets.visibilitySelector.destroy();
                             thisDets.$changeVisibilityButton.off(
                                 'click' + crisis.event.factionVisibilityOff);
                             thisDets.$changeVisibilityButton.on(
