@@ -93,12 +93,14 @@
       <div id="protoRoutePoint" class="routePoint fa fa-flag"></div>
     </div>
     {{if .CanEdit}}
-      <div id="header">
-        <input type="button" id="newDivisionButton" value="Create New Division">
-        <input type="button" id="controlsButton" value="Edit Crisis">
+      <div id="headerHolder">
+        <div id="header">
+          <input type="button" id="newDivisionButton" value="Create New Division">
+          <input type="button" id="controlsButton" value="Edit Crisis">
+        </div>
       </div>
     {{end}}
-    <div id="main" class="mainBody">
+    <div id="main" class="mainBody" {{if not .CanEdit}} style="max-height: 100vh; max-width: 177.78 vh; top: 0"{{end}}>
       <div id="mapOuterDiv">
         <div id="mapBounds" style="position: absolute"></div>
         <div id="mapHolder">
