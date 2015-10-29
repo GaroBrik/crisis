@@ -39,8 +39,8 @@ func StartListening() {
 	})
 
 	http.HandleFunc("/uploadBG/", func(w http.ResponseWriter, r *http.Request) {
-		file, header, err := r.FormFile("background")
-		log.Println(header.Filename, header.Header)
+		log.Println(r.URL.Path, r.Header)
+		file, _, err := r.FormFile("background")
 		maybePanic(err)
 
 		out, err := os.Create(staticPath + "bgs/1.png")
