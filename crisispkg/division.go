@@ -12,7 +12,7 @@ type Division struct {
 	FactionId int
 	Coords    Coords
 	VisibleTo []int64
-	TimeSpent int      `json:"-"`
+	TimeSpent float64  `json:"-"`
 	Speed     int      `json:"-"`
 	Route     []Coords `json:"-"`
 }

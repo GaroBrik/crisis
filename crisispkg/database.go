@@ -40,7 +40,7 @@ func (db *Database) Close() {
 }
 
 func DoUnitMovement(tx *pg.Tx) error {
-	moveAmount := 10
+	moveAmount := 0.5
 	crises, err := GetAllActiveCrises(tx)
 	if err != nil {
 		return err
@@ -63,7 +63,7 @@ func DoUnitMovement(tx *pg.Tx) error {
 				curCoords := div.Route[coordIdx]
 				curDist := div.Route[coordIdx].distanceTo(&div.Route[coordIdx+1])
 				coeff := crisis.MapCosts[curCoords.Y][curCoords.X]
-				distToMove := int(float64(coeff)*curDist+0.5) - div.TimeSpent
+				distToMove := float64(coeff)*curDist - div.TimeSpent
 				if distToMove < moveLeft {
 					moveLeft -= distToMove
 					coordIdx++
