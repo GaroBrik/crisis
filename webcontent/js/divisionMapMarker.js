@@ -13,6 +13,7 @@ crisis.DivisionMapMarker = function(div) {
     /** @override */
     this.divisionChanged = function() {
         crisis.map.position(thisMarker.$marker, div.absCoords);
+        thisMarker.color();
     };
 
     /**
@@ -30,7 +31,7 @@ crisis.DivisionMapMarker = function(div) {
 
     this.color = function() {
         /** @type {Array<number>} */
-        var arr = crisis.divisions.keys();
+        var arr = crisis.factions.keys();
         arr.sort();
         /** @type {number} */
         var i = _.find(arr, function(id) { return id === div.id; });
