@@ -44,10 +44,14 @@ func StartListening() {
 		file, _, err := r.FormFile("background")
 		maybePanic(err)
 
-		out, err := os.Create(imagePath + "1.png")
+		out1, err := os.Create(imagePath + "1.png")
+		maybePanic(err)
+		out2, err := os.Create(staticPath + "bgs/1.png")
 		maybePanic(err)
 
-		_, err = io.Copy(out, file)
+		_, err = io.Copy(out1, file)
+		maybePanic(err)
+		_, err = io.Copy(out2, file)
 		maybePanic(err)
 	})
 
@@ -104,11 +108,12 @@ func mainPage(res http.ResponseWriter, req *http.Request) {
 				"static/buckets.min.js",
 				"static/compiled.js",
 			},
-			CSSUrl:   "static/main.css",
-			Types:    types,
-			Factions: facs,
-			CanEdit:  authInfo.CanEdit,
-			ViewAs:   viewAs,
+			CSSUrl:    "static/main.css",
+			Types:     types,
+			Factions:  facs,
+			CanEdit:   authInfo.CanEdit,
+			ViewAs:    viewAs,
+			ImagePath: os.Getenv("CRISIS_IMAGE_PATH"),
 		})
 	})
 	maybePanic(err)

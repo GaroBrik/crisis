@@ -46,5 +46,6 @@ pushd "${WEBCONTENT_DIR}/js" > /dev/null
          --generate_exports --warning_level VERBOSE \
          --jscomp_warning=checkTypes --jscomp_warning=missingProperties
     cp -r "${WEBCONTENT_DIR}/js/thirdparty/." "${STATIC_DIR}/"
+    mkdir "${STATIC_DIR}/bgs"
     cp -r "${CRISIS_IMAGE_PATH}/." "${STATIC_DIR}/bgs/"
 } >> "${CRISIS_LOG_DIR}/go.log"
