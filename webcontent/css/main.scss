@@ -3,6 +3,10 @@ $headerZ: 10000;
 $mapHolderZ: $headerZ / 2;
 $mapBoundsZ: -1;
 
+body {
+    background-color: #888888;
+}
+
 ul {
     list-style-type: none;
     padding: 0;
@@ -13,27 +17,40 @@ ul {
     }
 }
 
-#header {
-    box-sizing: border-box;
+#headerHolder {
     position: fixed;
     left: 0;
-    top: 0;
-    height: $headerHeight;
-    width: 100%;
-    background-color: white;
-    padding: 10px;
+    top: $headerHeight;
+    width: 100vw;
+    height: 56.25vw;
+    max-height: calc(100vh - 40px);
+    max-width: calc(177.78vh - 71.12px);
+    margin: auto;
+    top: -40px; bottom:0;
+    left: 0; right:0;
     z-index: $headerZ;
-    background-color: #444444;
-    -webkit-box-shadow: 0px 5px 5px 0px rgba(0,0,0,0.75);
-    -moz-box-shadow: 0px 5px 5px 0px rgba(0,0,0,0.75);
-    box-shadow: 0px 5px 5px 0px rgba(0,0,0,0.75);
-
-    input {
+    
+    #header {
+        box-sizing: border-box;
+        position: absolute;
+        left: 0;
+        top: 0;
+        height: $headerHeight;
+        width: 100%;
+        background-color: white;
+        padding: 10px;
         background-color: #444444;
-    }
+        -webkit-box-shadow: 0px 5px 5px 0px rgba(0,0,0,0.75);
+        -moz-box-shadow: 0px 5px 5px 0px rgba(0,0,0,0.75);
+        box-shadow: 0px 5px 5px 0px rgba(0,0,0,0.75);
 
-    * {
-        color: white;
+        input {
+            background-color: #444444;
+        }
+
+        * {
+            color: white;
+        }
     }
 }
 
@@ -46,12 +63,10 @@ ul {
 
 .mainBody {
     position: fixed;
-    left: 0;
-    top: $headerHeight;
     width: 100vw;
     height: 56.25vw;
-    max-height: calc(100 * (vh - 40px));
-    max-width: calc(177.78 * (vh - 40px));
+    max-height: calc(100vh - 40px);
+    max-width: calc(177.78vh - 71.12px);
     margin: auto;
     top: 40px; bottom:0;
     left:0; right:0;
