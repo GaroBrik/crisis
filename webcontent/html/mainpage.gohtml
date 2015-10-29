@@ -61,18 +61,18 @@
       <li id="protoFactionListItem" class="factionListItem">
         <span class="name"></span>
         <input type="text" class="editField" style="display: none">
-        <input type="button" class="editButton"  value="E">
-        <input type="button" class="cancelButton" style="display: none" value="N">
-        <input type="button" class="commitButton" style="display: none" value="Y">
-        <input type="button" class="deleteButton" style="display: none" value="D">
+        <i class="editButton fa fa-wrench">
+        <i class="cancelButton fa fa-ban" style="display: none"></i>
+        <i type="button" class="commitButton fa fa-upload" style="display: none"></i>
+        <i type="button" class="deleteButton fa fa-trash" style="display: none"></i>
       </li>
       <li id="protoUnitTypeListItem" class="unitTypeListItem">
         <span class="name"></span>
         <input type="text" class="editField" style="display: none">
-        <input type="button" class="editButton"  value="E">
-        <input type="button" class="cancelButton" style="display: none" value="N">
-        <input type="button" class="commitButton" style="display: none" value="Y">
-        <input type="button" class="deleteButton" style="display: none" value="D">
+        <i class="editButton fa fa-wrench">
+        <i class="cancelButton fa fa-ban" style="display: none"></i>
+        <i type="button" class="commitButton fa fa-upload" style="display: none"></i>
+        <i type="button" class="deleteButton fa fa-trash" style="display: none"></i>
       </li>
       <div id="protoUnitTypes">
         {{range .Types}}
@@ -107,7 +107,7 @@
       <div id="mapOuterDiv">
         <div id="mapBounds" style="position: absolute"></div>
         <div id="mapHolder">
-          <img src="static/1.png" id="mapImage">
+          <img src="static/bgs/1.png" id="mapImage">
         </div>
       </div>
     </div>
