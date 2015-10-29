@@ -49,18 +49,22 @@ func (handler *AjaxHandler) HandleRequest(res http.ResponseWriter, req *http.Req
 	switch req.URL.Path[1:] {
 	case crisisPath:
 		type CrisisRequestJson struct {
-			ViewAs int
+			CanEdit bool
+			ViewAs  int
 		}
+		var jsonSent CrisisRequestJson
+		err := json.NewDecoder(req.Body).Decode(&jsonSent)
+		maybePanic(err)
 
 		var divisions []Division
 		var unitTypes []UnitType
 		var factions []Faction
-		err := handler.db.db.RunInTransaction(func(tx *pg.Tx) error {
+		err = handler.db.db.RunInTransaction(func(tx *pg.Tx) error {
 			var err error
-			if authInfo.CanEdit {
+			if jsonSent.CanEdit {
 				divisions, err = GetDivisionsByCrisisId(tx, authInfo.CrisisId)
 			} else {
-				divisions, err = GetDivisionsByFactionId(tx, *authInfo.ViewAs)
+				divisions, err = GetDivisionsByFactionId(tx, jsonSent.ViewAs)
 			}
 			if err != nil {
 				return err
