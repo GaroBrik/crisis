@@ -48,10 +48,9 @@ func StartListening() {
 		maybePanic(err)
 		out2, err := os.Create(staticPath + "bgs/1.png")
 		maybePanic(err)
+		writeTo := io.MultiWriter(out1, out2)
 
-		_, err = io.Copy(out1, file)
-		maybePanic(err)
-		_, err = io.Copy(out2, file)
+		_, err = io.Copy(writeTo, file)
 		maybePanic(err)
 	})
 
