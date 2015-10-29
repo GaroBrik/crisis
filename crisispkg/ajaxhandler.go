@@ -64,7 +64,7 @@ func (handler *AjaxHandler) HandleRequest(res http.ResponseWriter, req *http.Req
 			if jsonSent.CanEdit {
 				divisions, err = GetDivisionsByCrisisId(tx, authInfo.CrisisId)
 			} else {
-				divisions, err = GetDivisionsByFactionId(tx, jsonSent.ViewAs)
+				divisions, err = GetDivisionsForFactionId(tx, jsonSent.ViewAs)
 			}
 			if err != nil {
 				return err

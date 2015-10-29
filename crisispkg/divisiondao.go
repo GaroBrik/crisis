@@ -150,11 +150,13 @@ func GetDivisionsByCrisisId(tx *pg.Tx, crisisId int) ([]Division, error) {
 	return LoadDivisions(tx, divs)
 }
 
-func GetDivisionsByFactionId(tx *pg.Tx, factionId int) ([]Division, error) {
+func GetDivisionsForFactionId(tx *pg.Tx, factionId int) ([]Division, error) {
 	var divs Divisions
 	_, err := tx.Query(&divs, `
             SELECT `+divisionInfoSelector+` 
-            FROM division WHERE faction = ?`, factionId)
+            FROM division INNER JOIN division_view 
+                ON division.id = division_view.division_id 
+            WHERE division_view.faction_id = ?`, factionId)
 	if err != nil {
 		return nil, err
 	}
