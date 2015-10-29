@@ -23,15 +23,20 @@ ul {
     background-color: white;
     padding: 10px;
     z-index: $headerZ;
+    background-color: #444444;
 
-    form {
-        display: inline;
+    input {
+        background-color: #444444;
+    }
+
+    * {
+        color: white;
     }
 }
 
 .mfa-button {
     cursor: pointer;
-    :hover {
+    &:hover {
         color: grey;
     }
 }
@@ -132,7 +137,19 @@ ul {
 
 #controls {
     left: 0px;
-    top: $headerHeight;
-    position: fixed;
-    background-color: white;
+    top: 0px;
+    position: absolute;
+    background-color: rgba(44,44,44,0.9);
+
+    input {
+        background-color: #444444;
+    }
+
+    * {
+        color: white;
+    }
+    
+    form {
+        display: inline;
+    }
 }

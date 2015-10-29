@@ -69,10 +69,10 @@
       <li id="protoUnitTypeListItem" class="unitTypeListItem">
         <span class="name"></span>
         <input type="text" class="editField" style="display: none">
-        <i class="editButton fa fa-wrench mfa-button"></i>
-        <i class="cancelButton fa fa-ban mfa-button" style="display: none"></i>
-        <i type="button" class="commitButton fa fa-upload mfa-button" style="display: none"></i>
-        <i type="button" class="deleteButton fa fa-trash mfa-button" style="display: none"></i>
+        <i class="editButton fa fa-wrench">
+        <i class="cancelButton fa fa-ban" style="display: none"></i>
+        <i type="button" class="commitButton fa fa-upload" style="display: none"></i>
+        <i type="button" class="deleteButton fa fa-trash" style="display: none"></i>
       </li>
       <div id="protoUnitTypes">
         {{range .Types}}
@@ -96,11 +96,6 @@
       <div id="header">
         <input type="button" id="newDivisionButton" value="Create New Division">
         <input type="button" id="controlsButton" value="Edit Crisis">
-        <form action="uploadBG" method="post" enctype="multipart/form-data">
-          <label for="background">Upload a new map:</label>
-          <input type="file" name="background" id="background">
-          <input type="submit" name="submit" value="Submit">
-        </form>
       </div>
     {{end}}
     <div id="main" class="mainBody">
@@ -110,22 +105,27 @@
           <img src="static/bgs/1.png" id="mapImage">
         </div>
       </div>
+      {{if .CanEdit}}
+        <div id="controls" style="display: none">
+          <form action="uploadBG" method="post" enctype="multipart/form-data">
+            <label for="background">Upload a new map:</label>
+            <input type="file" name="background" id="background">
+            <input type="submit" name="submit" value="Submit">
+          </form>
+          <input id="controlsEditMapButton" type="button" value="Edit Map">
+          <div>
+            Factions
+            <ul id="controlsFactionList"></ul>
+            <input id="addFactionButton" type="button" value="Add Faction">
+          </div>
+          <div>
+            Unit Types
+            <ul id="controlsUnitTypeList"></ul>
+            <input id="addUnitTypeButton" type="button" value="Add Unit Type">
+          </div>
+        </div>
+      {{end}}
     </div>
-    {{if .CanEdit}}
-      <div id="controls" style="display: none">
-        <input id="controlsEditMapButton" type="button" value="Edit Map">
-        <div>
-          Factions
-          <ul id="controlsFactionList"></ul>
-          <input id="addFactionButton" type="button" value="Add Faction">
-        </div>
-        <div>
-          Unit Types
-          <ul id="controlsUnitTypeList"></ul>
-          <input id="addUnitTypeButton" type="button" value="Add Unit Type">
-        </div>
-      </div>
-    {{end}}
     <script type="text/javascript">
      $(document).ready(function() {
        crisis.init({{.CanEdit}}, {{.ViewAs}});
