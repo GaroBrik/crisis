@@ -250,22 +250,22 @@ crisis.positionDropdown = function($dropdown, $source, $container) {
     var containerRight = containerLeft + $container.width();
     var idealY =
         $source.position().top + $source.height() / 2 - $dropdown.height() / 2;
-    if (idealY + $dropdown.height() > containerBottom) {
-        idealY += containerBottom - (idealY + $dropdown.height());
+    if (idealY + $dropdown.height() > containerBottom - 10) {
+        idealY += containerBottom - 10 - (idealY + $dropdown.height());
     }
 
-    if (idealY < containerTop) {
-        idealY += containerTop - idealY;
+    if (idealY < containerTop + 10) {
+        idealY += containerTop + 10 - idealY;
     }
 
     var idealX =
         $source.position().left + $source.width() / 2 - $dropdown.width() / 2;
-    if (idealX + $dropdown.width() > containerRight) {
-        idealX += containerRight - (idealX + $dropdown.width());
+    if (idealX + $dropdown.width() > containerRight - 10) {
+        idealX += containerRight - 10 - (idealX + $dropdown.width());
     }
 
-    if (idealX < containerLeft) {
-        idealX += containerLeft - idealX;
+    if (idealX < containerLeft + 10) {
+        idealX += containerLeft + 10 - idealX;
     }
 
     $dropdown.css({
