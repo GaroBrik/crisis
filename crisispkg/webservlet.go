@@ -108,12 +108,11 @@ func mainPage(res http.ResponseWriter, req *http.Request) {
 				"static/buckets.min.js",
 				"static/compiled.js",
 			},
-			CSSUrl:    "static/main.css",
-			Types:     types,
-			Factions:  facs,
-			CanEdit:   authInfo.CanEdit,
-			ViewAs:    viewAs,
-			ImagePath: os.Getenv("CRISIS_IMAGE_PATH"),
+			CSSUrl:   "static/main.css",
+			Types:    types,
+			Factions: facs,
+			CanEdit:  authInfo.CanEdit,
+			ViewAs:   viewAs,
 		})
 	})
 	maybePanic(err)
