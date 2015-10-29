@@ -91,20 +91,22 @@
       </div>
       <div id="protoRoutePoint" class="routePoint"></div>
     </div>
-    <div id="header">
-      {{if .CanEdit}}
+    {{if .CanEdit}}
+      <div id="header">
         <input type="button" id="newDivisionButton" value="Create New Division">
         <input type="button" id="controlsButton" value="Edit Crisis">
-      {{end}}
-      {{if not .CanEdit}}
-        <span id="viewSelectionPlaceholder" style="display: none"></span>
-      {{end}}
-    </div>
+        <form action="uploadBG" method="post" enctype="multipart/form-data">
+          <label for="background">Upload a new map:</label>
+          <input type="file" name="background" id="background">
+          <input type="submit" name="submit" value="Submit">
+        </form>
+      </div>
+    {{end}}
     <div id="main" class="mainBody">
       <div id="mapOuterDiv">
         <div id="mapBounds" style="position: absolute"></div>
         <div id="mapHolder">
-          <img src="http://i.imgur.com/8JoB8Mh.jpg" id="mapImage">
+          <img src="static/1.png" id="mapImage">
         </div>
       </div>
     </div>

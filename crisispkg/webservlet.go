@@ -3,8 +3,10 @@ package crisis
 import (
 	"gopkg.in/pg.v3"
 	"html/template"
+	"io"
 	"log"
 	"net/http"
+	"os"
 	"time"
 )
 
@@ -34,6 +36,17 @@ func StartListening() {
 	ajaxHandler := GetAjaxHandlerInstance()
 	http.HandleFunc("/ajax/", func(w http.ResponseWriter, r *http.Request) {
 		ajaxHandler.HandleRequest(w, r)
+	})
+
+	http.HandleFunc("/uploadBG/", func(w http.ResponseWriter, r *http.Request) {
+		file, _, err := r.FormFile("background")
+		maybePanic(err)
+
+		out, err := os.Create(staticPath + "bgs/1.png")
+		maybePanic(err)
+
+		_, err = io.Copy(out, file)
+		maybePanic(err)
 	})
 
 	http.HandleFunc("/staff", mainPage)
