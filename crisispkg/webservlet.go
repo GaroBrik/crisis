@@ -61,9 +61,12 @@ func mainPage(res http.ResponseWriter, req *http.Request) {
 		maybePanic(err)
 	}
 
-	authInfo := AuthInfoOf(req)
-
 	err = GetDatabaseInstance().db.RunInTransaction(func(tx *pg.Tx) error {
+		authInfo, err := AuthInfoOf(tx, req)
+		if err != nil {
+			return err
+		}
+
 		types, err := GetUnitTypesByCrisisId(tx, authInfo.CrisisId)
 		if err != nil {
 			return err
@@ -84,6 +87,7 @@ func mainPage(res http.ResponseWriter, req *http.Request) {
 			Types:    types,
 			Factions: facs,
 			CanEdit:  authInfo.CanEdit,
+			ViewAs:   *authInfo.ViewAs,
 		})
 	})
 	maybePanic(err)

@@ -96,6 +96,9 @@
         <input type="button" id="newDivisionButton" value="Create New Division">
         <input type="button" id="controlsButton" value="Edit Crisis">
       {{end}}
+      {{if not .CanEdit}}
+        <span id="viewSelectionPlaceholder" style="display: none"></span>
+      {{end}}
     </div>
     <div id="main" class="mainBody">
       <div id="mapOuterDiv">
@@ -122,7 +125,7 @@
     {{end}}
     <script type="text/javascript">
      $(document).ready(function() {
-       crisis.init();
+       crisis.init({{.CanEdit}}, {{.ViewAs}});
      });
     </script>
   </body>

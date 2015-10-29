@@ -38,21 +38,27 @@ func GetAjaxHandlerInstance() *AjaxHandler {
 func (handler *AjaxHandler) HandleRequest(res http.ResponseWriter, req *http.Request) {
 	res.Header().Set("Content-Type", "application/json")
 
-	authInfo := AuthInfoOf(req)
-	canEdit := getCanEdit(req)
-	factionId := getFactionId(req)
+	var authInfo *AuthInfo
+	err := handler.db.db.RunInTransaction(func(tx *pg.Tx) error {
+		authInfo, err := AuthInfoOf(tx, req)
+		return err
+	})
 
 	switch req.URL.Path[1:] {
 	case crisisPath:
+		type CrisisRequestJson struct {
+			ViewAs int
+		}
+
 		var divisions []Division
 		var unitTypes []UnitType
 		var factions []Faction
 		err := handler.db.db.RunInTransaction(func(tx *pg.Tx) error {
 			var err error
-			if canEdit {
+			if authInfo.CanEdit {
 				divisions, err = GetDivisionsByCrisisId(tx, authInfo.CrisisId)
 			} else {
-				divisions, err = GetDivisionsByFactionId(tx, factionId)
+				divisions, err = GetDivisionsByFactionId(tx, *authInfo.ViewAs)
 			}
 			if err != nil {
 				return err

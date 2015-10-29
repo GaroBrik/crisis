@@ -234,24 +234,26 @@ crisis.ajax.postUnitTypeUpdate = function(name, id, options) {
 
 /**
  * @param {string} url
+ * @param {Object} data
  * @param {jQueryAjaxSettings=} ajaxSettings
  * @param {number=} frequency
  */
-crisis.ajax.poll = function(url, ajaxSettings, frequency) {
+crisis.ajax.poll = function(url, data, ajaxSettings, frequency) {
     if (frequency === undefined) frequency = 10000;
 
     setTimeout(function() {
-        $.ajax(url, ajaxSettings);
+        crisis.ajax.postData(url, data, ajaxSettings);
         crisis.ajax.poll(url, ajaxSettings, frequency);
     }, frequency);
 };
 
 /**
  * @param {string} url
+ * @param {Object} data
  * @param {jQueryAjaxSettings=} ajaxSettings
  * @param {number=} frequency
  */
-crisis.ajax.pollNow = function(url, ajaxSettings, frequency) {
-    $.ajax(url, ajaxSettings);
+crisis.ajax.pollNow = function(url, data, ajaxSettings, frequency) {
+    crisis.ajax.postData(url, data, ajaxSettings);
     crisis.ajax.poll(url, ajaxSettings, frequency);
 }

@@ -14,7 +14,7 @@ var crisis = {
     unitTypesListeners: new buckets.Set(function(l) { return l.listenerId(); })
 };
 
-/** 
+/**
  * @interface
  * @template T
  */
@@ -24,13 +24,19 @@ crisis.ModelChangeListener.prototype.modelAdded = function(model) {};
 /** @return {string} */
 crisis.ModelChangeListener.prototype.listenerId = function() {};
 
-/** @export */
-crisis.init = function() {
+/**
+ * @export
+ * @param {boolean} canEdit
+ * @param {number} viewAs */
+crisis.init = function(canEdit, viewAs) {
     crisis.prototypes.init();
     crisis.controls.initialize();
     crisis.map.init();
 
     crisis.ajax.pollNow(crisis.ajax.crisisPath, {
+        CanEdit: canEdit,
+        ViewAs: viewAs
+    }, {
         /** @param {crisisJson.Crisis} json */
         success: function(json) {
             crisis.updateData(json);
