@@ -82,7 +82,7 @@ crisis.DivisionDetails = function(division, forCreation, coords) {
         thisDets.$factionNameSpan = thisDets.$details.find('.factionNameSpan');
         thisDets.factionSelector = new crisis.FactionSelector(
             'factionSelectorForDivDets(' +
-                (forCreation ? (new Date).getTime() : division.id) +
+                (thisDets.forCreation ? (new Date).getTime() : division.id) +
                 ')');
         thisDets.$details.find('.factionSelectorPlace').replaceWith(
             thisDets.factionSelector.$selector);
@@ -311,7 +311,11 @@ crisis.DivisionDetails = function(division, forCreation, coords) {
             });
         }
 
-        thisDets.state = crisis.DivisionDetails.State.EDITING;
+        if (thisDets.forCreation) {
+            thisDets.state = crisis.DivisionDetails.State.CREATING;
+        } else {
+            thisDets.state = crisis.DivisionDetails.State.EDITING;
+        }
     };
 
     this.enableRoute = function() {
@@ -391,7 +395,9 @@ crisis.DivisionDetails = function(division, forCreation, coords) {
                                function(unit) { return unit.typeId; });
 
         thisDets.unitTypeChooser = new crisis.UnitTypeChooser(
-            'divDetsTypeChooser(' + division.id + ')',
+            'divDetsTypeChooser(' +
+                (thisDets.forCreation ? (new Date).getTime() : division.id) +
+                ')',
             function(num) {
                 if (num === null) return;
                 /** @type {crisis.DetailsUnitLi} */
