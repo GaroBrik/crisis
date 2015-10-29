@@ -12,9 +12,10 @@ crisis.DivisionMapMarker = function(div) {
     /** @type {Array<number>} */
     var arr = crisis.divisions.keys();
     arr.sort();
+    console.log(arr);
     /** @type {number} */
-    console.log(i, crisis.DivisionMapMarker.colors[i]);
     var i = _.find(arr, function(id) { return id === div.id; });
+    console.log(i, crisis.DivisionMapMarker.colors[i]);
     this.$marker.css('color', crisis.DivisionMapMarker.colors[i]);
 
     /** @override */
