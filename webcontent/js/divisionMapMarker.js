@@ -34,7 +34,7 @@ crisis.DivisionMapMarker = function(div) {
         var arr = crisis.factions.keys();
         arr.sort();
         /** @type {number} */
-        var i = _.find(arr, function(id) { return id === div.id; });
+        var i = _.find(arr, function(id) { return id === div.factionId; });
         thisMarker.$marker.css('color', crisis.DivisionMapMarker.colors[i]);
     };
 
