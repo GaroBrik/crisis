@@ -20,7 +20,7 @@ crisis.Division = function(divJson) {
     /** @type {string} */
     this.name;
     /** @type {number} */
-    this.factionId = divJson.factionId;
+    this.factionId = divJson.FactionId;
     /** @type {crisis.DivisionMapMarker} */
     this.mapMarker = new crisis.DivisionMapMarker(this);
     /** @type {crisis.DivisionDetails} */
