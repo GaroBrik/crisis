@@ -149,6 +149,10 @@ ul {
     float: right;
 }
 
+.routePoint {
+    position: absolute;
+}
+
 .factionListItem, .unitTypeListItem {
     .editField {
         width: 7em;
@@ -240,10 +244,12 @@ ul {
 
 .verticalShadow {
     height: 100%;
+    top: 0;
 }
 
 .horizontalShadow {
     width: 100%;
+    left: 0;
 }
 
 .topShadow {
