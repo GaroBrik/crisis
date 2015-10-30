@@ -65,6 +65,7 @@ crisis.FactionLi = function(faction, forCreation) {
 crisis.FactionLi.prototype.startEditing = function() {
     if (!this.forCreation) {
         this.$editField.val(this.faction.name);
+        this.$colorPicker.val(this.faction.color);
     }
 
     this.$nameSpan.hide();
@@ -151,9 +152,6 @@ crisis.FactionLi.prototype.destroy = function() {
  */
 crisis.FactionLi.prototype.factionChanged = function(faction) {
     this.$nameSpan.text(faction.name);
-    if (!this.$colorPicker.is(':visible')) {
-        this.$colorPicker.val(faction.color);
-    }
 };
 
 /**
