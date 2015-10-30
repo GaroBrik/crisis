@@ -28,6 +28,8 @@ crisis.FactionLi = function(faction, forCreation) {
     this.$editField = this.$listItem.find('.editField');
     /** @type {jQuery} */
     this.$nameSpan = this.$listItem.find('.name');
+    /** @type {jQuery} */
+    this.$colorPicker = this.$listItem.find('.colorPicker');
 
     this.$editButton.on('click' + crisis.event.baseNameSpace, function() {
         thisLi.startEditing();
@@ -69,6 +71,7 @@ crisis.FactionLi.prototype.startEditing = function() {
     this.$editButton.hide();
 
     this.$editField.show();
+    this.$colorPicker.show();
     this.$cancelButton.show();
     if (!this.forCreation) {
         this.$deleteButton.show();
@@ -80,6 +83,7 @@ crisis.FactionLi.prototype.stopEditing = function() {
     if (this.forCreation) this.destroy();
 
     this.$editField.hide();
+    this.$colorPicker.hide();
     this.$cancelButton.hide();
     this.$deleteButton.hide();
     this.$commitButton.hide();
@@ -91,7 +95,7 @@ crisis.FactionLi.prototype.stopEditing = function() {
 crisis.FactionLi.prototype.commit = function() {
     /** @type {crisis.FactionLi} */
     var thisLi = this;
-    
+
     /** @type {string} */
     var name = /** @type {string} */ (this.$editField.val());
     if (name === '' || name === null) {
