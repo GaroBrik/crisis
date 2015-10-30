@@ -40,7 +40,7 @@ func (db *Database) Close() {
 }
 
 func DoUnitMovement(tx *pg.Tx) error {
-	moveAmount := 0.5
+	moveAmount := 1.0
 	crises, err := GetAllActiveCrises(tx)
 	if err != nil {
 		return err
@@ -69,8 +69,8 @@ func DoUnitMovement(tx *pg.Tx) error {
 					coordIdx++
 					div.TimeSpent = 0
 				} else {
-					moveLeft = 0
 					div.TimeSpent = distToMove - moveLeft
+					moveLeft = 0
 				}
 			}
 			stmt.Exec(div.Id, coordIdx+1, div.TimeSpent)
