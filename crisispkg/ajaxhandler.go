@@ -87,7 +87,8 @@ func (handler *AjaxHandler) HandleRequest(res http.ResponseWriter, req *http.Req
 				return err
 			}
 
-			speed, err = GetSpeedByCrisisId(tx, authInfo.CrisisId)
+			crisis, err := GetCrisisById(tx, authInfo.CrisisId)
+			speed = crisis.Speed
 			return err
 		})
 		maybePanic(err)

@@ -31,6 +31,13 @@ func GetAllActiveCrises(tx *pg.Tx) ([]Crisis, error) {
 	return crises, nil
 }
 
+func GetCrisisById(tx *pg.Tx, crisisId int) (Crisis, error) {
+	var crisis Crisis
+	_, err := tx.QueryOne(&crisis, `SELECT `+crisisSelector+` FROM crisis WHERE id = ?`,
+		crisisId)
+	return crisis, err
+}
+
 func GetSpeedByCrisisId(tx *pg.Tx, crisisId int) (int, error) {
 	var speed int
 	_, err := tx.QueryOne(
