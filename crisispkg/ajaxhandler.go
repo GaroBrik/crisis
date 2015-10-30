@@ -98,6 +98,7 @@ func (handler *AjaxHandler) HandleRequest(res http.ResponseWriter, req *http.Req
 			Divisions: divisions,
 			Factions:  factions,
 			UnitTypes: unitTypes,
+			Speed:     speed,
 		})
 		if err != nil {
 			http.Error(res, err.Error(), http.StatusInternalServerError)
