@@ -8,10 +8,18 @@ var crisisJson = {};
  *   MapCosts: Array<Array<number>>,
  *   Divisions: Array<crisisJson.Division>,
  *   Factions: Array<crisisJson.Faction>,
- *   UnitTypes: Array<crisisJson.UnitType>
+ *   UnitTypes: Array<crisisJson.UnitType>,
+ *   Speed: number
  * }}
  */
 crisisJson.Crisis;
+
+/**
+ * @typedef {{
+ *   Speed: number
+ * }}
+ */
+crisisJson.UpdateCrisisSpeed;
 
 /**
  * @typedef {{
@@ -144,4 +152,4 @@ crisisJson.Bounds;
  *   Message: string
  * }}
  */
-crisisJson.Success;
+crisisJson.SuccessResponse;

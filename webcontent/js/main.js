@@ -11,8 +11,19 @@ var crisis = {
     /** @type {buckets.Dictionary<number, crisis.UnitType>} */
     unitTypes: new buckets.Dictionary(),
     /** @type {buckets.Set<crisis.ModelChangeListener<crisis.UnitType>>} */
-    unitTypesListeners: new buckets.Set(function(l) { return l.listenerId(); })
+    unitTypesListeners: new buckets.Set(function(l) { return l.listenerId(); }),
+    /** @type {buckets.Set<crisis.CrisisChangeListener>} */
+    crisisListeners: new buckets.Set(function(l) { return l.listenerId(); })
 };
+
+/**
+ * @interface
+ * @template T
+ */
+crisis.CrisisChangeListener = function() {};
+crisis.CrisisChangeListener.prototype.crisisChanged = function() {};
+/** @return {string} */
+crisis.CrisisChangeListener.prototype.listenerId = function() {};
 
 /**
  * @interface
@@ -63,11 +74,17 @@ crisis.updateData = function(json) {
         function(json) { return json.Id; }
     );
 
-    crisis.divisions.forEach(function(k, div) {
-        div.mapMarker.color();
-    });
+    /** @type {boolean} */
+    var changed = false;
 
-    crisis.controls.reRender();
+    if (crisis.speed !== json.Speed) {
+        crisis.speed = json.Speed;
+        changed = true;
+    }
+
+    if (changed) {
+        crisis.crisisListeners.forEach(function(l) { l.crisisChanged(); });
+    }
 };
 
 /**
@@ -215,7 +232,20 @@ crisis.stringToInt = function(str) {
     /** @type {number} */
     var num = parseInt(str, 10);
     if (num === null || isNaN(num)) {
-        console.log('failed to convert string ' + str + ' to a number');
+        console.log('failed to convert string ' + str + ' to an int');
+    }
+    return num;
+};
+
+/**
+ * @param {string} str
+ * @return {number}
+ */
+crisis.stringToFloat = function(str) {
+    /** @type {number} */
+    var num = parseFloat(str);
+    if (num === null || isNaN(num)) {
+        console.log('failed to convert string ' + str + ' to a float');
     }
     return num;
 };

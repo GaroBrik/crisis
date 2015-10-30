@@ -119,9 +119,9 @@ crisis.UnitTypeLi.prototype.commit = function() {
 crisis.UnitTypeLi.prototype.commitDelete = function() {
     /** @type {crisis.UnitTypeLi} */
     var thisLi = this;
-    
+
     crisis.ajax.postUnitTypeDeletion(this.unitType.id, {
-        /** @param {crisisJson.Success} json */
+        /** @param {crisisJson.SuccessResponse} json */
         success: function(json) {
             if (json.Success) {
                 thisLi.unitType.destroy();

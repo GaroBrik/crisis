@@ -10,6 +10,11 @@ type AjaxHandler struct {
 	db *Database
 }
 
+type SuccessResponse struct {
+	Success bool
+	Message string
+}
+
 const (
 	ajaxPath                     = "ajax/"
 	crisisPath                   = ajaxPath + "crisis/"
@@ -24,6 +29,7 @@ const (
 	createUnitTypePath           = ajaxPath + "createUnitType/"
 	deleteUnitTypePath           = ajaxPath + "deleteUnitType/"
 	divisionRoutePath            = ajaxPath + "divisionRoute/"
+	updateCrisisSpeedPath        = ajaxPath + "updateCrisisSpeed/"
 )
 
 var m_ajaxHandler *AjaxHandler
@@ -59,6 +65,7 @@ func (handler *AjaxHandler) HandleRequest(res http.ResponseWriter, req *http.Req
 		var divisions []Division
 		var unitTypes []UnitType
 		var factions []Faction
+		var speed float64
 		err = handler.db.db.RunInTransaction(func(tx *pg.Tx) error {
 			var err error
 			if jsonSent.CanEdit {
@@ -76,6 +83,11 @@ func (handler *AjaxHandler) HandleRequest(res http.ResponseWriter, req *http.Req
 			}
 
 			factions, err = GetFactionsByCrisisId(tx, authInfo.CrisisId)
+			if err != nil {
+				return err
+			}
+
+			speed, err = GetSpeedByCrisisId(tx, authInfo.CrisisId)
 			return err
 		})
 		maybePanic(err)
@@ -242,7 +254,7 @@ func (handler *AjaxHandler) HandleRequest(res http.ResponseWriter, req *http.Req
 		})
 		maybePanic(err)
 
-		resp := struct{ Success bool }{success}
+		resp := SuccessResponse{Success: success}
 
 		json, err := json.Marshal(resp)
 		maybePanic(err)
@@ -282,7 +294,8 @@ func (handler *AjaxHandler) HandleRequest(res http.ResponseWriter, req *http.Req
 
 		var finalFaction *Faction
 		err = handler.db.db.RunInTransaction(func(tx *pg.Tx) error {
-			fac, err := UpdateFaction(tx, jsonSent.Id, jsonSent.Name, jsonSent.Color)
+			fac, err := UpdateFaction(
+				tx, jsonSent.Id, jsonSent.Name, jsonSent.Color)
 			if err != nil {
 				return err
 			}
@@ -365,6 +378,23 @@ func (handler *AjaxHandler) HandleRequest(res http.ResponseWriter, req *http.Req
 			return err
 		})
 		maybePanic(err)
+
+	case updateCrisisSpeedPath:
+		type UpdateCrisisSpeedJson struct{ Speed string }
+		var jsonSent UpdateCrisisSpeedJson
+		err := json.NewDecoder(req.Body).Decode(&jsonSent)
+		maybePanic(err)
+
+		err = handler.db.db.RunInTransaction(func(tx *pg.Tx) error {
+			err := UpdateCrisisSpeed(tx, jsonSent.Speed, authInfo.CrisisId)
+			return err
+		})
+		maybePanic(err)
+
+		json, err := json.Marshal(SuccessResponse{Success: true})
+		maybePanic(err)
+
+		res.Write(json)
 
 	default:
 		http.Error(res, "Invalid request path", http.StatusBadRequest)

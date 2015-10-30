@@ -9,6 +9,7 @@ type Crisis struct {
 	Id        int `json:"-"`
 	Active    bool
 	MapBounds Bounds
+	Speed     float64
 	Divisions []Division
 	UnitTypes []UnitType
 	Factions  []Faction
@@ -34,6 +35,11 @@ func (crisis *Crisis) LoadColumn(colIdx int, colName string, b []byte) error {
 		}
 	case "height":
 		err := pg.Decode(&crisis.MapBounds.Height, b)
+		if err != nil {
+			return err
+		}
+	case "speed":
+		err := pg.Decode(&crisis.Speed, b)
 		if err != nil {
 			return err
 		}

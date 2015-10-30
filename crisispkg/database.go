@@ -40,7 +40,6 @@ func (db *Database) Close() {
 }
 
 func DoUnitMovement(tx *pg.Tx) error {
-	moveAmount := 2.0
 	crises, err := GetAllActiveCrises(tx)
 	if err != nil {
 		return err
@@ -57,7 +56,7 @@ func DoUnitMovement(tx *pg.Tx) error {
 
 	for _, crisis := range crises {
 		for _, div := range crisis.Divisions {
-			moveLeft := moveAmount
+			moveLeft := crisis.Speed
 			coordIdx := 0
 			for moveLeft > 0 && coordIdx < len(div.Route)-1 {
 				curCoords := div.Route[coordIdx]

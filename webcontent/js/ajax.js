@@ -65,6 +65,11 @@ crisis.ajax.updateUnitTypePath = crisis.ajax.path + 'updateUnitType/';
  * @type {string}
  */
 crisis.ajax.deleteUnitTypePath = crisis.ajax.path + 'deleteUnitType/';
+/**
+ * @const
+ * @type {string}
+ */
+crisis.ajax.updateCrisisSpeedPath = crisis.ajax.path + 'updateCrisisSpeed/';
 
 /**
  * @param {string} path
@@ -236,6 +241,18 @@ crisis.ajax.postUnitTypeUpdate = function(name, id, options) {
         Name: name
     };
     crisis.ajax.postData(crisis.ajax.updateUnitTypePath, data, options);
+};
+
+/**
+ * @param {number} speed
+ * @param {jQueryAjaxSettings=} options
+ */
+crisis.ajax.postCrisisSpeedUpdate = function(speed, options) {
+    /** @type {crisisJson.UpdateCrisisSpeed} */
+    var data = {
+        Speed: speed
+    };
+    crisis.ajax.postData(crisis.ajax.updateCrisisSpeedPath, data, options);
 };
 
 /**

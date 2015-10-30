@@ -1,3 +1,4 @@
+/** @implements {crisis.CrisisChangeListener} */
 crisis.controls = {
     /** @enum {string} */
     State: {
@@ -14,7 +15,11 @@ crisis.controls = {
     /** @type {jQuery} */
     $unitTypeList: null,
     /** @type {jQuery} */
-    $factionList: null
+    $factionList: null,
+    /** @type {jQuery} */
+    $speedField: null,
+    /** @type {jQuery} */
+    $saveSpeedButton: null
 };
 
 crisis.controls.initialize = function() {
@@ -23,6 +28,8 @@ crisis.controls.initialize = function() {
     crisis.controls.$factionList = $('#controlsFactionList');
     crisis.controls.$addUnitTypeButton = $('#addUnitTypeButton');
     crisis.controls.$addFactionButton = $('#addFactionButton');
+    crisis.controls.$speedField = $('#speedField');
+    crisis.controls.$saveSpeedButton = $('#saveSpeedButton');
 
     crisis.controls.state = crisis.controls.State.CLOSED;
 
@@ -34,6 +41,14 @@ crisis.controls.initialize = function() {
         'click' + crisis.event.baseNameSpace, function() {
             new crisis.FactionLi(null, true);
         });
+    crisis.controls.$saveSpeedButton.on(
+        'click' + crisis.event.baseNameSpace, function() {
+            crisis.ajax.postCrisisSpeedUpdate(crisis.stringToFloat(
+                /** @type {string} */ (crisis.controls.$speedField.val())));
+        });
+
+    crisis.controls.$speedField.val(crisis.speed.toString());
+    crisis.crisisListeners.add(crisis.controls);
 };
 
 crisis.controls.toggle = function() {
@@ -74,3 +89,16 @@ crisis.controls.reRender = function() {
 };
 
 crisis.controls.render = function() {};
+
+/** @override */
+crisis.controls.crisisChanged = function() {
+    crisis.controls.$speedField.val(crisis.speed.toString());
+};
+
+/**
+ * @override
+ * @return {string}
+ */
+crisis.controls.listenerId = function() {
+    return 'controls';
+}

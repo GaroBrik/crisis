@@ -133,7 +133,7 @@ crisis.FactionLi.prototype.commitDelete = function() {
     var thisLi = this;
 
     crisis.ajax.postFactionDeletion(this.faction.id, {
-        /** @param {crisisJson.Success} json */
+        /** @param {crisisJson.SuccessResponse} json */
         success: function(json) {
             if (json.Success) {
                 thisLi.faction.destroy();

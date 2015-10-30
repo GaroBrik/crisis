@@ -8,7 +8,7 @@ import (
 const (
 	crisisSelector = `
             id, active, array_length(map_costs, 1) AS height, 
-            array_length(map_costs, 2) AS width
+            array_length(map_costs, 2) AS width, speed
         `
 )
 
@@ -30,6 +30,27 @@ func GetAllActiveCrises(tx *pg.Tx) ([]Crisis, error) {
 
 	return crises, nil
 }
+
+func GetSpeedByCrisisId(tx *pg.Tx, crisisId int) (float64, error) {
+	var speed float64
+	_, err := tx.QueryOne(
+		&speed, `SELECT speed FROM crisis WHERE id = ?`, crisisId)
+	return speed, err
+}
+
+func UpdateCrisisSpeed(tx *pg.Tx, speed string, crisisId int) error {
+	_, err := tx.Exec(`UPDATE crisis SET speed = ? WHERE id = ?`,
+		speed, crisisId)
+	return err
+}
+
+// func UpdateCrisisDimensions(tx *pg.Tx, height, width, crisisId int) error {
+// 	_, err := tx.Exec(`
+//             UPDATE crisis SET map_costs=
+//                 array_fill(array_fill(100, ARRAY[?]), ARRAY[?])
+//         `)
+// 	return nil
+// }
 
 func LoadCrisis(tx *pg.Tx, crisis *Crisis) (Crisis, error) {
 	var err error

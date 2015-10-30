@@ -6,6 +6,7 @@ CREATE TABLE crisis (
        map_costs INTEGER[][] NOT NULL,
        crisis_name VARCHAR(40) NOT NULL,
        active BOOLEAN NOT NULL DEFAULT TRUE,
+       speed DOUBLE PRECISION NOT NULL DEFAULT 0,
        password VARCHAR(40) NOT NULL
 );
 ALTER SEQUENCE crisis_id_seq OWNED BY crisis.id;
