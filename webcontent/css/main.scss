@@ -21,17 +21,21 @@ ul {
     margin: 0;
 }
 
-.splitLeft {
-    width: 50%;
+.splitLeft, .splitRight {
+    width: 49%;
     position: absolute;
+    box-sizing: border-box;
+    padding: 10px;
     left: 0;
 } 
 
 .splitRight {
-    width: 50%;
-    position: absolute;
     right: 0;
-} 
+}
+
+.splitLeft {
+    left: 0;
+}
 
 #headerHolder {
     position: fixed;
@@ -138,6 +142,23 @@ ul {
     text-shadow: 1px 1px 1px #000;
 }
 
+.add-button {
+    float: right;
+}
+
+.factionListItem, .unitTypeListItem {
+    .editField {
+        width: 7em;
+    }
+}
+
+.factionListItem {
+    .colorPicker {
+        width: 20px;
+        border: none;
+    }
+}
+
 .divisionPane {
     background-color: rgba(44,44,44,0.5);
     width: 200px;
@@ -181,7 +202,6 @@ ul {
     position: absolute;
     background-color: rgba(44,44,44,0.9);
     z-index: 10000;
-    padding: 10px;
     width: 100%;
 
     input {

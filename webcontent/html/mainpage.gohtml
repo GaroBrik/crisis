@@ -59,6 +59,7 @@
       <li id="protoFactionListItem" class="factionListItem">
         <span class="name"></span>
         <input type="text" class="editField" style="display: none">
+        <input type="color" class="colorPicker" style="display: none">
         <i class="editButton fa fa-wrench mfa-button" title="Edit Faction"></i>
         <i class="cancelButton fa fa-ban mfa-button" title="Cancel Changes" style="display: none" ></i>
         <i class="commitButton fa fa-floppy-o mfa-button" title="Save Changes" style="display: none"></i>
@@ -108,15 +109,15 @@
       {{if .CanEdit}}
         <div id="controls" class="controls" style="display: none">
           <div class="splitLeft">
-            <div>
+            <div class="modelList">
               <h3 class="inlineHeader">Factions</h3>
               <ul id="controlsFactionList"></ul>
-              <i id="addFactionButton" class="fa fa-plus fa-lg mfa-button" title="Add Faction"></i>
+              <i id="addFactionButton" class="fa fa-plus fa-lg mfa-button add-button" title="Add Faction"></i>
             </div>
-            <div>
+            <div class="modelList">
               <h3 class="inlineHeader">Unit Types</h3>
               <ul id="controlsUnitTypeList"></ul>
-              <i id="addUnitTypeButton" class="fa fa-plus fa-lg mfa-button" title="Add Unit Type"></i>
+              <i id="addUnitTypeButton" class="fa fa-plus fa-lg mfa-button add-button" title="Add Unit Type"></i>
             </div>
           </div>
           <div class="splitRight">
