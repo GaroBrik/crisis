@@ -47,7 +47,6 @@ crisis.controls.initialize = function() {
                 /** @type {string} */ (crisis.controls.$speedField.val())));
         });
 
-    crisis.controls.$speedField.val(crisis.speed.toString());
     crisis.crisisListeners.add(crisis.controls);
 };
 
