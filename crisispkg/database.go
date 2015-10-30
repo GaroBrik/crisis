@@ -40,7 +40,7 @@ func (db *Database) Close() {
 }
 
 func DoUnitMovement(tx *pg.Tx) error {
-	moveAmount := 1.0
+	moveAmount := 2.0
 	crises, err := GetAllActiveCrises(tx)
 	if err != nil {
 		return err
