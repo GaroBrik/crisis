@@ -28,7 +28,7 @@ crisis.controls.initialize = function() {
     crisis.controls.$factionList = $('#controlsFactionList');
     crisis.controls.$addUnitTypeButton = $('#addUnitTypeButton');
     crisis.controls.$addFactionButton = $('#addFactionButton');
-    crisis.controls.$speedField = $('#speedField');
+    crisis.controls.$speedField = $('#crisisSpeedField');
     crisis.controls.$saveSpeedButton = $('#saveSpeedButton');
 
     crisis.controls.state = crisis.controls.State.CLOSED;
