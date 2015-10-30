@@ -73,6 +73,13 @@ ul {
     }
 }
 
+.modelList {
+    position: relative;
+    margin-right: 15px;
+    display: inline-block;
+    vertical-align: top;
+}
+
 .mfa-button {
     cursor: pointer;
     &:hover {
@@ -206,13 +213,6 @@ ul {
 
     input {
         background-color: #444444;
-    }
-
-    div {
-        position: relative;
-        display: inline-block;
-        vertical-align: top;
-        margin-left: 10px;
     }
 
     * {
