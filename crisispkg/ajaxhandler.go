@@ -65,7 +65,7 @@ func (handler *AjaxHandler) HandleRequest(res http.ResponseWriter, req *http.Req
 		var divisions []Division
 		var unitTypes []UnitType
 		var factions []Faction
-		var speed float64
+		var speed int
 		err = handler.db.db.RunInTransaction(func(tx *pg.Tx) error {
 			var err error
 			if jsonSent.CanEdit {

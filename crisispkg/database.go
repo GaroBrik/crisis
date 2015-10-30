@@ -56,7 +56,7 @@ func DoUnitMovement(tx *pg.Tx) error {
 
 	for _, crisis := range crises {
 		for _, div := range crisis.Divisions {
-			moveLeft := crisis.Speed
+			moveLeft := float64(crisis.Speed)
 			coordIdx := 0
 			for moveLeft > 0 && coordIdx < len(div.Route)-1 {
 				curCoords := div.Route[coordIdx]
