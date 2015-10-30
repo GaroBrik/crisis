@@ -61,18 +61,18 @@
       <li id="protoFactionListItem" class="factionListItem">
         <span class="name"></span>
         <input type="text" class="editField" style="display: none">
-        <i class="editButton fa fa-wrench mfa-button"></i>
-        <i class="cancelButton fa fa-ban mfa-button" style="display: none"></i>
-        <i type="button" class="commitButton fa fa-upload mfa-button" style="display: none"></i>
-        <i type="button" class="deleteButton fa fa-trash mfa-button" style="display: none"></i>
+        <i class="editButton fa fa-wrench mfa-button" title="Edit Faction"></i>
+        <i class="cancelButton fa fa-ban mfa-button" title="Cancel Changes" style="display: none" ></i>
+        <i class="commitButton fa fa-floppy-o mfa-button" title="Save Changes" style="display: none"></i>
+        <i class="deleteButton fa fa-trash mfa-button" title="Delete Faction" style="display: none"></i>
       </li>
       <li id="protoUnitTypeListItem" class="unitTypeListItem">
         <span class="name"></span>
         <input type="text" class="editField" style="display: none">
-        <i class="editButton fa fa-wrench"></i>
-        <i class="cancelButton fa fa-ban" style="display: none"></i>
-        <i type="button" class="commitButton fa fa-upload" style="display: none"></i>
-        <i type="button" class="deleteButton fa fa-trash" style="display: none"></i>
+        <i class="editButton fa fa-wrench mfa-button" title="Edit Unit Type"></i>
+        <i class="cancelButton fa fa-ban mfa-button" title="Cancel Changes" style="display: none" ></i>
+        <i class="commitButton fa fa-floppy-o mfa-button" title="Save Changes" style="display: none"></i>
+        <i class="deleteButton fa fa-trash mfa-button" title="Delete Unit Type" style="display: none"></i>
       </li>
       <div id="protoUnitTypes">
         {{range .Types}}
@@ -108,21 +108,31 @@
         </div>
       </div>
       {{if .CanEdit}}
-        <div id="controls" style="display: none">
-          <form action="uploadBG" method="post" enctype="multipart/form-data">
-            <label for="background">Upload a new map:</label>
-            <input type="file" name="background" id="background">
-            <input type="submit" name="submit" value="Submit">
-          </form>
-          <div>
-            Factions
-            <ul id="controlsFactionList"></ul>
-            <input id="addFactionButton" type="button" value="Add Faction">
+        <div id="controls" class="controls" style="display: none">
+          <div class="splitLeft">
+            <div>
+              <h3 class="inlineHeader">Factions</h3>
+              <ul id="controlsFactionList"></ul>
+              <input id="addFactionButton" type="button" value="Add Faction">
+            </div>
+            <div>
+              <h3 class="inlineHeader">Unit Types</h3>
+              <ul id="controlsUnitTypeList"></ul>
+              <input id="addUnitTypeButton" type="button" value="Add Unit Type">
+            </div>
           </div>
-          <div>
-            Unit Types
-            <ul id="controlsUnitTypeList"></ul>
-            <input id="addUnitTypeButton" type="button" value="Add Unit Type">
+          <div class="splitRight">
+            <form action="uploadBG" method="post" enctype="multipart/form-data">
+              <label for="background">Upload a new map:</label>
+              <input type="file" name="background" id="background">
+              <input type="submit" name="submit" value="Submit">
+            </form>
+            <br>
+            <div>
+              Edit crisis speed:
+              <input type="text" id="crisisSpeedField">
+              <i class="commitButton fa fa-floppy-o mfa-button" title="Save Changes" style="display: none"></i>
+            </div>
           </div>
         </div>
       {{end}}

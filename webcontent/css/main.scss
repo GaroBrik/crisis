@@ -17,6 +17,22 @@ ul {
     }
 }
 
+.inlineHeader {
+    margin: 0;
+}
+
+.splitLeft {
+    width: 50%;
+    position: absolute;
+    left: 0;
+} 
+
+.splitRight {
+    width: 50%;
+    position: absolute;
+    right: 0;
+} 
+
 #headerHolder {
     position: fixed;
     left: 0;
@@ -56,7 +72,7 @@ ul {
 .mfa-button {
     cursor: pointer;
     &:hover {
-        color: grey;
+        color: #bbb;
     }
 }
 
@@ -159,7 +175,7 @@ ul {
     }
 }
 
-#controls {
+.controls {
     left: 0px;
     top: 0px;
     position: absolute;
