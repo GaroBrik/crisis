@@ -2,6 +2,7 @@
  * @constructor
  * @param {crisis.Division} div
  * @implements {crisis.Division.ChangeListener}
+ * @implements {crisis.Faction.ChangeListener}
  */
 crisis.DivisionMapMarker = function(div) {
     /** @type {crisis.DivisionMapMarker} */
@@ -11,10 +12,23 @@ crisis.DivisionMapMarker = function(div) {
     this.$marker = crisis.cloneProto(crisis.prototypes.$divisionMarker);
 
     /** @override */
-    this.divisionChanged = function() {
-        crisis.map.position(thisMarker.$marker, div.absCoords);
+    this.divisionChanged = function(newDiv) {
+        crisis.map.position(thisMarker.$marker, newDiv.absCoords);
         thisMarker.color();
     };
+
+    /** @override */
+    this.divisionDestroyed = function() {
+        thisMarker.destroy();
+    };
+
+    /** @override */
+    this.factionChanged = function(faction) {
+        thisMarker.color();
+    };
+
+    /** @override */
+    this.factionDestroyed = _.noop;
 
     /**
      * @override
@@ -24,32 +38,18 @@ crisis.DivisionMapMarker = function(div) {
         return 'divisionMapMarker(' + div.id + ')';
     };
 
-    /** @override */
-    this.divisionDestroyed = function() {
+    this.destroy = function() {
         thisMarker.$marker.remove();
+        div.listeners.remove(thisMarker);
+        crisis.getFaction(div.factionId).listeners.remove(thisMarker);
     };
 
     this.color = function() {
-        /** @type {Array<number>} */
-        var arr = crisis.factions.keys();
-        arr.sort();
-        /** @type {number} */
-        var i = _.find(arr, function(id) { return id === div.factionId; });
-        thisMarker.$marker.css('color', crisis.DivisionMapMarker.colors[i]);
+        thisMarker.$marker.css('color', crisis.getFaction(div.factionId).color);
     };
 
     this.$marker.click(function() { div.details.toggle(); });
     crisis.map.add(this.$marker);
     div.listeners.add(this);
+    crisis.getFaction(div.factionId).listeners.add(this);
 };
-
-/** @type {Array<string>} */
-crisis.DivisionMapMarker.colors = [
-    '#ff0000',
-    '#00ff00',
-    '#0000ff',
-    '#000000',
-    '#ffff00',
-    '#ff00ff',
-    '#00ffff',
-    '#ffffff'];

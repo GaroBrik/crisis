@@ -102,8 +102,14 @@ crisis.FactionLi.prototype.commit = function() {
         return;
     }
 
+    /** @type {string} */
+    var color = /** @type {string} */ (this.$colorPicker.val());
+    if (color === '' || color === null) {
+        return;
+    }
+
     if (this.forCreation) {
-        crisis.ajax.postFactionCreation(name, {
+        crisis.ajax.postFactionCreation(name, color, {
             /** @param {crisisJson.Faction} json */
             success: function(json) {
                 thisLi.destroy();
@@ -111,7 +117,7 @@ crisis.FactionLi.prototype.commit = function() {
             }
         });
     } else {
-        crisis.ajax.postFactionUpdate(name, this.faction.id, {
+        crisis.ajax.postFactionUpdate(name, color, this.faction.id, {
             /** @param {crisisJson.Faction} json */
             success: function(json) {
                 thisLi.faction.update(json);
@@ -124,7 +130,7 @@ crisis.FactionLi.prototype.commit = function() {
 crisis.FactionLi.prototype.commitDelete = function() {
     /** @type {crisis.FactionLi} */
     var thisLi = this;
-    
+
     crisis.ajax.postFactionDeletion(this.faction.id, {
         /** @param {crisisJson.Success} json */
         success: function(json) {
@@ -139,12 +145,15 @@ crisis.FactionLi.prototype.destroy = function() {
     this.$listItem.remove();
 };
 
-/** 
+/**
  * @override
- * @param {crisis.Faction} faction 
+ * @param {crisis.Faction} faction
  */
 crisis.FactionLi.prototype.factionChanged = function(faction) {
     this.$nameSpan.text(faction.name);
+    if (!this.$colorPicker.is(':visible')) {
+        this.$colorPicker.val(faction.color);
+    }
 };
 
 /**

@@ -16,7 +16,8 @@ crisisJson.Crisis;
 /**
  * @typedef {{
  *   Id: number,
- *   Name: string
+ *   Name: string,
+ *   Color: string
  * }}
  */
 crisisJson.Faction;
@@ -30,7 +31,8 @@ crisisJson.DeleteFaction;
 
 /**
  * @typedef {{
- *   Name: string
+ *   Name: string,
+ *   Color: string
  * }}
  */
 crisisJson.CreateFaction;

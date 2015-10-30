@@ -6,11 +6,13 @@
 crisis.Faction = function(json) {
     /** @type {crisis.Faction} */
     var thisFac = this;
-    
+
     /** @type {number} */
     this.id = json.Id;
     /** @type {string} */
     this.name = json.Name;
+    /** @type {string} */
+    this.color = json.Color;
     /** @type {buckets.Set<crisis.Faction.ChangeListener>} */
     this.listeners = new buckets.Set(function(l) { return l.listenerId(); });
     /** @type {crisis.FactionLi} */
@@ -40,7 +42,7 @@ crisis.Faction.ChangeListener.prototype.listenerId = function() {};
 crisis.Faction.prototype.update = function(json) {
     /** @type {crisis.Faction} */
     var thisFac = this;
-    
+
     if (this.id !== json.Id) {
         console.log('Faction.update: mismatched data');
         return;
@@ -53,6 +55,11 @@ crisis.Faction.prototype.update = function(json) {
         this.name = json.Name;
     }
 
+    if (this.color !== json.Color) {
+        changed = true;
+        this.color = json.Color;
+    }
+
     if (changed) {
         this.listeners.forEach(function(listener) {
             listener.factionChanged(thisFac);
@@ -63,7 +70,7 @@ crisis.Faction.prototype.update = function(json) {
 crisis.Faction.prototype.destroy = function() {
     /** @type {crisis.Faction} */
     var thisFac = this;
-    
+
     this.listeners.forEach(function(listener) {
         listener.factionDestroyed(thisFac.id);
     });

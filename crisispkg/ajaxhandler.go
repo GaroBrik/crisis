@@ -250,14 +250,17 @@ func (handler *AjaxHandler) HandleRequest(res http.ResponseWriter, req *http.Req
 		res.Write(json)
 
 	case createFactionPath:
-		type CreateFactionJson struct{ Name string }
+		type CreateFactionJson struct {
+			Name  string
+			Color string
+		}
 		var jsonSent CreateFactionJson
 		err := json.NewDecoder(req.Body).Decode(&jsonSent)
 		maybePanic(err)
 
 		var finalFaction *Faction
 		err = handler.db.db.RunInTransaction(func(tx *pg.Tx) error {
-			fac, err := CreateFaction(tx, jsonSent.Name, authInfo.CrisisId)
+			fac, err := CreateFaction(tx, jsonSent.Name, jsonSent.Color, authInfo.CrisisId)
 			if err != nil {
 				return err
 			}
@@ -279,7 +282,7 @@ func (handler *AjaxHandler) HandleRequest(res http.ResponseWriter, req *http.Req
 
 		var finalFaction *Faction
 		err = handler.db.db.RunInTransaction(func(tx *pg.Tx) error {
-			fac, err := UpdateFaction(tx, jsonSent.Id, jsonSent.Name)
+			fac, err := UpdateFaction(tx, jsonSent.Id, jsonSent.Name, jsonSent.Color)
 			if err != nil {
 				return err
 			}

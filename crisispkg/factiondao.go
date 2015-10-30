@@ -4,10 +4,12 @@ import (
 	"gopkg.in/pg.v3"
 )
 
+const factionSelector = ` id, faction_name, color `
+
 func GetFactionsByCrisisId(tx *pg.Tx, crisisId int) ([]Faction, error) {
 	var factions Factions
 	_, err := tx.Query(&factions, `
-            SELECT id, faction_name FROM faction WHERE crisis = ?
+            SELECT `+factionSelector+` FROM faction WHERE crisis = ?
         `, crisisId)
 	if err != nil {
 		return nil, err
@@ -19,31 +21,32 @@ func GetFactionsByCrisisId(tx *pg.Tx, crisisId int) ([]Faction, error) {
 func GetFactionByName(tx *pg.Tx, crisisId int, name string) (Faction, error) {
 	var faction Faction
 	_, err := tx.QueryOne(&faction, `
-            SELECT id, faction_name FROM faction 
+            SELECT `+factionSelector+` FROM faction 
             WHERE lower(faction_name) = lower(?)
         `, name)
 	return faction, err
 }
 
-func CreateFaction(tx *pg.Tx, name string, crisisId int) (Faction, error) {
+func CreateFaction(tx *pg.Tx, name, color string, crisisId int) (Faction, error) {
 	fac := Faction{Name: name}
 	_, err := tx.QueryOne(&fac, `
-            INSERT INTO faction (faction_name, crisis) 
-            VALUES (?, ?) RETURNING id
-        `, fac.Name, crisisId)
+            INSERT INTO faction (faction_name, crisis, color) 
+            VALUES (?, ?, ?) RETURNING id
+        `, fac.Name, crisisId, color)
 	return fac, err
 }
 
-func UpdateFaction(tx *pg.Tx, factionId int, newName string) (Faction, error) {
+func UpdateFaction(tx *pg.Tx, factionId int, newName, newColor string) (Faction, error) {
 	var faction Faction
-	_, err := tx.Exec(`UPDATE faction SET faction_name = ? WHERE id = ?`,
-		newName, factionId)
+	_, err := tx.Exec(`
+            UPDATE faction SET faction_name = ?, color = ? WHERE id = ?
+        `, newName, newColor, factionId)
 	if err != nil {
 		return faction, err
 	}
 
 	_, err = tx.QueryOne(&faction, `
-            SELECT id, faction_name FROM faction WHERE id = ?
+            SELECT `+factionSelector+` FROM faction WHERE id = ?
         `, factionId)
 	return faction, err
 }

@@ -6,8 +6,9 @@ import (
 )
 
 type Faction struct {
-	Id   int
-	Name string
+	Id    int
+	Name  string
+	Color string
 }
 
 func (fac *Faction) LoadColumn(colIdx int, colName string, b []byte) error {
@@ -19,6 +20,11 @@ func (fac *Faction) LoadColumn(colIdx int, colName string, b []byte) error {
 		}
 	case "faction_name":
 		err := pg.Decode(&fac.Name, b)
+		if err != nil {
+			return err
+		}
+	case "color":
+		err := pg.Decode(&fac.Color, b)
 		if err != nil {
 			return err
 		}

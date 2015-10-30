@@ -166,11 +166,15 @@ crisis.ajax.postDivisionRoute = function(divisionId, route, options) {
 
 /**
  * @param {string} name
+ * @param {string} color
  * @param {jQueryAjaxSettings=} options
  */
-crisis.ajax.postFactionCreation = function(name, options) {
+crisis.ajax.postFactionCreation = function(name, color, options) {
     /** @type {crisisJson.CreateFaction} */
-    var data = { Name: name };
+    var data = {
+        Name: name,
+        Color: color
+    };
     crisis.ajax.postData(crisis.ajax.createFactionPath, data, options);
 };
 
@@ -186,14 +190,16 @@ crisis.ajax.postFactionDeletion = function(id, options) {
 
 /**
  * @param {string} name
+ * @param {string} color
  * @param {number} id
  * @param {jQueryAjaxSettings=} options
  */
-crisis.ajax.postFactionUpdate = function(name, id, options) {
+crisis.ajax.postFactionUpdate = function(name, color, id, options) {
     /** @type {crisisJson.DeleteFaction} */
     var data = {
         Id: id,
-        Name: name
+        Name: name,
+        Color: color
     };
     crisis.ajax.postData(crisis.ajax.updateFactionPath, data, options);
 };

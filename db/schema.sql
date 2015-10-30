@@ -15,6 +15,7 @@ CREATE TABLE faction (
        id INTEGER PRIMARY KEY DEFAULT nextval('faction_id_seq'),
        crisis INTEGER REFERENCES crisis (id) ON DELETE CASCADE,
        faction_name VARCHAR(40) NOT NULL,
+       color VARCHAR(7) NOT NULL,
        UNIQUE (crisis, faction_name)
 );
 ALTER SEQUENCE faction_id_seq OWNED BY faction.id;
