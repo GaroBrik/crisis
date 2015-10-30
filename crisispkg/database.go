@@ -69,7 +69,7 @@ func DoUnitMovement(tx *pg.Tx) error {
 					coordIdx++
 					div.TimeSpent = 0
 				} else {
-					div.TimeSpent = distToMove - moveLeft
+					div.TimeSpent = div.TimeSpent + moveLeft
 					moveLeft = 0
 				}
 			}
