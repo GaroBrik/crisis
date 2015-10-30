@@ -9,10 +9,6 @@ crisis.Division = function(divJson) {
     /** @type {buckets.Set<crisis.Division.ChangeListener>} */
     this.listeners = new buckets.Set(function(l) { return l.listenerId(); });
 
-    /** @type {crisis.DivisionMapMarker} */
-    this.mapMarker = new crisis.DivisionMapMarker(this);
-    /** @type {crisis.DivisionDetails} */
-    this.details = crisis.DivisionDetails.fromDivision(this);
     /** @type {number} */
     this.id = divJson.Id;
     /** @type {crisis.Coords} */
@@ -24,7 +20,11 @@ crisis.Division = function(divJson) {
     /** @type {string} */
     this.name;
     /** @type {number} */
-    this.factionId;
+    this.factionId = divJson.factionId;
+    /** @type {crisis.DivisionMapMarker} */
+    this.mapMarker = new crisis.DivisionMapMarker(this);
+    /** @type {crisis.DivisionDetails} */
+    this.details = crisis.DivisionDetails.fromDivision(this);
 
     this.update(divJson);
     crisis.divisionsListeners.forEach(function(l) { l.modelAdded(div); });
