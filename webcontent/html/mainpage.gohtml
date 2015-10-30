@@ -22,16 +22,14 @@
           {{if .CanEdit}}
             <span class="paneInvalidAlert" style="display: none">Invalid Input<br></span>
           {{end}}
-          <span class="factionNameSpan"></span>
-          {{if .CanEdit}}
-            <span class="factionSelectorPlace" style="display: none"></span>
-          {{end}}
-          <br>
-          <span class="divisionNameSpan"></span>
+          <h2 class="divisionNameSpan inlineHeader"></h2>
           {{if .CanEdit}}
             <input type="text" class="editNameField" style="display: none">
           {{end}}
-          <br>
+          <h3 class="factionNameSpan inlineHeader"></h3>
+          {{if .CanEdit}}
+            <span class="factionSelectorPlace" style="display: none"></span>
+          {{end}}
           <ul class="unitList"></ul>
           {{if .CanEdit}}
             <input type="button" class="editButton" value="Edit">
@@ -113,12 +111,12 @@
             <div>
               <h3 class="inlineHeader">Factions</h3>
               <ul id="controlsFactionList"></ul>
-              <input id="addFactionButton" type="button" value="Add Faction">
+              <i id="addFactionButton" class="fa fa-plus fa-lg mfa-button" title="Add Faction"></i>
             </div>
             <div>
               <h3 class="inlineHeader">Unit Types</h3>
               <ul id="controlsUnitTypeList"></ul>
-              <input id="addUnitTypeButton" type="button" value="Add Unit Type">
+              <i id="addUnitTypeButton" class="fa fa-plus fa-lg mfa-button" title="Add Unit Type"></i>
             </div>
           </div>
           <div class="splitRight">
