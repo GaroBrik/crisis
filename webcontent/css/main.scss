@@ -97,10 +97,6 @@ ul {
     top: 40px; bottom:0;
     left:0; right:0;
     overflow: hidden;
-
-    div {
-        position: absolute;
-    }
 }
 
 #mapOuterDiv {
@@ -210,6 +206,13 @@ ul {
     background-color: rgba(44,44,44,0.9);
     z-index: 10000;
     width: 100%;
+    padding: 15px;
+
+    & > div {
+        position: relative;
+        display: inline-block;
+        margin-right: 10px;
+    }
 
     input {
         background-color: #444444;
@@ -231,6 +234,7 @@ ul {
 
 .shadow {
     z-index: 2 * $headerZ;
+    position: absolute;
 }
 
 .verticalShadow {

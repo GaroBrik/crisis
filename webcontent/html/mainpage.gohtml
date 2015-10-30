@@ -108,7 +108,7 @@
       </div>
       {{if .CanEdit}}
         <div id="controls" class="controls" style="display: none">
-          <div class="splitLeft">
+          <div>
             <div class="modelList">
               <h3 class="inlineHeader">Factions</h3>
               <ul id="controlsFactionList"></ul>
@@ -120,7 +120,7 @@
               <i id="addUnitTypeButton" class="fa fa-plus fa-lg mfa-button add-button" title="Add Unit Type"></i>
             </div>
           </div>
-          <div class="splitRight">
+          <div>
             <form action="uploadBG" method="post" enctype="multipart/form-data">
               <label for="background">Upload a new map:</label>
               <input type="file" name="background" id="background">
