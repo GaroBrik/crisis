@@ -381,7 +381,7 @@ func (handler *AjaxHandler) HandleRequest(res http.ResponseWriter, req *http.Req
 		maybePanic(err)
 
 	case updateCrisisSpeedPath:
-		type UpdateCrisisSpeedJson struct{ Speed string }
+		type UpdateCrisisSpeedJson struct{ Speed int }
 		var jsonSent UpdateCrisisSpeedJson
 		err := json.NewDecoder(req.Body).Decode(&jsonSent)
 		maybePanic(err)

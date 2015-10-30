@@ -9,7 +9,7 @@ type Crisis struct {
 	Id        int `json:"-"`
 	Active    bool
 	MapBounds Bounds
-	Speed     float64
+	Speed     int
 	Divisions []Division
 	UnitTypes []UnitType
 	Factions  []Faction

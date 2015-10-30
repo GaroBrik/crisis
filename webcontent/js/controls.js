@@ -43,7 +43,7 @@ crisis.controls.initialize = function() {
         });
     crisis.controls.$saveSpeedButton.on(
         'click' + crisis.event.baseNameSpace, function() {
-            crisis.ajax.postCrisisSpeedUpdate(crisis.stringToFloat(
+            crisis.ajax.postCrisisSpeedUpdate(crisis.stringToInt(
                 /** @type {string} */ (crisis.controls.$speedField.val())));
         });
 

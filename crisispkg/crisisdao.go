@@ -31,14 +31,14 @@ func GetAllActiveCrises(tx *pg.Tx) ([]Crisis, error) {
 	return crises, nil
 }
 
-func GetSpeedByCrisisId(tx *pg.Tx, crisisId int) (float64, error) {
-	var speed float64
+func GetSpeedByCrisisId(tx *pg.Tx, crisisId int) (int, error) {
+	var speed int
 	_, err := tx.QueryOne(
 		&speed, `SELECT speed FROM crisis WHERE id = ?`, crisisId)
 	return speed, err
 }
 
-func UpdateCrisisSpeed(tx *pg.Tx, speed string, crisisId int) error {
+func UpdateCrisisSpeed(tx *pg.Tx, speed int, crisisId int) error {
 	_, err := tx.Exec(`UPDATE crisis SET speed = ? WHERE id = ?`,
 		speed, crisisId)
 	return err
