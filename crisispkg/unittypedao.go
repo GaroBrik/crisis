@@ -4,10 +4,14 @@ import (
 	"gopkg.in/pg.v3"
 )
 
+const (
+	unitTypeSelector = ` id, unit_name, speed `
+)
+
 func GetUnitTypesByCrisisId(tx *pg.Tx, crisisId int) ([]UnitType, error) {
 	var unitTypes UnitTypes
 	_, err := tx.Query(&unitTypes, `
-            SELECT id, unit_name FROM unit_type WHERE crisis = ?
+            SELECT `+unitTypeSelector+` FROM unit_type WHERE crisis = ?
         `, crisisId)
 	if err != nil {
 		return nil, err
@@ -37,7 +41,7 @@ func UpdateUnitType(tx *pg.Tx, typeId int, newName string,
 	}
 
 	_, err = tx.QueryOne(&unitType, `
-            SELECT id, unit_name FROM unit_type WHERE id = ?
+            SELECT `+unitTypeSelector+` FROM unit_type WHERE id = ?
         `, typeId)
 	return unitType, err
 }
