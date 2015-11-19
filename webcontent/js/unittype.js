@@ -6,11 +6,13 @@
 crisis.UnitType = function(json) {
     /** @type {crisis.UnitType} */
     var thisType = this;
-    
+
     /** @type {number} */
     this.id = json.Id;
     /** @type {string} */
     this.name = json.Name;
+    /** @type {number} */
+    this.speed = json.Speed;
     /** @type {buckets.Set<crisis.UnitType.ChangeListener>} */
     this.listeners = new buckets.Set(function(l) { return l.listenerId(); });
     /** @type {crisis.UnitTypeLi} */
@@ -38,7 +40,7 @@ crisis.UnitType.ChangeListener.prototype.listenerId = function() {};
 crisis.UnitType.prototype.update = function(json) {
     /** @type {crisis.UnitType} */
     var thisType = this;
-    
+
     if (this.id !== json.Id) {
         console.log('UnitType.update: mismatched data');
         return;
@@ -46,10 +48,15 @@ crisis.UnitType.prototype.update = function(json) {
 
     /** @type {boolean} */
     var changed = false;
-    
+
     if (this.name !== json.Name) {
         changed = true;
         this.name = json.Name;
+    }
+
+    if (this.speed !== json.Speed) {
+        changed = true;
+        this.speed = json.Speed;
     }
 
     if (changed) {

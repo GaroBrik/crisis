@@ -25,7 +25,11 @@ crisis.UnitTypeLi = function(unitType, forCreation) {
     /** @type {jQuery} */
     this.$commitButton = this.$listItem.find('.commitButton');
     /** @type {jQuery} */
-    this.$editField = this.$listItem.find('.editField');
+    this.$editNameField = this.$listItem.find('.editNameField');
+    /** @type {jQuery} */
+    this.$speedLabel = this.$listItem.find('.speedLabel');
+    /** @type {jQuery} */
+    this.$editSpeedField = this.$listItem.find('.editSpeedField');
     /** @type {jQuery} */
     this.$nameSpan = this.$listItem.find('.name');
 
@@ -61,13 +65,18 @@ crisis.UnitTypeLi = function(unitType, forCreation) {
 
 crisis.UnitTypeLi.prototype.startEditing = function() {
     if (!this.forCreation) {
-        this.$editField.val(this.unitType.name);
+        this.$editNameField.val(this.unitType.name);
+        this.$editSpeedField.val(this.unitType.speed);
+    } else {
+        this.$editSpeedField.val(1);
     }
 
     this.$nameSpan.hide();
     this.$editButton.hide();
 
-    this.$editField.show();
+    this.$editNameField.show();
+    this.$speedLabel.show();
+    this.$editSpeedField.show();
     this.$cancelButton.show();
     if (!this.forCreation) {
         this.$deleteButton.show();
@@ -78,7 +87,9 @@ crisis.UnitTypeLi.prototype.startEditing = function() {
 crisis.UnitTypeLi.prototype.stopEditing = function() {
     if (this.forCreation) this.destroy();
 
-    this.$editField.hide();
+    this.$editNameField.hide();
+    this.$speedLabel.hide();
+    this.$editSpeedField.hide();
     this.$cancelButton.hide();
     this.$deleteButton.hide();
     this.$commitButton.hide();
@@ -90,15 +101,22 @@ crisis.UnitTypeLi.prototype.stopEditing = function() {
 crisis.UnitTypeLi.prototype.commit = function() {
     /** @type {crisis.UnitTypeLi} */
     var thisLi = this;
-    
+
     /** @type {string} */
-    var name = /** @type {string} */ (this.$editField.val());
+    var name = /** @type {string} */ (this.$editNameField.val());
     if (name === '' || name === null) {
         return;
     }
 
+    /** @type {number} */
+    var speed = crisis.stringToFloat(
+        /** @type {string} */(this.$editSpeedField.val()));
+    if (isNaN(speed) || speed < 0) {
+        return;
+    }
+
     if (this.forCreation) {
-        crisis.ajax.postUnitTypeCreation(name, {
+        crisis.ajax.postUnitTypeCreation(name, speed, {
             /** @param {crisisJson.UnitType} json */
             success: function(json) {
                 thisLi.destroy();
@@ -106,7 +124,7 @@ crisis.UnitTypeLi.prototype.commit = function() {
             }
         });
     } else {
-        crisis.ajax.postUnitTypeUpdate(name, this.unitType.id, {
+        crisis.ajax.postUnitTypeUpdate(name, speed, this.unitType.id, {
             /** @param {crisisJson.UnitType} json */
             success: function(json) {
                 thisLi.unitType.update(json);

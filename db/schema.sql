@@ -41,6 +41,7 @@ CREATE SEQUENCE unit_type_id_seq;
 CREATE TABLE unit_type (
        id INTEGER PRIMARY KEY DEFAULT nextval('unit_type_id_seq'),
        crisis INTEGER REFERENCES crisis (id) ON DELETE CASCADE,
+       speed DOUBLE PRECISION NOT NULL DEFAULT 1.0,
        unit_name VARCHAR(40) NOT NULL
 );
 ALTER SEQUENCE unit_type_id_seq OWNED BY unit_type.id;

@@ -66,6 +66,11 @@ func LoadCrisis(tx *pg.Tx, crisis *Crisis) (Crisis, error) {
 		return *crisis, err
 	}
 
+	crisis.UnitTypes, err = GetUnitTypesByCrisisId(tx, crisis.Id)
+	if err != nil {
+		return *crisis, err
+	}
+
 	crisis.Divisions, err = GetDivisionsByCrisisId(tx, crisis.Id)
 	return *crisis, err
 }

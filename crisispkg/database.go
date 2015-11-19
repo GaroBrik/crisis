@@ -55,8 +55,22 @@ func DoUnitMovement(tx *pg.Tx) error {
 	}
 
 	for _, crisis := range crises {
+		typeSpeedMap := make(map[int]float64)
+		for _, utype := range crisis.UnitTypes {
+			typeSpeedMap[utype.Id] = utype.Speed
+		}
+
 		for _, div := range crisis.Divisions {
-			moveLeft := float64(crisis.Speed)
+			var minSpeed float64 = 1.0
+			if len(div.Units) != 0 {
+				minSpeed = typeSpeedMap[div.Units[0].Type]
+				for _, unit := range div.Units {
+					if typeSpeedMap[unit.Type] < minSpeed {
+						minSpeed = typeSpeedMap[unit.Type]
+					}
+				}
+			}
+			moveLeft := float64(crisis.Speed) * minSpeed
 			coordIdx := 0
 			for moveLeft > 0 && coordIdx < len(div.Route)-1 {
 				curCoords := div.Route[coordIdx]

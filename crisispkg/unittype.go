@@ -6,8 +6,9 @@ import (
 )
 
 type UnitType struct {
-	Name string
-	Id   int
+	Name  string
+	Speed float64
+	Id    int
 }
 
 func (unitType *UnitType) LoadColumn(colIdx int, colName string, b []byte) error {
@@ -19,6 +20,11 @@ func (unitType *UnitType) LoadColumn(colIdx int, colName string, b []byte) error
 		}
 	case "id":
 		err := pg.Decode(&unitType.Id, b)
+		if err != nil {
+			return err
+		}
+	case "speed":
+		err := pg.Decode(&unitType.Speed, b)
 		if err != nil {
 			return err
 		}

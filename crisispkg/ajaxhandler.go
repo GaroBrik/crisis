@@ -325,14 +325,18 @@ func (handler *AjaxHandler) HandleRequest(res http.ResponseWriter, req *http.Req
 		maybePanic(err)
 
 	case createUnitTypePath:
-		type CreateUnitTypeJson struct{ Name string }
+		type CreateUnitTypeJson struct {
+			Name  string
+			Speed float64
+		}
 		var jsonSent CreateUnitTypeJson
 		err := json.NewDecoder(req.Body).Decode(&jsonSent)
 		maybePanic(err)
 
 		var finalUnitType *UnitType
 		err = handler.db.db.RunInTransaction(func(tx *pg.Tx) error {
-			fac, err := CreateUnitType(tx, jsonSent.Name, authInfo.CrisisId)
+			fac, err := CreateUnitType(
+				tx, jsonSent.Name, jsonSent.Speed, authInfo.CrisisId)
 			if err != nil {
 				return err
 			}
@@ -354,7 +358,8 @@ func (handler *AjaxHandler) HandleRequest(res http.ResponseWriter, req *http.Req
 
 		var finalUnitType *UnitType
 		err = handler.db.db.RunInTransaction(func(tx *pg.Tx) error {
-			fac, err := UpdateUnitType(tx, jsonSent.Id, jsonSent.Name)
+			fac, err := UpdateUnitType(
+				tx, jsonSent.Id, jsonSent.Name, jsonSent.Speed)
 			if err != nil {
 				return err
 			}

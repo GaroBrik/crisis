@@ -211,11 +211,15 @@ crisis.ajax.postFactionUpdate = function(name, color, id, options) {
 
 /**
  * @param {string} name
+ * @param {number} speed
  * @param {jQueryAjaxSettings=} options
  */
-crisis.ajax.postUnitTypeCreation = function(name, options) {
+crisis.ajax.postUnitTypeCreation = function(name, speed, options) {
     /** @type {crisisJson.CreateUnitType} */
-    var data = { Name: name };
+    var data = {
+        Name: name,
+        Speed: speed
+    };
     crisis.ajax.postData(crisis.ajax.createUnitTypePath, data, options);
 };
 
@@ -231,14 +235,16 @@ crisis.ajax.postUnitTypeDeletion = function(id, options) {
 
 /**
  * @param {string} name
+ * @param {number} speed
  * @param {number} id
  * @param {jQueryAjaxSettings=} options
  */
-crisis.ajax.postUnitTypeUpdate = function(name, id, options) {
+crisis.ajax.postUnitTypeUpdate = function(name, speed, id, options) {
     /** @type {crisisJson.DeleteUnitType} */
     var data = {
         Id: id,
-        Name: name
+        Name: name,
+        Speed: speed
     };
     crisis.ajax.postData(crisis.ajax.updateUnitTypePath, data, options);
 };

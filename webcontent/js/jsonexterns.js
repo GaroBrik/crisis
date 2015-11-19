@@ -48,7 +48,8 @@ crisisJson.CreateFaction;
 /**
  * @typedef {{
  *   Id: number,
- *   Name: string
+ *   Name: string,
+ *   Speed: number
  * }}
  */
 crisisJson.UnitType;
@@ -62,7 +63,8 @@ crisisJson.DeleteUnitType;
 
 /**
  * @typedef {{
- *   Name: string
+ *   Name: string,
+ *   Speed: number
  * }}
  */
 crisisJson.CreateUnitType;
