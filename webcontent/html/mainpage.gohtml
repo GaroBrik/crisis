@@ -13,6 +13,7 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
   </head>
   <body>
+    <iframe name="hiddenFrame" style="display: none"></iframe>
     <div style="display: none" id="htmlObjectPrototypes">
       <div id="protoDivisionMarker" class="divisionMarker">
         <img class="icon">
@@ -43,7 +44,7 @@
             <input type="button" class="addUnitButton" style="display: none" value="Add Unit">
             <input type="button" class="changeVisibilityButton" style="display: none" value="View">
             <br>
-            <form action="uploadDivisionIcon" method="post" enctype="multipart/form-data" style="display: none" class="changeIconForm" >
+            <form action="uploadDivisionIcon" method="post" enctype="multipart/form-data" style="display: none" class="changeIconForm" target="hiddenFrame">
               <label for="background">Change Icon:</label>
               <input type="file" name="icon">
               <input type="hidden" name="div-id" class="hiddenDivId">
@@ -82,7 +83,7 @@
         <span class="name"></span>
         <input type="text" class="editNameField" placeholder="name" style="display: none">
         <span class="speedLabel" style="display: none">Speed Factor:</span>
-        <input type="text" class="editSpeedField" style="display: none" siz="10">
+        <input type="text" class="editSpeedField" style="display: none" size="5">
         <i class="editButton fa fa-wrench mfa-button" title="Edit Unit Type"></i>
         <i class="cancelButton fa fa-ban mfa-button" title="Cancel Changes" style="display: none" ></i>
         <i class="commitButton fa fa-floppy-o mfa-button" title="Save Changes" style="display: none"></i>
