@@ -71,6 +71,38 @@ func StartListening() {
 		// maybePanic(err)
 	})
 
+	http.HandleFunc("/uploadTypeIcon", func(w http.ResponseWriter, r *http.Request) {
+		file, _, err := r.FormFile(`icon`)
+		maybePanic(err)
+
+		val := r.FormValue(`type-id`)
+
+		out1, err := os.Create(imagePath + `/t1-` + val + `.png`)
+		maybePanic(err)
+		defer out1.Close()
+		out2, err := os.Create(staticPath + `bgs/t1-` + val + `.png`)
+		defer out2.Close()
+		maybePanic(err)
+		writeTo := io.MultiWriter(out1, out2)
+
+		_, err = io.Copy(writeTo, file)
+		maybePanic(err)
+
+		// out1.Close()
+		// img, err := os.Open(imagePath + "/1.png")
+		// maybePanic(err)
+
+		// config, _, err := image.DecodeConfig(img)
+		// maybePanic(err)
+
+		// err = GetDatabaseInstance().db.RunInTransaction(func(tx *pg.Tx) error {
+		// 	err := UpdateCrisisDimensions(
+		// 		tx, config.Width, config.Height, 1)
+		// 	return err
+		// })
+		// maybePanic(err)
+	})
+
 	http.HandleFunc("/staff", mainPage)
 	http.HandleFunc("/view", mainPage)
 

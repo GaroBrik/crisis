@@ -93,6 +93,7 @@ crisis.Division.prototype.update = function(divJson) {
 
 crisis.Division.prototype.destroy = function() {
     this.details.destroy();
+    this.mapMarker.destroy();
 };
 
 /** @param {crisis.Unit} unit */

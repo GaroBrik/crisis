@@ -18,6 +18,8 @@ crisis.DetailsUnitLi = function(forCreation, details, typeId, amount) {
     /** @type {jQuery} */
     this.$listItem = crisis.cloneProto(crisis.prototypes.$unitListItem);
     /** @type {jQuery} */
+    this.$icon = this.$listItem.find('.icon');
+    /** @type {jQuery} */
     this.$value = this.$listItem.find('.value');
     /** @type {jQuery} */
     this.$type = this.$listItem.find('.type');
@@ -80,6 +82,7 @@ crisis.DetailsUnitLi = function(forCreation, details, typeId, amount) {
 
     this.destroy = function() { thisLi.$listItem.remove(); };
 
+    this.$icon.attr('src', 'bgs/t1-' + typeId + '.png?' + (new Date).getTime());
     this.$type.text(crisis.getUnitType(typeId).name);
     crisis.getUnitType(typeId).listeners.add(this);
     this.$removeUnitButton.on('click' + crisis.event.baseNameSpace, function() {

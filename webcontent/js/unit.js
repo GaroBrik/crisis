@@ -33,7 +33,7 @@ crisis.Unit.ChangeListener.prototype.listenerId = function() {};
 crisis.Unit.prototype.update = function(json) {
     /** @type {crisis.Unit} */
     var thisUnit = this;
-    
+
     if (this.amount !== json.Amount) {
         this.amount = json.Amount;
         this.listeners.forEach(function(listener) {

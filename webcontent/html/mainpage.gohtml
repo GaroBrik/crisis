@@ -6,9 +6,9 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.8.3/underscore-min.js"></script>
     <script src="https://code.jquery.com/ui/1.11.3/jquery-ui.min.js"></script>
     {{range .JSUrls}}
-      <script src="{{.}}"></script>
+      <script src="{{.}}?v1"></script>
     {{end}}
-    <link rel="stylesheet" type="text/css" href="{{.CSSUrl}}">
+    <link rel="stylesheet" type="text/css" href="{{.CSSUrl}}?v1">
     <link rel="stylesheet" type="text/css" href="https://code.jquery.com/ui/1.11.3/themes/smoothness/jquery-ui.css">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
   </head>
@@ -50,6 +50,7 @@
         {{end}}
       </div>
       <li id="protoUnitListItem" class="unitListItem">
+        <img class="icon">
         <span class="type"></span>
         <span class="value"></span>
         <input type="text" class="editField" style="display: none">
@@ -66,14 +67,23 @@
         <i class="deleteButton fa fa-trash mfa-button" title="Delete Faction" style="display: none"></i>
       </li>
       <li id="protoUnitTypeListItem" class="unitTypeListItem">
+        <img class="icon">
         <span class="name"></span>
         <input type="text" class="editNameField" placeholder="name" style="display: none">
-        <span class="speedLabel" style="display: none">Speed:</span>
+        <span class="speedLabel" style="display: none">Speed Factor:</span>
         <input type="text" class="editSpeedField" style="display: none">
         <i class="editButton fa fa-wrench mfa-button" title="Edit Unit Type"></i>
         <i class="cancelButton fa fa-ban mfa-button" title="Cancel Changes" style="display: none" ></i>
         <i class="commitButton fa fa-floppy-o mfa-button" title="Save Changes" style="display: none"></i>
         <i class="deleteButton fa fa-trash mfa-button" title="Delete Unit Type" style="display: none"></i>
+        <br>
+        <form action="uploadTypeIcon" method="post" enctype="multipart/form-data">
+          <label for="background">Change Icon:</label>
+          <input type="file" name="icon">
+          <input type="hidden" name="type-id">
+          <input type="hidden" name="country">
+          <input type="submit" name="submit" value="Submit">
+        </form>
       </li>
       <div id="protoUnitTypes">
         {{range .Types}}

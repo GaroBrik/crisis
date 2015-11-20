@@ -31,6 +31,8 @@ crisis.UnitTypeLi = function(unitType, forCreation) {
     /** @type {jQuery} */
     this.$editSpeedField = this.$listItem.find('.editSpeedField');
     /** @type {jQuery} */
+    this.$icon = this.$listItem.find('.icon');
+    /** @type {jQuery} */
     this.$nameSpan = this.$listItem.find('.name');
 
     this.$editButton.on('click' + crisis.event.baseNameSpace, function() {
@@ -56,6 +58,8 @@ crisis.UnitTypeLi = function(unitType, forCreation) {
 
     if (!this.forCreation) {
         this.$nameSpan.text(unitType.name);
+        this.$icon.attr('src', 'bgs/t1-' + thisLi.unitType.id +
+                        '.png?' + (new Date).getTime());
         unitType.listeners.add(this);
     } else {
         this.startEditing();
@@ -157,6 +161,8 @@ crisis.UnitTypeLi.prototype.destroy = function() {
 
 /** @param {crisis.UnitType} unitType */
 crisis.UnitTypeLi.prototype.unitTypeChanged = function(unitType) {
+    this.$icon.attr('src', 'bgs/t1-' + this.unitType.id +
+                    '.png?' + (new Date).getTime());
     this.$nameSpan.text(unitType.name);
 };
 
