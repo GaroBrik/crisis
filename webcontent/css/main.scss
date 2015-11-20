@@ -199,6 +199,8 @@ ul {
 
     .details {
         position: relative;
+        max-height: 300px;
+        overflow-y: auto;
         
         .unitList {
             width: 100%;
@@ -208,6 +210,8 @@ ul {
                     width: 50px;
                 }
             }
+            max-height: 200px;
+            overflow-y: auto;
         }
     }
 
