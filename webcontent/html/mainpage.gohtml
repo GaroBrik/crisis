@@ -43,7 +43,7 @@
             <input type="button" class="addUnitButton" style="display: none" value="Add Unit">
             <input type="button" class="changeVisibilityButton" style="display: none" value="View">
             <br>
-            <form action="uploadDivisionIcon" method="post" enctype="multipart/form-data" style="display: none" class="chnageIconForm" >
+            <form action="uploadDivisionIcon" method="post" enctype="multipart/form-data" style="display: none" class="changeIconForm" >
               <label for="background">Change Icon:</label>
               <input type="file" name="icon">
               <input type="hidden" name="div-id" class="hiddenDivId">
@@ -82,13 +82,13 @@
         <span class="name"></span>
         <input type="text" class="editNameField" placeholder="name" style="display: none">
         <span class="speedLabel" style="display: none">Speed Factor:</span>
-        <input type="text" class="editSpeedField" style="display: none">
+        <input type="text" class="editSpeedField" style="display: none" siz="10">
         <i class="editButton fa fa-wrench mfa-button" title="Edit Unit Type"></i>
         <i class="cancelButton fa fa-ban mfa-button" title="Cancel Changes" style="display: none" ></i>
         <i class="commitButton fa fa-floppy-o mfa-button" title="Save Changes" style="display: none"></i>
         <i class="deleteButton fa fa-trash mfa-button" title="Delete Unit Type" style="display: none"></i>
         <br>
-        <form action="uploadTypeIcon" method="post" enctype="multipart/form-data" display="hidden">
+        <form action="uploadTypeIcon" method="post" enctype="multipart/form-data" style="display: none">
           <label for="background">Change Icon:</label>
           <input type="file" name="icon">
           <input type="hidden" name="type-id" class="hiddenTypeId">
