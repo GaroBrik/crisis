@@ -164,6 +164,14 @@ ul {
     }
 }
 
+.unitTypeListItem {
+    form {
+        input[type=file] {
+            width: 172px;
+        }
+    }
+}
+
 .factionListItem {
     .colorPicker {
         width: 20px;

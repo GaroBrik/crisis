@@ -34,6 +34,8 @@ crisis.UnitTypeLi = function(unitType, forCreation) {
     this.$icon = this.$listItem.find('.icon');
     /** @type {jQuery} */
     this.$nameSpan = this.$listItem.find('.name');
+    /** @type {jQuery} */
+    this.$changeIconForm = this.$listItem.find('form');
 
     this.$editButton.on('click' + crisis.event.baseNameSpace, function() {
         thisLi.startEditing();
@@ -58,8 +60,12 @@ crisis.UnitTypeLi = function(unitType, forCreation) {
 
     if (!this.forCreation) {
         this.$nameSpan.text(unitType.name);
+        this.$icon.error(function() {
+            thisLi.$icon.css('visibility', 'hidden');
+        });
         this.$icon.attr('src', 'bgs/t1-' + thisLi.unitType.id +
                         '.png?' + (new Date).getTime());
+        this.
         unitType.listeners.add(this);
     } else {
         this.startEditing();
@@ -82,6 +88,7 @@ crisis.UnitTypeLi.prototype.startEditing = function() {
     this.$speedLabel.show();
     this.$editSpeedField.show();
     this.$cancelButton.show();
+    this.$changeIconForm.show();
     if (!this.forCreation) {
         this.$deleteButton.show();
     }
@@ -97,6 +104,7 @@ crisis.UnitTypeLi.prototype.stopEditing = function() {
     this.$cancelButton.hide();
     this.$deleteButton.hide();
     this.$commitButton.hide();
+    this.$changeIconForm.hide();
 
     this.$nameSpan.show();
     this.$editButton.show();
