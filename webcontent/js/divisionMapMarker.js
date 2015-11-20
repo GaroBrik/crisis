@@ -52,8 +52,8 @@ crisis.DivisionMapMarker = function(div) {
     };
 
     this.$icon.error(function() {
-        this.$icon.hide();
-        this.$backupIcon.show();
+        thisMarker.$icon.hide();
+        thisMarker.$backupIcon.show();
     });
     this.$icon.attr('src', 'bgs/d1-' + div.id + '.png?' + (new Date).getTime());
     this.$marker.click(function() { div.details.toggle(); });

@@ -149,8 +149,6 @@ crisis.DivisionDetails = function(division, forCreation, coords) {
                                      }
                                  });
 
-        thisDets.$changeIconForm.find('.hiddenDivId').val(division.id);
-
         thisDets.$routePlotter = thisDets.$pane.find('.routePlotter');
         thisDets.$routeInvalidAlert =
             thisDets.$routePlotter.find('.routeInvalidAlert');
@@ -178,6 +176,7 @@ crisis.DivisionDetails = function(division, forCreation, coords) {
 
         if (thisDets.forCreation) return;
 
+        thisDets.$changeIconForm.find('.hiddenDivId').val(division.id);
         division.units.forEach(function(typeId, unit) {
             thisDets.$unitList.append(unit.detailsLi.$listItem);
         });
