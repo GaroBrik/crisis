@@ -53,6 +53,8 @@ crisis.DivisionDetails = function(division, forCreation, coords) {
     this.$cancelRouteButton = null;
     /** @type {jQuery} */
     this.$commitRouteButton = null;
+    /** @type {jQuery} */
+    this.$changeIconForm = null;
     /** @type {boolean} */
     this.isOpen = false;
     /** @type {boolean} */
@@ -97,6 +99,7 @@ crisis.DivisionDetails = function(division, forCreation, coords) {
         thisDets.$cancelButton = thisDets.$details.find('.cancelButton');
         thisDets.$commitButton = thisDets.$details.find('.commitButton');
         thisDets.$deleteButton = thisDets.$details.find('.deleteButton');
+        thisDets.$changeIconForm = thisDets.$details.find('.changeIconForm');
 
         thisDets.$editButton.on('click' + crisis.event.baseNameSpace,
                                 function() {
@@ -109,11 +112,13 @@ crisis.DivisionDetails = function(division, forCreation, coords) {
         thisDets.$addUnitButton.on('click' + crisis.event.baseNameSpace,
                                function() {
                                    thisDets.addUnit();
+                                   thisDets.reRender();
                                });
         thisDets.$changeVisibilityButton.on(
             'click' + crisis.event.factionVisibilityOn,
             function() {
                 thisDets.changeVisibility();
+                thisDets.reRender();
             });
         thisDets.$cancelButton.on('click' + crisis.event.baseNameSpace,
                                   function() {
@@ -143,6 +148,8 @@ crisis.DivisionDetails = function(division, forCreation, coords) {
                                          thisDets.close();
                                      }
                                  });
+
+        thisDets.$changeIconForm.find('.hiddenDivId').val(division.id);
 
         thisDets.$routePlotter = thisDets.$pane.find('.routePlotter');
         thisDets.$routeInvalidAlert =
@@ -303,6 +310,7 @@ crisis.DivisionDetails = function(division, forCreation, coords) {
         thisDets.$commitButton.show();
         thisDets.$deleteButton.show();
         thisDets.$addUnitButton.show();
+        thisDets.$changeIconForm.show();
         thisDets.$changeVisibilityButton.prop('value', 'View').show();
 
         if (!thisDets.forCreation) {
@@ -316,6 +324,8 @@ crisis.DivisionDetails = function(division, forCreation, coords) {
         } else {
             thisDets.state = crisis.DivisionDetails.State.EDITING;
         }
+
+        thisDets.reRender();
     };
 
     this.enableRoute = function() {
@@ -333,6 +343,7 @@ crisis.DivisionDetails = function(division, forCreation, coords) {
         crisis.map.getClick(clickCallback);
 
         thisDets.state = crisis.DivisionDetails.State.ROUTING;
+        thisDets.reRender();
     };
 
     this.disableEdit = function() {
@@ -342,6 +353,7 @@ crisis.DivisionDetails = function(division, forCreation, coords) {
         thisDets.$commitButton.hide();
         thisDets.$deleteButton.hide();
         thisDets.$addUnitButton.hide();
+        thisDets.$changeIconForm.hide();
         thisDets.$changeVisibilityButton.hide();
         thisDets.stopChangingVisibility();
         if (thisDets.unitTypeChooser !== null) {

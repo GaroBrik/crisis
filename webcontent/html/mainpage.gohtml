@@ -14,7 +14,10 @@
   </head>
   <body>
     <div style="display: none" id="htmlObjectPrototypes">
-      <div id="protoDivisionMarker" class="divisionMarker fa fa-shield fa-lg"></div>
+      <div id="protoDivisionMarker" class="divisionMarker">
+        <img class="icon">
+        <i class="fa fa-shield fa-lg backup-icon" style="display: none"></i>
+      </div>
       <select id="protoFactionSelector" class="factionSelector"></select>
       <div id="protoDivisionPane" class="dropdown divisionPane" style="display: none">
         <div class="details">
@@ -39,6 +42,14 @@
             <input type="button" class="deleteButton" style="display: none" value="Delete">
             <input type="button" class="addUnitButton" style="display: none" value="Add Unit">
             <input type="button" class="changeVisibilityButton" style="display: none" value="View">
+            <br>
+            <form action="uploadDivisionIcon" method="post" enctype="multipart/form-data" display="hidden" class="chnageIconForm" >
+              <label for="background">Change Icon:</label>
+              <input type="file" name="icon">
+              <input type="hidden" name="div-id" class="hiddenDivId">
+              <input type="hidden" name="crisis">
+              <input type="submit" name="submit" value="Submit">
+            </form>
           {{end}}
         </div>
         {{if .CanEdit}}
@@ -80,8 +91,8 @@
         <form action="uploadTypeIcon" method="post" enctype="multipart/form-data" display="hidden">
           <label for="background">Change Icon:</label>
           <input type="file" name="icon">
-          <input type="hidden" name="type-id">
-          <input type="hidden" name="country">
+          <input type="hidden" name="type-id" class="hiddenTypeId">
+          <input type="hidden" name="crisis">
           <input type="submit" name="submit" value="Submit">
         </form>
       </li>

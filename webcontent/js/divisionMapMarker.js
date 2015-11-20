@@ -10,6 +10,8 @@ crisis.DivisionMapMarker = function(div) {
 
     /** @type {jQuery} */
     this.$marker = crisis.cloneProto(crisis.prototypes.$divisionMarker);
+    this.$backupIcon = this.$marker.find('.backup-icon');
+    this.$icon = this.$marker.find('.icon');
 
     /** @override */
     this.divisionChanged = function(newDiv) {
@@ -45,9 +47,15 @@ crisis.DivisionMapMarker = function(div) {
     };
 
     this.color = function() {
-        thisMarker.$marker.css('color', crisis.getFaction(div.factionId).color);
+        thisMarker.$marker.find('.backup-icon')
+            .css('color', crisis.getFaction(div.factionId).color);
     };
 
+    this.$icon.error(function() {
+        this.$icon.hide();
+        this.$backupIcon.show();
+    });
+    this.$icon.attr('src', 'bgs/d1-' + div.id + '.png?' + (new Date).getTime());
     this.$marker.click(function() { div.details.toggle(); });
     crisis.map.add(this.$marker);
     div.listeners.add(this);

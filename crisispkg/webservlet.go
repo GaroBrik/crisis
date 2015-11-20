@@ -87,6 +87,24 @@ func StartListening() {
 
 		_, err = io.Copy(writeTo, file)
 		maybePanic(err)
+	})
+
+	http.HandleFunc("/uploadDivisionIcon", func(w http.ResponseWriter, r *http.Request) {
+		file, _, err := r.FormFile(`icon`)
+		maybePanic(err)
+
+		val := r.FormValue(`div-id`)
+
+		out1, err := os.Create(imagePath + `/d1-` + val + `.png`)
+		maybePanic(err)
+		defer out1.Close()
+		out2, err := os.Create(staticPath + `bgs/d1-` + val + `.png`)
+		defer out2.Close()
+		maybePanic(err)
+		writeTo := io.MultiWriter(out1, out2)
+
+		_, err = io.Copy(writeTo, file)
+		maybePanic(err)
 
 		// out1.Close()
 		// img, err := os.Open(imagePath + "/1.png")

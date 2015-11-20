@@ -77,6 +77,7 @@ crisis.UnitTypeLi.prototype.startEditing = function() {
     if (!this.forCreation) {
         this.$editNameField.val(this.unitType.name);
         this.$editSpeedField.val(this.unitType.speed);
+        this.$changeIconForm.find('.hiddenTypeId').val(this.unitType.id);
     } else {
         this.$editSpeedField.val(1);
     }
