@@ -16,7 +16,7 @@
     <iframe name="hiddenFrame" style="display: none"></iframe>
     <div style="display: none" id="htmlObjectPrototypes">
       <div id="protoDivisionMarker" class="divisionMarker">
-        <img class="icon">
+        <img class="icon iconLarge">
         <i class="fa fa-shield fa-lg backup-icon" style="display: none"></i>
       </div>
       <select id="protoFactionSelector" class="factionSelector"></select>
@@ -89,7 +89,7 @@
         <i class="commitButton fa fa-floppy-o mfa-button" title="Save Changes" style="display: none"></i>
         <i class="deleteButton fa fa-trash mfa-button" title="Delete Unit Type" style="display: none"></i>
         <br>
-        <form action="uploadTypeIcon" method="post" enctype="multipart/form-data" style="display: none">
+        <form action="uploadTypeIcon" method="post" enctype="multipart/form-data" style="display: none" target="hiddenFrame">
           <label for="background">Change Icon:</label>
           <input type="file" name="icon">
           <input type="hidden" name="type-id" class="hiddenTypeId">
@@ -145,7 +145,7 @@
             </div>
           </div>
           <div>
-            <form action="uploadBG" method="post" enctype="multipart/form-data">
+            <form action="uploadBG" method="post" enctype="multipart/form-data" target="hiddenFrame">
               <label for="background">Upload a new map:</label>
               <input type="file" name="background" id="background">
               <input type="submit" name="submit" value="Submit">
