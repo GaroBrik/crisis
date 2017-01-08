@@ -47,5 +47,7 @@ pushd "${WEBCONTENT_DIR}/js" > /dev/null
          --jscomp_warning=checkTypes --jscomp_warning=missingProperties
     cp -r "${WEBCONTENT_DIR}/js/thirdparty/." "${STATIC_DIR}/"
     mkdir "${STATIC_DIR}/bgs"
-    cp -r "${CRISIS_IMAGE_PATH}/." "${STATIC_DIR}/bgs/"
+    IMAGE_PATH="${OPENSHIFT_GO_DIR}imgs"
+    mkdir -p "${IMAGE_PATH}"
+    cp -r "${IMAGE_PATH}/." "${STATIC_DIR}/bgs/"
 } >> "${OPENSHIFT_GO_LOG_DIR}go.log"

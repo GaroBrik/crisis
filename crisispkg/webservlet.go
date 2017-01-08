@@ -39,7 +39,7 @@ func StartListening() {
 		ajaxHandler.HandleRequest(w, r)
 	})
 
-	imagePath := os.Getenv("CRISIS_IMAGE_PATH")
+	imagePath := os.Getenv("OPENSHIFT_GO_DIR") + "imgs"
 	log.Println(imagePath)
 	http.HandleFunc("/uploadBG", func(w http.ResponseWriter, r *http.Request) {
 		file, _, err := r.FormFile("background")
