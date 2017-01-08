@@ -40,7 +40,7 @@ pushd "${WEBCONTENT_DIR}/js" > /dev/null
              jquery-1.9.js \
              underscore-1.5.1.js \
              bucketsexterns.js"
-    java -jar compiler.jar \
+    java -jar thirdparty/closure-compiler/closure-compiler.jar \
          --compilation_level SIMPLE_OPTIMIZATIONS \
          --js $INPUT --externs $EXTERNS --js_output_file $OUTPUT \
          --generate_exports --warning_level VERBOSE \
