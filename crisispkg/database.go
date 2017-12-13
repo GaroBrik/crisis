@@ -6,12 +6,13 @@ import (
 )
 
 const (
-	DB_USER_ENV     = "OPENSHIFT_POSTGRESQL_DB_USERNAME"
-	DB_PASSWORD_ENV = "OPENSHIFT_POSTGRESQL_DB_PASSWORD"
-	DB_HOST_ENV     = "OPENSHIFT_POSTGRESQL_DB_HOST"
-	DB_PORT_ENV     = "OPENSHIFT_POSTGRESQL_DB_PORT"
+	DB_USER_ENV     = "DB_USERNAME"
+	DB_PASSWORD_ENV = "DB_PASSWORD"
+	DB_HOST_ENV     = "DB_HOST"
+	DB_PORT_ENV     = "DB_PORT"
 	DB_NAME         = "crisis"
 	USE_SSL         = false
+	NETWORK         = "tcp"
 )
 
 type Database struct {
@@ -23,6 +24,7 @@ var m_database *Database
 func GetDatabaseInstance() *Database {
 	if m_database == nil {
 		db := pg.Connect(&pg.Options{
+			Network:  NETWORK,
 			User:     os.Getenv(DB_USER_ENV),
 			Password: os.Getenv(DB_PASSWORD_ENV),
 			Port:     os.Getenv(DB_PORT_ENV),
@@ -46,7 +48,7 @@ func DoUnitMovement(tx *pg.Tx) error {
 	}
 
 	stmt, err := tx.Prepare(`
-            UPDATE division SET (route, time_spent) = 
+            UPDATE division SET (route, time_spent) =
                                 (route[$2:array_length(route,1)], $3)
             WHERE id = $1
         `)

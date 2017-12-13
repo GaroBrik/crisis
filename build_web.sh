@@ -1,10 +1,12 @@
 #!/bin/bash
 
-export PATH="${PATH}:${OPENSHIFT_HOMEDIR}.gem/bin"
+ROOT="$(cd "$(dirname "$0")"; pwd -P )"
 
-STATIC_DIR="${OPENSHIFT_REPO_DIR}static"
-mkdir $STATIC_DIR
-WEBCONTENT_DIR="${OPENSHIFT_REPO_DIR}webcontent"
+STATIC_DIR="${ROOT}/static"
+IMAGE_PATH="${ROOT}/imgs"
+mkdir -p $STATIC_DIR
+mkdir -p $IMAGE_PATH
+WEBCONTENT_DIR="${ROOT}/webcontent"
 
 echo "-----> compiling scss"
 sass "${WEBCONTENT_DIR}/css/main.scss" "${STATIC_DIR}/main.css"
@@ -12,7 +14,7 @@ sass "${WEBCONTENT_DIR}/css/main.scss" "${STATIC_DIR}/main.css"
 echo "-----> compiling js"
 pushd "${WEBCONTENT_DIR}/js" > /dev/null
 {
-    OUTPUT="${STATIC_DIR}/compiled.js" 
+    OUTPUT="${STATIC_DIR}/compiled.js"
     INPUT="goog.js \
            main.js \
            prototypes.js \
@@ -45,9 +47,8 @@ pushd "${WEBCONTENT_DIR}/js" > /dev/null
          --js $INPUT --externs $EXTERNS --js_output_file $OUTPUT \
          --generate_exports --warning_level VERBOSE \
          --jscomp_warning=checkTypes --jscomp_warning=missingProperties
-    cp -r "${WEBCONTENT_DIR}/js/thirdparty/." "${STATIC_DIR}/"
-    mkdir "${STATIC_DIR}/bgs"
-    IMAGE_PATH="${OPENSHIFT_GO_DIR}imgs"
+    cp "${WEBCONTENT_DIR}/js/thirdparty/"/*.js "${STATIC_DIR}/"
+    mkdir -p "${STATIC_DIR}/bgs"
     mkdir -p "${IMAGE_PATH}"
-    cp -r "${IMAGE_PATH}/." "${STATIC_DIR}/bgs/"
-} >> "${OPENSHIFT_GO_LOG_DIR}go.log"
+    # cp -r "${IMAGE_PATH}/." "${STATIC_DIR}/bgs/"
+}

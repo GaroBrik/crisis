@@ -4,7 +4,7 @@ CREATE SEQUENCE crisis_id_seq;
 CREATE TABLE crisis (
        id INTEGER PRIMARY KEY DEFAULT nextval('crisis_id_seq'),
        map_costs INTEGER[][] NOT NULL,
-       crisis_name VARCHAR(40) NOT NULL,
+       crisis_name VARCHAR(40) UNIQUE NOT NULL,
        active BOOLEAN NOT NULL DEFAULT TRUE,
        speed DOUBLE PRECISION NOT NULL DEFAULT 0,
        password VARCHAR(40) NOT NULL
@@ -23,7 +23,7 @@ ALTER SEQUENCE faction_id_seq OWNED BY faction.id;
 
 CREATE TYPE coords AS (
        x INTEGER,
-       y INTEGER 
+       y INTEGER
 );
 
 CREATE SEQUENCE division_id_seq;

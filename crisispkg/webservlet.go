@@ -30,7 +30,7 @@ type pageInfo struct {
 
 var mainPageTmpl *template.Template
 
-func StartListening() {
+func init() {
 	staticServer := http.FileServer(http.Dir(staticPath))
 	http.Handle("/static/", http.StripPrefix("/static/", staticServer))
 
