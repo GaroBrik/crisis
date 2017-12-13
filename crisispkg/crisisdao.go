@@ -7,7 +7,7 @@ import (
 
 const (
 	crisisSelector = `
-            id, active, array_length(map_costs, 1) AS height, 
+            id, uuid, active, array_length(map_costs, 1) AS height, 
             array_length(map_costs, 2) AS width, speed
         `
 )

@@ -7,14 +7,15 @@ import (
 )
 
 type AuthInfo struct {
-	CrisisId int
-	CanEdit  bool
-	ViewAs   *int
+	CrisisId   int
+	CanEdit    bool
+	ViewAs     *int
 }
 
 func AuthInfoOf(tx *pg.Tx, request *http.Request) (*AuthInfo, error) {
 	authInfo := AuthInfo{}
 	authInfo.CrisisId = 1
+
 	authInfo.CanEdit = !strings.Contains(request.URL.Path, "view")
 	if !authInfo.CanEdit {
 		val, ok := request.URL.Query()["as"]

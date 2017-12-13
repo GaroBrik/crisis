@@ -7,6 +7,7 @@ import (
 
 type Crisis struct {
 	Id        int `json:"-"`
+	UUID      string
 	Active    bool
 	MapBounds Bounds
 	Speed     int
@@ -20,6 +21,11 @@ func (crisis *Crisis) LoadColumn(colIdx int, colName string, b []byte) error {
 	switch colName {
 	case "id":
 		err := pg.Decode(&crisis.Id, b)
+		if err != nil {
+			return err
+		}
+	case "uuid":
+		err := pg.Decode(&crisis.UUID, b)
 		if err != nil {
 			return err
 		}

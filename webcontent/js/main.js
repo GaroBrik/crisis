@@ -38,8 +38,10 @@ crisis.ModelChangeListener.prototype.listenerId = function() {};
 /**
  * @export
  * @param {boolean} canEdit
- * @param {number} viewAs */
-crisis.init = function(canEdit, viewAs) {
+ * @param {number} viewAs
+ * @param {string} imgPrefix */
+crisis.init = function(canEdit, viewAs, imgPrefix) {
+    crisis.imgPrefix = imgPrefix;
     crisis.prototypes.init();
     crisis.controls.initialize();
     crisis.map.init();
@@ -314,4 +316,12 @@ crisis.factionHtml = function(id) {
     return crisis.cloneProto(
         crisis.prototypes.$factions.find(
             crisis.dataSelector(id, 'faction')));
+};
+
+/**
+ * @param {string} name
+ * @return {string}
+ */
+crisis.imgURL = function(name) {
+    return crisis.imgPrefix + name + '.png?' + (new Date).getTime();
 };

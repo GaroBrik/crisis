@@ -82,8 +82,7 @@ crisis.DetailsUnitLi = function(forCreation, details, typeId, amount) {
 
     this.destroy = function() { thisLi.$listItem.remove(); };
 
-    this.$icon.attr('src', 'static/bgs/t1-' + typeId +
-                    '.png?' + (new Date).getTime());
+    this.$icon.attr('src', crisis.imgURL('type' + typeId));
     this.$type.text(crisis.getUnitType(typeId).name);
     crisis.getUnitType(typeId).listeners.add(this);
     this.$removeUnitButton.on('click' + crisis.event.baseNameSpace, function() {

@@ -127,7 +127,7 @@
       <div id="mapOuterDiv">
         <div id="mapBounds" style="position: absolute"></div>
         <div id="mapHolder">
-          <img src="static/bgs/1.png" id="mapImage">
+          <img src="{{.ImgPrefix}}bg.png" id="mapImage">
         </div>
       </div>
       {{if .CanEdit}}
@@ -166,7 +166,7 @@
     </div>
     <script type="text/javascript">
      $(document).ready(function() {
-       crisis.init({{.CanEdit}}, {{.ViewAs}});
+       crisis.init({{.CanEdit}}, {{.ViewAs}}, {{.ImgPrefix}});
      });
     </script>
   </body>

@@ -3,9 +3,7 @@
 ROOT="$(cd "$(dirname "$0")"; pwd -P )"
 
 STATIC_DIR="${ROOT}/static"
-IMAGE_PATH="${ROOT}/imgs"
 mkdir -p $STATIC_DIR
-mkdir -p $IMAGE_PATH
 WEBCONTENT_DIR="${ROOT}/webcontent"
 
 echo "-----> compiling scss"
@@ -47,8 +45,5 @@ pushd "${WEBCONTENT_DIR}/js" > /dev/null
          --js $INPUT --externs $EXTERNS --js_output_file $OUTPUT \
          --generate_exports --warning_level VERBOSE \
          --jscomp_warning=checkTypes --jscomp_warning=missingProperties
-    cp "${WEBCONTENT_DIR}/js/thirdparty/"/*.js "${STATIC_DIR}/"
-    mkdir -p "${STATIC_DIR}/bgs"
-    mkdir -p "${IMAGE_PATH}"
-    # cp -r "${IMAGE_PATH}/." "${STATIC_DIR}/bgs/"
+    cp "${WEBCONTENT_DIR}/js/thirdparty"/*.js "${STATIC_DIR}/"
 }

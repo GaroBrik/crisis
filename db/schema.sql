@@ -3,6 +3,7 @@ BEGIN;
 CREATE SEQUENCE crisis_id_seq;
 CREATE TABLE crisis (
        id INTEGER PRIMARY KEY DEFAULT nextval('crisis_id_seq'),
+       uuid UUID DEFAULT gen_random_uuid(),
        map_costs INTEGER[][] NOT NULL,
        crisis_name VARCHAR(40) UNIQUE NOT NULL,
        active BOOLEAN NOT NULL DEFAULT TRUE,

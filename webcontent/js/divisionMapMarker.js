@@ -55,8 +55,7 @@ crisis.DivisionMapMarker = function(div) {
         thisMarker.$icon.hide();
         thisMarker.$backupIcon.show();
     });
-    this.$icon.attr('src', 'static/bgs/d1-' + div.id +
-                    '.png?' + (new Date).getTime());
+    this.$icon.attr('src', crisis.imgURL('div' + div.id));
     this.$marker.click(function() { div.details.toggle(); });
     crisis.map.add(this.$marker);
     div.listeners.add(this);

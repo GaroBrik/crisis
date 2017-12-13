@@ -63,8 +63,7 @@ crisis.UnitTypeLi = function(unitType, forCreation) {
         this.$icon.error(function() {
             thisLi.$icon.css('visibility', 'hidden');
         });
-        this.$icon.attr('src', 'static/bgs/t1-' + thisLi.unitType.id +
-                        '.png?' + (new Date).getTime());
+        this.$icon.attr('src', crisis.imgURL('type' + thisLi.unitType.id));
         this.
         unitType.listeners.add(this);
     } else {

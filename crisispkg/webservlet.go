@@ -1,14 +1,13 @@
 package crisis
 
 import (
-	"gopkg.in/pg.v3"
 	"html/template"
-	//	"image"
-	"io"
 	"log"
 	"net/http"
-	"os"
 	"time"
+	"os"
+
+	"gopkg.in/pg.v3"
 )
 
 type servlet func(http.ResponseWriter, *http.Request)
@@ -19,6 +18,7 @@ const (
 )
 
 type pageInfo struct {
+	ImgPrefix string
 	CanEdit   bool
 	ViewAs    int
 	JSUrls    []string
@@ -37,88 +37,6 @@ func init() {
 	ajaxHandler := GetAjaxHandlerInstance()
 	http.HandleFunc("/ajax/", func(w http.ResponseWriter, r *http.Request) {
 		ajaxHandler.HandleRequest(w, r)
-	})
-
-	imagePath := os.Getenv("OPENSHIFT_GO_DIR") + "imgs"
-	log.Println(imagePath)
-	http.HandleFunc("/uploadBG", func(w http.ResponseWriter, r *http.Request) {
-		file, _, err := r.FormFile("background")
-		maybePanic(err)
-
-		out1, err := os.Create(imagePath + "/1.png")
-		maybePanic(err)
-		defer out1.Close()
-		out2, err := os.Create(staticPath + "bgs/1.png")
-		defer out2.Close()
-		maybePanic(err)
-		writeTo := io.MultiWriter(out1, out2)
-
-		_, err = io.Copy(writeTo, file)
-		maybePanic(err)
-
-		// out1.Close()
-		// img, err := os.Open(imagePath + "/1.png")
-		// maybePanic(err)
-
-		// config, _, err := image.DecodeConfig(img)
-		// maybePanic(err)
-
-		// err = GetDatabaseInstance().db.RunInTransaction(func(tx *pg.Tx) error {
-		// 	err := UpdateCrisisDimensions(
-		// 		tx, config.Width, config.Height, 1)
-		// 	return err
-		// })
-		// maybePanic(err)
-	})
-
-	http.HandleFunc("/uploadTypeIcon", func(w http.ResponseWriter, r *http.Request) {
-		file, _, err := r.FormFile(`icon`)
-		maybePanic(err)
-
-		val := r.FormValue(`type-id`)
-
-		out1, err := os.Create(imagePath + `/t1-` + val + `.png`)
-		maybePanic(err)
-		defer out1.Close()
-		out2, err := os.Create(staticPath + `bgs/t1-` + val + `.png`)
-		defer out2.Close()
-		maybePanic(err)
-		writeTo := io.MultiWriter(out1, out2)
-
-		_, err = io.Copy(writeTo, file)
-		maybePanic(err)
-	})
-
-	http.HandleFunc("/uploadDivisionIcon", func(w http.ResponseWriter, r *http.Request) {
-		file, _, err := r.FormFile(`icon`)
-		maybePanic(err)
-
-		val := r.FormValue(`div-id`)
-
-		out1, err := os.Create(imagePath + `/d1-` + val + `.png`)
-		maybePanic(err)
-		defer out1.Close()
-		out2, err := os.Create(staticPath + `bgs/d1-` + val + `.png`)
-		defer out2.Close()
-		maybePanic(err)
-		writeTo := io.MultiWriter(out1, out2)
-
-		_, err = io.Copy(writeTo, file)
-		maybePanic(err)
-
-		// out1.Close()
-		// img, err := os.Open(imagePath + "/1.png")
-		// maybePanic(err)
-
-		// config, _, err := image.DecodeConfig(img)
-		// maybePanic(err)
-
-		// err = GetDatabaseInstance().db.RunInTransaction(func(tx *pg.Tx) error {
-		// 	err := UpdateCrisisDimensions(
-		// 		tx, config.Width, config.Height, 1)
-		// 	return err
-		// })
-		// maybePanic(err)
 	})
 
 	http.HandleFunc("/staff", mainPage)
@@ -153,6 +71,11 @@ func mainPage(res http.ResponseWriter, req *http.Request) {
 			return err
 		}
 
+		crisis, err := GetCrisisById(tx, authInfo.CrisisId)
+		if err != nil {
+			return err
+		}
+
 		types, err := GetUnitTypesByCrisisId(tx, authInfo.CrisisId)
 		if err != nil {
 			return err
@@ -175,6 +98,7 @@ func mainPage(res http.ResponseWriter, req *http.Request) {
 				"static/compiled.js",
 			},
 			CSSUrl:   "static/main.css",
+			ImgPrefix: `https://storage.googleapis.com/` + os.Getenv(BUCKET_NAME_ENV) + `/` + crisis.UUID + `-`,
 			Types:    types,
 			Factions: facs,
 			CanEdit:  authInfo.CanEdit,

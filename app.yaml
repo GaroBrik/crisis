@@ -4,11 +4,12 @@ env: flex
 env_variables:
   DB_USERNAME: crisis
   DB_PASSWORD: <PASSWORD>
-  DB_HOST:     /cloudsql/crisis-188722:us-east1:crisis-test/.s.PGSQL.5432
+  DB_HOST:     /cloudsql/<SQL_INSTANCE>/.s.PGSQL.5432
   DB_PORT:     5432
+  CLOUD_BUCKET_NAME: <BUCKET_NAME>
 
 beta_settings:
-  cloud_sql_instances: crisis-188722:us-east1:crisis-test
+  cloud_sql_instances: <SQL_INSTANCE>
 
 handlers:
 - url: /static
