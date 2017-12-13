@@ -12,7 +12,7 @@ const (
 	DB_PORT_ENV     = "DB_PORT"
 	DB_NAME         = "crisis"
 	USE_SSL         = false
-	NETWORK         = "tcp"
+	NETWORK         = "unix"
 )
 
 type Database struct {
